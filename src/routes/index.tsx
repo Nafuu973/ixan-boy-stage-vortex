@@ -199,7 +199,7 @@ function Hero() {
           {t.hero.intro}
         </p>
 
-        <div className="mt-6 max-w-xl">
+        <div className="mt-6 max-w-xl sig-reveal">
           <ChromeSignature text={t.hero.tag} />
         </div>
 
