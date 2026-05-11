@@ -390,7 +390,10 @@ function MusicalDNA() {
 
 function Proof() {
   const t = useT();
-  const labels = ["Scantraxx Prospexx", "Hardstyle France"];
+  const labels = [
+    { name: "Scantraxx Prospexx", logo: labelScantraxx },
+    { name: "Hardstyle France Records", logo: labelHFR },
+  ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
     <section className="relative bg-void py-24 md:py-32">
@@ -398,17 +401,24 @@ function Proof() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           06 · {t.proof.kicker}
         </div>
-        <div className="mt-12 grid gap-12 md:grid-cols-2">
+        <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">{t.proof.labels}</span>
-            <ul className="mt-6 space-y-4">
+            <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-bone/10">
               {labels.map((l) => (
-                <li key={l} className="group flex items-center justify-between border-b border-bone/10 pb-4">
-                  <span className="font-display text-2xl md:text-4xl">{l}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-bone/40 transition-colors group-hover:text-violet">RELEASED</span>
-                </li>
+                <div key={l.name} className="group relative flex aspect-square flex-col items-center justify-center bg-obsidian/60 p-4 transition-colors hover:bg-violet/10">
+                  <img
+                    src={l.logo}
+                    alt={l.name}
+                    loading="lazy"
+                    className="max-h-[70%] w-auto max-w-[80%] object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-x-0 bottom-3 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50 group-hover:text-bone/80">
+                    {l.name}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">{t.proof.supports}</span>
