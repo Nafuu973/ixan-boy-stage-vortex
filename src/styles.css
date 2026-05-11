@@ -386,39 +386,85 @@
     animation: sig-reveal 1.4s cubic-bezier(0.55, 0, 0.2, 1) 0.25s both;
   }
 
-  /* Chrome cinematic signature */
-  .chrome-signature {
+  /* Handwritten cinematic signature — IXAN BOY */
+  .hand-signature {
     isolation: isolate;
+    font-family: "Allura", "Pinyon Script", cursive;
+    font-weight: 400;
+    line-height: 0.9;
+    font-size: clamp(2.6rem, 7.5vw, 5.25rem);
+    letter-spacing: 0.005em;
+    color: #f3eefb;
+    padding: 0.15em 0.4em 0.55em 0.2em;
+    animation: hand-float 8s ease-in-out infinite;
+    will-change: transform;
   }
-  .chrome-signature__text {
+  .hand-signature__ink {
+    position: relative;
+    display: inline-block;
     background: linear-gradient(
-      180deg,
-      #fefefe 0%,
-      #d8d8e6 30%,
-      #8a8aa0 50%,
-      #ececf5 70%,
-      #b8b8cc 100%
+      175deg,
+      #ffffff 0%,
+      #f1e9ff 30%,
+      #c9b3ee 55%,
+      #ffffff 72%,
+      #b89be0 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35))
-      drop-shadow(0 0 18px color-mix(in oklab, var(--violet) 35%, transparent));
-    animation: chrome-float 7s ease-in-out infinite;
-    display: inline-block;
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45))
+      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 0 22px color-mix(in oklab, var(--violet) 38%, transparent));
   }
-  .chrome-signature__ghost {
+  .hand-signature__halo {
     position: absolute;
     inset: 0;
-    color: color-mix(in oklab, var(--violet) 22%, transparent);
-    filter: blur(14px);
+    display: flex;
+    align-items: center;
+    padding: 0.15em 0.4em 0.55em 0.2em;
+    color: color-mix(in oklab, var(--violet) 55%, white);
+    filter: blur(22px);
+    opacity: 0.55;
     z-index: -1;
-    animation: chrome-float 7s ease-in-out infinite;
+    pointer-events: none;
   }
-  @keyframes chrome-float {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-3px); }
+  .hand-signature__flourish {
+    position: absolute;
+    left: 0.4em;
+    right: 0.4em;
+    bottom: 0.18em;
+    width: calc(100% - 0.8em);
+    height: 0.55em;
+    color: color-mix(in oklab, var(--violet) 65%, #efe4ff);
+    opacity: 0.85;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 55%, transparent));
+    transform-origin: left center;
+    animation: flourish-draw 1.6s cubic-bezier(0.65, 0, 0.2, 1) 0.6s both;
+  }
+  .hand-signature__flourish path {
+    stroke-dasharray: 320;
+    stroke-dashoffset: 320;
+    animation: flourish-stroke 1.8s cubic-bezier(0.65, 0, 0.2, 1) 0.55s forwards;
+  }
+  @keyframes flourish-stroke {
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes flourish-draw {
+    from { opacity: 0; }
+    to   { opacity: 0.85; }
+  }
+  @keyframes hand-float {
+    0%, 100% { transform: translateY(0) rotate(-0.4deg); }
+    50%      { transform: translateY(-4px) rotate(0.2deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hand-signature, .hand-signature__flourish, .hand-signature__flourish path {
+      animation: none;
+    }
+    .hand-signature__flourish path { stroke-dashoffset: 0; }
   }
 
   /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
