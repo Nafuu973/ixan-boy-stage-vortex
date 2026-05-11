@@ -116,7 +116,37 @@
 }
 
 @layer utilities {
-  .font-display { font-family: var(--font-display); letter-spacing: -0.01em; }
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.018em;
+    text-shadow:
+      0 0.018em 0 color-mix(in oklab, white 10%, transparent),
+      0 0 0.55em color-mix(in oklab, var(--violet) 22%, transparent),
+      0 0 1.6em color-mix(in oklab, var(--violet) 10%, transparent);
+  }
+  /* Mainstage / festival treatment for the biggest section titles */
+  h1.font-display,
+  h2.font-display {
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      var(--bone) 35%,
+      color-mix(in oklab, var(--bone) 78%, var(--violet) 22%) 78%,
+      color-mix(in oklab, var(--bone) 55%, var(--violet) 45%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.025em;
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.08))
+      drop-shadow(0 0 0.4em color-mix(in oklab, var(--violet) 28%, transparent))
+      drop-shadow(0 0 1.2em color-mix(in oklab, var(--violet) 14%, transparent));
+    /* depth */
+    text-shadow: none;
+  }
+  h1.font-display::selection,
+  h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
   .font-mono { font-family: var(--font-mono); }
 
