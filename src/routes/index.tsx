@@ -12,6 +12,7 @@ import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
 import liveDecks from "@/assets/live-decks.jpg";
+import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx.png";
 import labelHFR from "@/assets/label-hardstyle-france.png";
 
@@ -208,10 +209,10 @@ function ExperienceLive() {
           <div className="md:col-span-8">
             <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
               <img
-                src={liveDecks}
+                src={liveBooth}
                 alt="IXAN BOY live"
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-center contrast-110 saturate-[0.7]"
+                className="absolute inset-0 h-full w-full object-cover object-center contrast-110 saturate-[0.75]"
               />
               {/* color & vignette grading */}
               <div className="absolute inset-0 bg-void/55 mix-blend-multiply" />
@@ -391,8 +392,16 @@ function MusicalDNA() {
 function Proof() {
   const t = useT();
   const labels = [
-    { name: "Scantraxx Prospexx", logo: labelScantraxx },
-    { name: "Hardstyle France Records", logo: labelHFR },
+    {
+      name: "Scantraxx Prospexx",
+      logo: labelScantraxx,
+      releases: ["So Dumb", "Through The Fire", "Better Not Run"],
+    },
+    {
+      name: "Hardstyle France Records",
+      logo: labelHFR,
+      releases: ["Take Me Body", "So Dumb (Sex Bomb)"],
+    },
   ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
@@ -404,18 +413,30 @@ function Proof() {
         <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">{t.proof.labels}</span>
-            <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-bone/10">
+            <div className="mt-6 space-y-px overflow-hidden rounded-sm bg-bone/10">
               {labels.map((l) => (
-                <div key={l.name} className="group relative flex aspect-square flex-col items-center justify-center bg-obsidian/60 p-4 transition-colors hover:bg-violet/10">
-                  <img
-                    src={l.logo}
-                    alt={l.name}
-                    loading="lazy"
-                    className="max-h-[70%] w-auto max-w-[80%] object-contain transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <span className="absolute inset-x-0 bottom-3 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50 group-hover:text-bone/80">
-                    {l.name}
-                  </span>
+                <div key={l.name} className="group relative grid grid-cols-5 gap-4 bg-obsidian/60 p-5 transition-colors hover:bg-violet/[0.06] md:p-6">
+                  <div className="col-span-2 flex items-center justify-center border-r border-bone/10 pr-4">
+                    <img
+                      src={l.logo}
+                      alt={l.name}
+                      loading="lazy"
+                      className="max-h-20 w-auto max-w-full object-contain transition-transform duration-500 group-hover:scale-105 md:max-h-24"
+                    />
+                  </div>
+                  <div className="col-span-3 flex flex-col justify-center">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50">
+                      {l.name}
+                    </span>
+                    <ul className="mt-2 space-y-1">
+                      {l.releases.map((r) => (
+                        <li key={r} className="flex items-center gap-2 font-display text-base leading-tight text-bone/90 md:text-xl">
+                          <span className="h-px w-3 bg-violet/70" />
+                          {r}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ))}
             </div>
