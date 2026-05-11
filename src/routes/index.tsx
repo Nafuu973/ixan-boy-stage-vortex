@@ -142,11 +142,11 @@ function SignatureScan() {
     const schedule = (delay: number) => {
       const id = window.setTimeout(() => {
         setKey((k) => k + 1);
-        schedule(6000 + Math.random() * 4000);
+        schedule(2800 + Math.random() * 1400);
       }, delay);
       timeouts.push(id);
     };
-    schedule(3200);
+    schedule(1200);
     return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
