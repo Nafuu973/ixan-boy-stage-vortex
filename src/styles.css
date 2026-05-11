@@ -127,22 +127,25 @@
   /* Mainstage / festival treatment for the biggest section titles */
   h1.font-display,
   h2.font-display {
+    /* Scantraxx-inspired gradient: bright white top-left to deep violet bottom-right */
     background: linear-gradient(
-      180deg,
+      155deg,
       #ffffff 0%,
-      var(--bone) 35%,
-      color-mix(in oklab, var(--bone) 78%, var(--violet) 22%) 78%,
-      color-mix(in oklab, var(--bone) 55%, var(--violet) 45%) 100%
+      #f4eefc 18%,
+      #d9c2f5 38%,
+      oklch(0.68 0.24 295) 58%,
+      oklch(0.52 0.28 295) 78%,
+      oklch(0.36 0.22 290) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.08))
-      drop-shadow(0 0 0.4em color-mix(in oklab, var(--violet) 28%, transparent))
-      drop-shadow(0 0 1.2em color-mix(in oklab, var(--violet) 14%, transparent));
-    /* depth */
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12))
+      drop-shadow(0 0 0.5em color-mix(in oklab, var(--violet) 38%, transparent))
+      drop-shadow(0 0 1.4em color-mix(in oklab, var(--violet) 18%, transparent));
     text-shadow: none;
   }
   h1.font-display::selection,
