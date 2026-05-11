@@ -133,12 +133,21 @@ function Preloader({ done }: { done: boolean }) {
   );
 }
 
-/* Signature scan — biometric premium detection sweep, replays subtly */
+/* Signature scan — biometric HARDSTYLE impact sweep, replays as a kick */
 function SignatureScan() {
   const [key, setKey] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setKey((k) => k + 1), 14000);
-    return () => clearInterval(id);
+    // first replay shortly after mount, then irregular cadence for tension
+    const timeouts: number[] = [];
+    const schedule = (delay: number) => {
+      const id = window.setTimeout(() => {
+        setKey((k) => k + 1);
+        schedule(6000 + Math.random() * 4000);
+      }, delay);
+      timeouts.push(id);
+    };
+    schedule(3200);
+    return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
     <div key={key} className="sig-scan z-20">
@@ -149,6 +158,8 @@ function SignatureScan() {
       <span className="sig-scan__label">SIGNATURE · IXAN BOY</span>
       <div className="sig-scan__lines" />
       <div className="sig-scan__noise" />
+      <div className="sig-scan__glitch" />
+      <div className="sig-scan__flash" />
       <div className="sig-scan__bloom" />
       <div className="sig-scan__line" />
     </div>
