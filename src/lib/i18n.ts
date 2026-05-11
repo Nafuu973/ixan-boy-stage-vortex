@@ -14,12 +14,12 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIF", feed: "TRANSMISSION ACTIVE" },
     presentation: {
       kicker: "Présentation",
-      title: "Disséquer pour mieux frapper.",
+      title: "La précision avant le chaos.",
       paragraphs: [
         "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
-        "Musicien et ingénieur son de formation, il développe un hardstyle / raw où la tension mélodique prépare les impacts avec une précision chirurgicale.",
+        "Musicien, producteur et ingénieur son de formation, IXAN BOY façonne un hardstyle/raw où les mélodies embarquent, la tension monte et chaque détail sonore s’orchestre avec une précision chirurgicale pour former une véritable symphonie raw.",
         "Chaque montée est calculée. Chaque impact est amplifié.",
-        "Découvertes des platines vinyles à 15 ans, immersion dans l’univers techno, hardcore et hardstyle façonnée par Thunderdome, puis années d’analyse sonore autour de Wildstylez, Ran-D, Regain, D-Sturb ou Kronos : IXAN BOY construit depuis 2020 une identité pensée pour l’impact live.",
+        "Depuis 2020, IXAN BOY façonne une identité construite autour de la tension, du contrôle et de la précision sonore.",
       ],
     },
     live: {
