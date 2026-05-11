@@ -209,7 +209,7 @@ function Hero() {
         </div>
       </motion.div>
 
-      <CinematicScan />
+      <SignatureScan />
     </section>
   );
 }
