@@ -437,8 +437,8 @@
     pointer-events: none;
   }
   @keyframes hand-float {
-    0%, 100% { transform: rotate(-2deg) translateY(0); }
-    50%      { transform: rotate(-1.6deg) translateY(-3px); }
+    0%, 100% { transform: rotate(-3deg) skewX(-4deg) translateY(0); }
+    50%      { transform: rotate(-2.6deg) skewX(-4deg) translateY(-3px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .hand-signature { animation: none; }
