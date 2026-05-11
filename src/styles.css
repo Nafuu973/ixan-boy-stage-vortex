@@ -443,24 +443,23 @@
     position: relative;
     display: inline-block;
     background: linear-gradient(
-      180deg,
+      178deg,
       #ffffff 0%,
-      #f3f3f8 28%,
-      #d6d7df 55%,
-      #a9abb6 85%,
-      #c8c9d2 100%
+      #f6f4fb 22%,
+      #d9d6e3 48%,
+      #aaa6b8 78%,
+      #c4bfd2 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 0.4px rgba(255, 255, 255, 0.35);
+    -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.28);
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85))
-      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7))
-      drop-shadow(0 8px 22px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 0 18px rgba(255, 255, 255, 0.18))
-      drop-shadow(0 0 28px rgba(170, 130, 255, 0.22));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5))
+      drop-shadow(0 0 22px rgba(190, 160, 255, 0.18));
   }
   .hand-signature__halo {
     position: absolute;
@@ -468,9 +467,9 @@
     display: flex;
     align-items: center;
     padding: 0.5em 0.85em 0.6em 0.6em;
-    color: rgba(245, 240, 255, 0.45);
-    filter: blur(16px);
-    opacity: 0.55;
+    color: rgba(220, 200, 255, 0.38);
+    filter: blur(20px);
+    opacity: 0.5;
     z-index: -1;
     pointer-events: none;
     animation: sig-breath 7s ease-in-out infinite;
