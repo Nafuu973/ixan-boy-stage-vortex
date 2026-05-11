@@ -210,11 +210,11 @@ function Hero() {
           {t.hero.intro}
         </p>
 
-        <div className="mt-6 max-w-xl sig-reveal">
+        <div className="mt-14 mb-10 sig-reveal">
           <ChromeSignature text={t.hero.tag} />
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-2 md:gap-3">
+        <div className="mt-2 flex flex-wrap gap-2 md:gap-3">
           <Cta href="#live" label={t.nav.live} primary />
           <Cta href="#contact" label={t.nav.booking} />
         </div>
