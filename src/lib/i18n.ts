@@ -14,12 +14,12 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIF", feed: "TRANSMISSION ACTIVE" },
     presentation: {
       kicker: "Présentation",
-      title: "Disséquer pour mieux frapper.",
+      title: "La précision avant le chaos.",
       paragraphs: [
         "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
-        "Musicien et ingénieur son de formation, il développe un hardstyle / raw où la tension mélodique prépare les impacts avec une précision chirurgicale.",
+        "Musicien, producteur et ingénieur son de formation, IXAN BOY façonne un hardstyle/raw où les mélodies embarquent, la tension monte et chaque détail sonore s’orchestre avec une précision chirurgicale pour former une véritable symphonie raw.",
         "Chaque montée est calculée. Chaque impact est amplifié.",
-        "Découvertes des platines vinyles à 15 ans, immersion dans l’univers techno, hardcore et hardstyle façonnée par Thunderdome, puis années d’analyse sonore autour de Wildstylez, Ran-D, Regain, D-Sturb ou Kronos : IXAN BOY construit depuis 2020 une identité pensée pour l’impact live.",
+        "Depuis 2020, IXAN BOY façonne une identité construite autour de la tension, du contrôle et de la précision sonore.",
       ],
     },
     live: {
@@ -101,12 +101,12 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
     presentation: {
       kicker: "Presentation",
-      title: "Dissect to strike harder.",
+      title: "Precision before chaos.",
       paragraphs: [
         "IXAN BOY doesn’t copy his influences — he dissects them to build his own language.",
-        "Musician and trained sound engineer, he develops a hardstyle / raw where melodic tension prepares impacts of surgical precision.",
+        "Musician, producer and trained sound engineer, IXAN BOY shapes a hardstyle/raw where melodies carry you, tension keeps rising and every sonic detail is orchestrated with surgical precision to form a true raw symphony.",
         "Every build-up is calculated. Every impact is amplified.",
-        "Discovering vinyl turntables at 15, an immersion into techno, hardcore and hardstyle shaped by Thunderdome, then years of sonic analysis around Wildstylez, Ran-D, Regain, D-Sturb or Kronos: since 2020 IXAN BOY has been crafting an identity built for live impact.",
+        "Since 2020, IXAN BOY has been shaping an identity built around tension, control and sonic precision.",
       ],
     },
     live: {

@@ -302,33 +302,101 @@ function PulseBar() {
 
 function Presentation() {
   const t = useT();
+  const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative bg-void py-24 md:py-40">
+    <section className="relative bg-void py-28 md:py-44">
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet"
+        >
           01 · {t.presentation.kicker}
-        </div>
-        <h2 className="font-display mt-4 text-[clamp(2.25rem,7vw,6rem)] leading-[0.95] text-balance">
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8 }}
+          className="font-display mt-5 uppercase text-[clamp(2.25rem,7vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+        >
           {t.presentation.title}
-        </h2>
-        <div className="mt-10 grid gap-x-12 gap-y-6 md:mt-14 md:grid-cols-12">
-          <div className="md:col-span-7 md:col-start-2 space-y-5">
-            {t.presentation.paragraphs.map((p, i) => (
-              <motion.p
-                key={i}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: i * 0.06 }}
-                className={`text-balance ${
-                  i === 2
-                    ? "font-display text-2xl leading-tight text-bone md:text-4xl"
-                    : "text-base leading-relaxed text-bone/80 md:text-lg"
-                }`}
-              >
-                {p}
-              </motion.p>
-            ))}
+        </motion.h2>
+
+        <div className="mt-16 grid gap-x-12 md:mt-24 md:grid-cols-12">
+          <div className="md:col-span-7 md:col-start-2">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7 }}
+              className="font-serif italic text-balance text-xl leading-[1.55] text-bone md:text-2xl"
+            >
+              {intro}
+            </motion.p>
+
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="my-12 h-px w-16 origin-left bg-gradient-to-r from-violet/70 to-transparent md:my-16"
+            />
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, delay: 0.05 }}
+              className="text-balance text-base leading-[1.85] text-bone/80 md:text-lg md:leading-[1.9]"
+            >
+              {body}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 1.2, delay: 0.1 }}
+              className="my-16 flex items-center gap-4 md:my-24"
+            >
+              <span className="h-px w-10 bg-violet/60" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-violet/80">
+                Signature
+              </span>
+              <span className="h-px flex-1 bg-gradient-to-r from-violet/40 to-transparent" />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9 }}
+              className="font-display text-balance text-3xl leading-[1.05] text-bone md:text-5xl"
+            >
+              {signature}
+            </motion.p>
+
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="my-16 h-px w-24 origin-left bg-gradient-to-r from-violet/60 via-violet/30 to-transparent md:my-24"
+            />
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8 }}
+              className="text-balance text-base leading-[1.85] text-bone/70 md:text-lg md:leading-[1.9]"
+            >
+              {closing}
+            </motion.p>
           </div>
         </div>
       </div>
