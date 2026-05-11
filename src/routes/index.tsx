@@ -207,19 +207,27 @@ function ExperienceLive() {
         <div className="mt-12 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-8">
             <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
-              {/* Slot ready for <video src="..."> */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_30%,oklch(0.55_0.28_295/0.3),transparent_70%)] bg-[length:200%_100%]"
-                  style={{ animation: "shimmer 6s linear infinite" }} />
-                <div className="relative z-10 text-center">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
-                    Multicam Studio Mix · à venir
-                  </span>
-                  <div className="mt-4 flex items-center justify-center gap-3">
-                    <span className="h-2 w-2 rounded-full bg-violet pulse-glow" />
-                    <span className="font-display text-2xl">REC · 00:00:00</span>
-                  </div>
-                </div>
+              <img
+                src={liveDecks}
+                alt="IXAN BOY live"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover object-center contrast-110 saturate-[0.7]"
+              />
+              {/* color & vignette grading */}
+              <div className="absolute inset-0 bg-void/55 mix-blend-multiply" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,oklch(0.55_0.28_295/0.35),transparent_60%)] mix-blend-screen" />
+              <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/30" />
+              {/* HUD overlay */}
+              <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                <span className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember pulse-glow" />
+                  REC · LIVE
+                </span>
+                <span className="text-bone/50">CAM_01 / 04</span>
+              </div>
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-4 py-4">
+                <span className="font-display text-2xl md:text-4xl leading-none">IXAN BOY</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">150 BPM · RAW</span>
               </div>
               {/* corner brackets */}
               {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) => (
