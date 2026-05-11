@@ -281,10 +281,8 @@ function PulseBar() {
               key={i}
               className="flex-1 bg-bone/60"
               style={{
-                height: `calc(${
-                  15 + Math.abs(Math.sin(i * 0.4)) * 70
-                }% * (0.6 + var(--pulse) * 0.9))`,
-                opacity: 0.5 + Math.sin(i * 0.3) * 0.3,
+                height: `calc(${(15 + Math.abs(Math.sin(i * 0.4)) * 70).toFixed(2)}% * (0.6 + var(--pulse) * 0.9))`,
+                opacity: Number((0.5 + Math.sin(i * 0.3) * 0.3).toFixed(3)),
               }}
             />
           ))}
