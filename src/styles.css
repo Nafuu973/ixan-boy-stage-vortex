@@ -389,15 +389,17 @@
   /* Handwritten chrome signature — IXAN BOY */
   .hand-signature {
     isolation: isolate;
-    font-family: "Dancing Script", "Allura", cursive;
-    font-weight: 700;
-    line-height: 1;
-    font-size: clamp(2.4rem, 7vw, 4.75rem);
-    letter-spacing: 0.005em;
-    padding: 0.2em 0.35em 0.35em 0.2em;
+    font-family: "Kaushan Script", "Caveat Brush", cursive;
+    font-weight: 400;
+    line-height: 1.05;
+    font-size: clamp(2.2rem, 6.4vw, 4.4rem);
+    letter-spacing: 0.002em;
+    padding: 0.35em 0.6em 0.4em 0.55em;
+    margin-left: -0.3em;
     animation: hand-float 8s ease-in-out infinite;
     will-change: transform;
-    transform: rotate(-2deg);
+    transform: rotate(-3deg) skewX(-4deg);
+    overflow: visible;
   }
   .hand-signature__ink {
     position: relative;
@@ -405,38 +407,38 @@
     background: linear-gradient(
       170deg,
       #ffffff 0%,
-      #e8e8ee 18%,
-      #9a9aa8 38%,
-      #fafafd 52%,
-      #c4c4d0 70%,
-      #6f6f7e 88%,
-      #d8d8e2 100%
+      #e6e6ec 16%,
+      #8e8e9c 36%,
+      #fafafd 50%,
+      #b8b8c4 68%,
+      #5e5e6c 86%,
+      #d2d2dc 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.55))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65))
-      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45))
-      drop-shadow(0 0 24px rgba(255, 255, 255, 0.08));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6))
+      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7))
+      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5))
+      drop-shadow(0 0 26px rgba(255, 255, 255, 0.08));
   }
   .hand-signature__halo {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
-    padding: 0.2em 0.35em 0.35em 0.2em;
-    color: rgba(255, 255, 255, 0.35);
-    filter: blur(20px);
+    padding: 0.35em 0.6em 0.4em 0.55em;
+    color: rgba(255, 255, 255, 0.32);
+    filter: blur(22px);
     opacity: 0.5;
     z-index: -1;
     pointer-events: none;
   }
   @keyframes hand-float {
-    0%, 100% { transform: rotate(-2deg) translateY(0); }
-    50%      { transform: rotate(-1.6deg) translateY(-3px); }
+    0%, 100% { transform: rotate(-3deg) skewX(-4deg) translateY(0); }
+    50%      { transform: rotate(-2.6deg) skewX(-4deg) translateY(-3px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .hand-signature { animation: none; }
