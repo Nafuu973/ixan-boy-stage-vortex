@@ -133,12 +133,24 @@ function Preloader({ done }: { done: boolean }) {
   );
 }
 
-/* Cinematic optical scan — single thin violet-white line + bloom sweep */
-function CinematicScan() {
+/* Signature scan — biometric premium detection sweep, replays subtly */
+function SignatureScan() {
+  const [key, setKey] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setKey((k) => k + 1), 14000);
+    return () => clearInterval(id);
+  }, []);
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
-      <div className="cine-scan-line" />
-      <div className="cine-scan-bloom" />
+    <div key={key} className="sig-scan z-20">
+      <span className="sig-scan__bracket sig-scan__bracket--tl" />
+      <span className="sig-scan__bracket sig-scan__bracket--tr" />
+      <span className="sig-scan__bracket sig-scan__bracket--bl" />
+      <span className="sig-scan__bracket sig-scan__bracket--br" />
+      <span className="sig-scan__label">SIGNATURE · IXAN BOY</span>
+      <div className="sig-scan__lines" />
+      <div className="sig-scan__noise" />
+      <div className="sig-scan__bloom" />
+      <div className="sig-scan__line" />
     </div>
   );
 }
