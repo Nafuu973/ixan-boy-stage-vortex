@@ -126,28 +126,34 @@
   }
   /* Mainstage / festival treatment for the biggest section titles */
   h1.font-display,
-  h2.font-display {
-    /* Scantraxx-inspired gradient: bright white top-left to deep violet bottom-right */
-    background: linear-gradient(
-      155deg,
-      #ffffff 0%,
-      #ede0fb 12%,
-      #c8a3f0 28%,
-      oklch(0.62 0.27 295) 48%,
-      oklch(0.48 0.29 295) 72%,
-      oklch(0.30 0.22 290) 100%
-    );
+  h2.font-display,
+  h3.font-display {
+    /* Cinematic chrome → violet → deep aubergine. Soft silver highlights, premium festival feel. */
+    background:
+      linear-gradient(
+        158deg,
+        #ffffff 0%,
+        #f5ecff 9%,
+        #e2cdf7 20%,
+        #b88be8 34%,
+        oklch(0.62 0.27 295) 50%,
+        oklch(0.46 0.29 295) 72%,
+        oklch(0.26 0.18 290) 100%
+      );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12))
-      drop-shadow(0 0 0.5em color-mix(in oklab, var(--violet) 38%, transparent))
-      drop-shadow(0 0 1.4em color-mix(in oklab, var(--violet) 18%, transparent));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.18))
+      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 0 0.55em color-mix(in oklab, var(--violet) 40%, transparent))
+      drop-shadow(0 0 1.6em color-mix(in oklab, var(--violet) 18%, transparent));
     text-shadow: none;
   }
+  /* Subtle silver sheen overlay on big titles */
+  h1.font-display, h2.font-display { position: relative; }
   h1.font-display::selection,
   h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
@@ -437,24 +443,23 @@
     position: relative;
     display: inline-block;
     background: linear-gradient(
-      180deg,
+      178deg,
       #ffffff 0%,
-      #f3f3f8 28%,
-      #d6d7df 55%,
-      #a9abb6 85%,
-      #c8c9d2 100%
+      #f6f4fb 22%,
+      #d9d6e3 48%,
+      #aaa6b8 78%,
+      #c4bfd2 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    -webkit-text-stroke: 0.4px rgba(255, 255, 255, 0.35);
+    -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.28);
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85))
-      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7))
-      drop-shadow(0 8px 22px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 0 18px rgba(255, 255, 255, 0.18))
-      drop-shadow(0 0 28px rgba(170, 130, 255, 0.22));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5))
+      drop-shadow(0 0 22px rgba(190, 160, 255, 0.18));
   }
   .hand-signature__halo {
     position: absolute;
@@ -462,9 +467,9 @@
     display: flex;
     align-items: center;
     padding: 0.5em 0.85em 0.6em 0.6em;
-    color: rgba(245, 240, 255, 0.45);
-    filter: blur(16px);
-    opacity: 0.55;
+    color: rgba(220, 200, 255, 0.38);
+    filter: blur(20px);
+    opacity: 0.5;
     z-index: -1;
     pointer-events: none;
     animation: sig-breath 7s ease-in-out infinite;
