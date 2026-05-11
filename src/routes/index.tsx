@@ -13,8 +13,8 @@ import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
 import liveDecks from "@/assets/live-decks.jpg";
 import liveBooth from "@/assets/live-booth.jpg";
-import labelScantraxx from "@/assets/label-scantraxx.png";
-import labelHFR from "@/assets/label-hardstyle-france.png";
+import labelScantraxx from "@/assets/label-scantraxx-round.png";
+import labelHFR from "@/assets/label-hardstyle-france-round.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
