@@ -195,18 +195,18 @@ function Hero() {
 
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex h-full flex-col justify-end px-5 pb-14 md:px-12 md:pb-20"
+        className="relative z-10 flex h-full flex-col justify-end px-5 pb-12 md:px-12 md:pb-16"
       >
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
           {t.hero.sub}
         </div>
-        <h1 className="font-display mt-3 text-[clamp(4rem,16vw,15rem)] leading-[0.85] tracking-tight">
-          IXAN
+        <h1 className="hero-title font-display mt-3 text-[clamp(4rem,16vw,15rem)] leading-[0.85] tracking-tight">
+          <span className="hero-title__word">IXAN</span>
           <br className="md:hidden" />
-          <span className="md:ml-6 text-violet">BOY</span>
+          <span className="hero-title__word hero-title__word--accent md:ml-6">BOY</span>
         </h1>
 
-        <div className="mt-12 mb-12 sig-reveal flex justify-center md:justify-start md:-ml-2">
+        <div className="mt-10 mb-10 sig-reveal flex justify-start -ml-1 md:-ml-4">
           <ChromeSignature text={t.hero.tag} />
         </div>
 

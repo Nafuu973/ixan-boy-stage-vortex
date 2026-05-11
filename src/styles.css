@@ -186,10 +186,10 @@
      FLASH → SCAN → REVEAL → DISAPPEAR (~1.4s)
      ============================================================ */
   @keyframes sig-scan-sweep {
-    0%   { top: -2%; opacity: 0; }
-    6%   { opacity: 1; }
-    94%  { opacity: 1; }
-    100% { top: 102%; opacity: 0; }
+    0%   { top: -4%; opacity: 0; }
+    14%  { opacity: 0.85; }
+    86%  { opacity: 0.85; }
+    100% { top: 104%; opacity: 0; }
   }
   @keyframes sig-scan-bloom {
     0%   { opacity: 0; top: -10%; }
@@ -237,23 +237,23 @@
     position: absolute;
     inset-inline: -2%;
     top: 0;
-    height: 3px;
+    height: 1.5px;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      color-mix(in oklab, var(--violet) 60%, transparent) 12%,
-      color-mix(in oklab, var(--violet) 90%, white) 38%,
+      color-mix(in oklab, var(--violet) 45%, transparent) 18%,
+      color-mix(in oklab, var(--violet) 80%, white) 42%,
       #ffffff 50%,
-      color-mix(in oklab, var(--violet) 90%, white) 62%,
-      color-mix(in oklab, var(--violet) 60%, transparent) 88%,
+      color-mix(in oklab, var(--violet) 80%, white) 58%,
+      color-mix(in oklab, var(--violet) 45%, transparent) 82%,
       transparent 100%
     );
     box-shadow:
-      0 0 8px 1px #ffffff,
-      0 0 24px 2px color-mix(in oklab, var(--violet) 90%, white),
-      0 0 60px 8px color-mix(in oklab, var(--violet) 70%, transparent),
-      0 0 120px 20px color-mix(in oklab, var(--violet) 35%, transparent);
-    animation: sig-scan-sweep 1.4s cubic-bezier(0.55, 0, 0.2, 1) forwards;
+      0 0 6px 1px rgba(255,255,255,0.6),
+      0 0 18px 2px color-mix(in oklab, var(--violet) 70%, transparent),
+      0 0 48px 6px color-mix(in oklab, var(--violet) 40%, transparent),
+      0 0 100px 16px color-mix(in oklab, var(--violet) 22%, transparent);
+    animation: sig-scan-sweep 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
     will-change: transform, opacity;
   }
 
@@ -286,7 +286,8 @@
       transparent 70%
     );
     mix-blend-mode: screen;
-    animation: sig-scan-bloom 1.4s cubic-bezier(0.55, 0, 0.2, 1) forwards;
+    animation: sig-scan-bloom 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+    opacity: 0.7;
     will-change: transform, opacity;
   }
 
@@ -393,11 +394,11 @@
     font-weight: 400;
     font-style: italic;
     line-height: 1;
-    font-size: clamp(4.2rem, 11vw, 8rem);
-    letter-spacing: 0.005em;
-    padding: 0.5em 0.85em 0.6em 0.6em;
-    margin-left: -0.3em;
-    animation: hand-float 9s ease-in-out infinite;
+    font-size: clamp(3.2rem, 8.4vw, 6.2rem);
+    letter-spacing: 0.012em;
+    padding: 0.45em 0.75em 0.55em 0.5em;
+    margin-left: -0.2em;
+    animation: hand-float 10s ease-in-out infinite;
     will-change: transform, filter;
     transform: rotate(-3deg);
     overflow: visible;
@@ -406,16 +407,16 @@
   .hand-signature::before {
     content: "";
     position: absolute;
-    inset: -8% -6%;
+    inset: -14% -10%;
     background:
-      radial-gradient(58% 55% at 50% 55%, rgba(8, 6, 18, 0.78), rgba(8, 6, 18, 0.45) 55%, transparent 78%),
-      radial-gradient(45% 40% at 30% 65%, color-mix(in oklab, var(--violet) 28%, transparent), transparent 75%),
-      radial-gradient(38% 30% at 75% 40%, rgba(255, 255, 255, 0.10), transparent 78%);
-    filter: blur(20px);
-    opacity: 0.95;
+      radial-gradient(58% 55% at 50% 55%, rgba(8, 6, 18, 0.62), rgba(8, 6, 18, 0.32) 55%, transparent 80%),
+      radial-gradient(45% 40% at 30% 65%, color-mix(in oklab, var(--violet) 22%, transparent), transparent 78%),
+      radial-gradient(38% 30% at 75% 40%, rgba(255, 255, 255, 0.07), transparent 80%);
+    filter: blur(28px);
+    opacity: 0.85;
     z-index: -2;
     pointer-events: none;
-    animation: sig-aura 7s ease-in-out infinite;
+    animation: sig-aura 8s ease-in-out infinite;
   }
   /* Tiny lens flare */
   .hand-signature::after {
