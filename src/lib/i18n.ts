@@ -4,101 +4,140 @@ export type Lang = "fr" | "en";
 
 export const dict = {
   fr: {
-    nav: { listen: "Écouter", live: "Live Edit", booking: "Booking", socials: "Réseaux" },
+    nav: { live: "Live Edit", booking: "Booking" },
     hero: {
+      sub: "Hardstyle / Raw",
+      intro:
+        "Une signature hardstyle / raw française construite pour imposer une intensité absolue en live.",
       tag: "Emotion before destruction.",
-      sub: "Hardstyle — Raw",
-      ready: "Festival ready · 2025",
     },
-    pulse: { label: "BPM", state: "LIVE SIGNAL" },
+    pulse: { state: "SIGNAL ACTIF", feed: "TRANSMISSION ACTIVE" },
+    presentation: {
+      kicker: "Présentation",
+      title: "Disséquer pour mieux frapper.",
+      paragraphs: [
+        "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
+        "Musicien et ingénieur son de formation, il développe un hardstyle / raw où la tension mélodique prépare des impacts d’une précision chirurgicale.",
+        "Chaque montée est calculée. Chaque impact est amplifié.",
+        "Découvertes des platines vinyles à 15 ans, immersion dans l’univers techno, hardcore et hardstyle façonnée par Thunderdome, puis années d’analyse sonore autour de Wildstylez, Ran-D, Regain, D-Sturb ou Kronos : IXAN BOY construit depuis 2020 une identité pensée pour l’impact live.",
+      ],
+    },
     live: {
-      kicker: "Experience Live",
-      lines: ["Construit pour l'impact.", "Tension mélodique. Libération violente."],
+      kicker: "Expérience Live",
+      headline: ["Construit", "pour l’impact."],
+      side: ["Construit pour l’impact.", "Le silence prépare l’impact."],
     },
     why: {
-      title: "Pourquoi booker IXAN BOY",
+      kicker: "Pourquoi booker IXAN BOY",
       cards: [
         {
           k: "01 — Crédibilité Labels",
-          h: "Releases sur Scantraxx Prospexx & Hardstyle France.",
-          p: "Un projet déjà signé sur des structures reconnues de la scène.",
+          h: "Déjà repéré par les structures qui façonnent le raw moderne.",
+          p: "Signé sur Scantraxx Prospexx & Hardstyle France.",
         },
         {
           k: "02 — Identité sonore",
-          h: "Chaque morceau pensé comme un moment de set.",
-          p: "Installer la tension. Déclencher la réaction. Laisser une empreinte.",
+          h: "Chaque morceau pensé comme une mécanique de tension.",
+          p: "Installer l’attente. Déclencher la réaction. Laisser une empreinte.",
         },
         {
           k: "03 — Reconnaissance scène",
-          h: "Supports : Kronos · Damien RK · Fury · Miss Pepper.",
-          p: "Une signature reconnue par les artistes qui définissent le son raw.",
+          h: "Ses productions trouvent des relais dans les sets de Kronos, Damien RK, Fury, Miss Pepper.",
+          p: "Une signature déjà identifiée par les artistes qui définissent le raw moderne.",
         },
       ],
     },
-    silence: "Le silence avant la frappe.",
+    silence: "Le silence prépare l’impact.",
     tracks: {
       kicker: "Signature Tracks",
+      title: "Signature.",
       list: [
         { title: "Through The Fire", mood: "Émotion · Montée · Rupture" },
         { title: "Better Not Run", mood: "Tension · Précision · Impact" },
       ],
     },
     dna: {
-      kicker: "Musical DNA",
-      body: "Une puissance sous contrôle. Une précision chirurgicale. Chaque kick sculpté pour repousser la limite d'une base déjà massive. Le chaos, parfaitement maîtrisé.",
+      kicker: "ADN Musical",
+      title: "Le silence avant la frappe.",
+      intro: [
+        "Des mélodies construites pour installer la tension.",
+        "Des impacts pensés pour la détruire.",
+      ],
+      bodyKicker: "ADN sonore IXAN",
+      body: "IXAN BOY développe une approche du raw basée sur la précision et le contrôle. Ses kicks ne cherchent pas uniquement la violence : ils amplifient la sensation d’impact jusqu’à créer une tension physique. Chaque détail sonore est travaillé pour pousser l’intensité encore plus loin, sans jamais perdre la maîtrise.",
     },
-    proof: { kicker: "Soutiens & Labels", labels: "LABELS", supports: "SUPPORTS" },
+    proof: {
+      kicker: "Soutiens & Labels",
+      labels: "Labels",
+      supports: "Supports",
+      played: "Joué",
+    },
     booking: {
-      kicker: "Booking Ready",
-      lines: [
-        "Management structuré.",
-        "Réactivité sous 24h.",
-        "Format club & festival.",
-        "Projet en montée — identité déjà solide.",
+      kicker: "Booking",
+      cards: [
+        { k: "Management", p: "Communication rapide et structurée." },
+        { k: "Live Format", p: "Pensé pour clubs et scènes festival." },
+        { k: "Performance", p: "Une identité sonore déjà reconnaissable." },
+        { k: "Vision", p: "Un projet construit pour évoluer vite." },
       ],
     },
     contact: {
-      kicker: "Contact",
+      kicker: "Contact Booking",
+      headline: ["Booker", "IXAN BOY."],
       cta: "Réserver IXAN BOY",
       mail: "booking@ixanboy.com",
       end: "Emotion before destruction.",
     },
+    footer: { signal: "SIGNAL · STABLE", style: "HARDSTYLE / RAW" },
   },
   en: {
-    nav: { listen: "Listen", live: "Live Edit", booking: "Booking", socials: "Socials" },
+    nav: { live: "Live Edit", booking: "Booking" },
     hero: {
+      sub: "Hardstyle / Raw",
+      intro:
+        "A French hardstyle / raw signature built to impose absolute intensity on stage.",
       tag: "Emotion before destruction.",
-      sub: "Hardstyle — Raw",
-      ready: "Festival ready · 2025",
     },
-    pulse: { label: "BPM", state: "LIVE SIGNAL" },
+    pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
+    presentation: {
+      kicker: "Presentation",
+      title: "Dissect to strike harder.",
+      paragraphs: [
+        "IXAN BOY doesn’t copy his influences — he dissects them to build his own language.",
+        "Musician and trained sound engineer, he develops a hardstyle / raw where melodic tension prepares impacts of surgical precision.",
+        "Every build-up is calculated. Every impact is amplified.",
+        "Discovering vinyl turntables at 15, an immersion into techno, hardcore and hardstyle shaped by Thunderdome, then years of sonic analysis around Wildstylez, Ran-D, Regain, D-Sturb or Kronos: since 2020 IXAN BOY has been crafting an identity built for live impact.",
+      ],
+    },
     live: {
       kicker: "Live Experience",
-      lines: ["Built for impact.", "Melodic tension. Violent release."],
+      headline: ["Built", "for impact."],
+      side: ["Built for impact.", "Silence prepares the impact."],
     },
     why: {
-      title: "Why book IXAN BOY",
+      kicker: "Why book IXAN BOY",
       cards: [
         {
           k: "01 — Label credibility",
-          h: "Released on Scantraxx Prospexx & Hardstyle France.",
-          p: "A project already signed to recognized scene structures.",
+          h: "Already spotted by the structures shaping modern raw.",
+          p: "Signed on Scantraxx Prospexx & Hardstyle France.",
         },
         {
           k: "02 — Sonic identity",
-          h: "Every track designed as a set moment.",
-          p: "Build the tension. Trigger the reaction. Leave a mark.",
+          h: "Every track engineered as a tension mechanism.",
+          p: "Set the wait. Trigger the reaction. Leave a mark.",
         },
         {
           k: "03 — Scene recognition",
-          h: "Supports: Kronos · Damien RK · Fury · Miss Pepper.",
-          p: "A signature acknowledged by the artists who define the raw sound.",
+          h: "His productions are already played by Kronos, Damien RK, Fury, Miss Pepper.",
+          p: "A signature acknowledged by the artists defining modern raw.",
         },
       ],
     },
-    silence: "The silence before the strike.",
+    silence: "Silence prepares the impact.",
     tracks: {
       kicker: "Signature Tracks",
+      title: "Signature.",
       list: [
         { title: "Through The Fire", mood: "Emotion · Rise · Break" },
         { title: "Better Not Run", mood: "Tension · Precision · Impact" },
@@ -106,24 +145,37 @@ export const dict = {
     },
     dna: {
       kicker: "Musical DNA",
-      body: "Power under control. Surgical precision. Every kick sculpted to push past the limit of an already massive foundation. Chaos, perfectly mastered.",
+      title: "The silence before the strike.",
+      intro: [
+        "Melodies built to install the tension.",
+        "Impacts designed to destroy it.",
+      ],
+      bodyKicker: "IXAN sonic DNA",
+      body: "IXAN BOY develops a take on raw rooted in precision and control. His kicks don’t only chase violence: they amplify the sensation of impact until it becomes physical tension. Every sonic detail is engineered to push the intensity further, without ever losing control.",
     },
-    proof: { kicker: "Support & Labels", labels: "LABELS", supports: "SUPPORTS" },
+    proof: {
+      kicker: "Supports & Labels",
+      labels: "Labels",
+      supports: "Supports",
+      played: "Played",
+    },
     booking: {
-      kicker: "Booking Ready",
-      lines: [
-        "Structured management.",
-        "Response within 24h.",
-        "Club & festival format.",
-        "A rising project — identity already locked.",
+      kicker: "Booking",
+      cards: [
+        { k: "Management", p: "Fast, structured communication." },
+        { k: "Live Format", p: "Built for clubs and festival stages." },
+        { k: "Performance", p: "A sonic identity already recognizable." },
+        { k: "Vision", p: "A project built to scale fast." },
       ],
     },
     contact: {
-      kicker: "Contact",
+      kicker: "Booking Contact",
+      headline: ["Book", "IXAN BOY."],
       cta: "Book IXAN BOY",
       mail: "booking@ixanboy.com",
       end: "Emotion before destruction.",
     },
+    footer: { signal: "SIGNAL · STABLE", style: "HARDSTYLE / RAW" },
   },
 } as const;
 
