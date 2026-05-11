@@ -180,7 +180,7 @@ function Hero() {
         <h1 className="font-display mt-3 text-[clamp(4rem,16vw,15rem)] leading-[0.85] tracking-tight">
           IXAN
           <br className="md:hidden" />
-          <span className="md:ml-6">BOY</span>
+          <span className="md:ml-6 text-violet">BOY</span>
         </h1>
 
         <p className="mt-5 max-w-xl text-balance text-sm leading-relaxed text-bone/75 md:text-base">
@@ -329,7 +329,7 @@ function ExperienceLive() {
         <h2 className="font-display mt-4 text-[clamp(3rem,11vw,9rem)] leading-[0.9]">
           {t.live.headline[0]}
           <br />
-          {t.live.headline[1]}
+          <span className="text-violet">{t.live.headline[1]}</span>
         </h2>
         <div className="mt-12 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-8">
@@ -745,7 +745,7 @@ function ContactFinal() {
         <h2 className="font-display mt-6 text-balance text-[clamp(3rem,14vw,12rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
-          {t.contact.headline[1]}
+          <span className="text-violet">{t.contact.headline[1]}</span>
         </h2>
 
         <div className="mt-10 flex flex-col gap-3">
