@@ -492,6 +492,44 @@
     .hand-signature__halo { animation: none; }
   }
 
+  /* Hero title — cinematic premium branding */
+  .hero-title {
+    position: relative;
+  }
+  .hero-title__word {
+    display: inline-block;
+    background: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #ececf2 35%,
+      #b8b9c4 75%,
+      #8a8b96 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 0 24px rgba(255, 255, 255, 0.06));
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.04);
+  }
+  .hero-title__word--accent {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--violet) 30%, white) 0%,
+      var(--violet) 45%,
+      color-mix(in oklab, var(--violet) 78%, black) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6))
+      drop-shadow(0 0 30px color-mix(in oklab, var(--violet) 40%, transparent));
+  }
+
   /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
   @keyframes track-breathe {
     0%, 100% {
