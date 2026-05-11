@@ -389,56 +389,59 @@
   /* Handwritten chrome signature — IXAN BOY */
   .hand-signature {
     isolation: isolate;
-    font-family: "Kaushan Script", "Caveat Brush", cursive;
+    font-family: "Permanent Marker", "Rock Salt", cursive;
     font-weight: 400;
-    line-height: 1.05;
-    font-size: clamp(2.2rem, 6.4vw, 4.4rem);
-    letter-spacing: 0.002em;
-    padding: 0.35em 0.6em 0.4em 0.55em;
-    margin-left: -0.3em;
-    animation: hand-float 8s ease-in-out infinite;
+    line-height: 1;
+    font-size: clamp(2rem, 5.6vw, 3.8rem);
+    letter-spacing: 0.01em;
+    padding: 0.3em 0.5em 0.35em 0.45em;
+    margin-left: -0.2em;
+    animation: hand-float 7s ease-in-out infinite;
     will-change: transform;
-    transform: rotate(-3deg) skewX(-4deg);
+    transform: rotate(-3.5deg) skewX(-6deg);
     overflow: visible;
+    text-transform: uppercase;
   }
   .hand-signature__ink {
     position: relative;
     display: inline-block;
     background: linear-gradient(
-      170deg,
+      168deg,
       #ffffff 0%,
-      #e6e6ec 16%,
-      #8e8e9c 36%,
-      #fafafd 50%,
-      #b8b8c4 68%,
-      #5e5e6c 86%,
-      #d2d2dc 100%
+      #e2e2ea 14%,
+      #7c7c8c 32%,
+      #fbfbfe 48%,
+      #b0b0bc 64%,
+      #4e4e5c 82%,
+      #d6d6e0 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0.8px rgba(20, 20, 28, 0.55);
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.6))
-      drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7))
-      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5))
-      drop-shadow(0 0 26px rgba(255, 255, 255, 0.08));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7))
+      drop-shadow(0 3px 4px rgba(0, 0, 0, 0.78))
+      drop-shadow(0 8px 18px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 0 28px rgba(255, 255, 255, 0.1));
   }
   .hand-signature__halo {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
-    padding: 0.35em 0.6em 0.4em 0.55em;
-    color: rgba(255, 255, 255, 0.32);
-    filter: blur(22px);
-    opacity: 0.5;
+    padding: 0.3em 0.5em 0.35em 0.45em;
+    color: rgba(255, 255, 255, 0.34);
+    filter: blur(24px);
+    opacity: 0.55;
     z-index: -1;
     pointer-events: none;
+    text-transform: uppercase;
   }
   @keyframes hand-float {
-    0%, 100% { transform: rotate(-3deg) skewX(-4deg) translateY(0); }
-    50%      { transform: rotate(-2.6deg) skewX(-4deg) translateY(-3px); }
+    0%, 100% { transform: rotate(-3.5deg) skewX(-6deg) translateY(0); }
+    50%      { transform: rotate(-3deg)   skewX(-6deg) translateY(-3px); }
   }
   @media (prefers-reduced-motion: reduce) {
     .hand-signature { animation: none; }
