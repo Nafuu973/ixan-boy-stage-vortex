@@ -11,6 +11,9 @@ import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
+import liveDecks from "@/assets/live-decks.jpg";
+import labelScantraxx from "@/assets/label-scantraxx.png";
+import labelHFR from "@/assets/label-hardstyle-france.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -204,19 +207,27 @@ function ExperienceLive() {
         <div className="mt-12 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-8">
             <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
-              {/* Slot ready for <video src="..."> */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_30%,oklch(0.55_0.28_295/0.3),transparent_70%)] bg-[length:200%_100%]"
-                  style={{ animation: "shimmer 6s linear infinite" }} />
-                <div className="relative z-10 text-center">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
-                    Multicam Studio Mix · à venir
-                  </span>
-                  <div className="mt-4 flex items-center justify-center gap-3">
-                    <span className="h-2 w-2 rounded-full bg-violet pulse-glow" />
-                    <span className="font-display text-2xl">REC · 00:00:00</span>
-                  </div>
-                </div>
+              <img
+                src={liveDecks}
+                alt="IXAN BOY live"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover object-center contrast-110 saturate-[0.7]"
+              />
+              {/* color & vignette grading */}
+              <div className="absolute inset-0 bg-void/55 mix-blend-multiply" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,oklch(0.55_0.28_295/0.35),transparent_60%)] mix-blend-screen" />
+              <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/30" />
+              {/* HUD overlay */}
+              <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                <span className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-ember pulse-glow" />
+                  REC · LIVE
+                </span>
+                <span className="text-bone/50">CAM_01 / 04</span>
+              </div>
+              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-4 py-4">
+                <span className="font-display text-2xl md:text-4xl leading-none">IXAN BOY</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">150 BPM · RAW</span>
               </div>
               {/* corner brackets */}
               {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) => (
@@ -379,7 +390,10 @@ function MusicalDNA() {
 
 function Proof() {
   const t = useT();
-  const labels = ["Scantraxx Prospexx", "Hardstyle France"];
+  const labels = [
+    { name: "Scantraxx Prospexx", logo: labelScantraxx },
+    { name: "Hardstyle France Records", logo: labelHFR },
+  ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
     <section className="relative bg-void py-24 md:py-32">
@@ -387,17 +401,24 @@ function Proof() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           06 · {t.proof.kicker}
         </div>
-        <div className="mt-12 grid gap-12 md:grid-cols-2">
+        <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">{t.proof.labels}</span>
-            <ul className="mt-6 space-y-4">
+            <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-sm bg-bone/10">
               {labels.map((l) => (
-                <li key={l} className="group flex items-center justify-between border-b border-bone/10 pb-4">
-                  <span className="font-display text-2xl md:text-4xl">{l}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-bone/40 transition-colors group-hover:text-violet">RELEASED</span>
-                </li>
+                <div key={l.name} className="group relative flex aspect-square flex-col items-center justify-center bg-obsidian/60 p-4 transition-colors hover:bg-violet/10">
+                  <img
+                    src={l.logo}
+                    alt={l.name}
+                    loading="lazy"
+                    className="max-h-[70%] w-auto max-w-[80%] object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <span className="absolute inset-x-0 bottom-3 text-center font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50 group-hover:text-bone/80">
+                    {l.name}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
           <div>
             <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">{t.proof.supports}</span>
