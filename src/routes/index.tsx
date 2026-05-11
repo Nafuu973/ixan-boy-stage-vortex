@@ -6,7 +6,9 @@ import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { startPulse } from "@/lib/pulse";
 import { TrackPlayer } from "@/components/epk/TrackPlayer";
 import { RevealText } from "@/components/epk/RevealText";
-import heroImg from "@/assets/hero-portrait.jpg";
+import heroImg from "@/assets/portrait-hero.jpg";
+import tunnelImg from "@/assets/portrait-tunnel.jpg";
+import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
 
@@ -52,11 +54,9 @@ function Index() {
   function TopBar() {
     return (
       <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-5 py-4 md:px-10 md:py-6">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-violet pulse-glow" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-bone/70">
-            IXAN_BOY · EPK
-          </span>
+        <div className="flex items-center gap-3">
+          <img src={logoImg} alt="IXAN BOY" className="h-7 w-auto md:h-9 drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]" />
+          <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-bone/60 sm:inline">EPK · 2025</span>
         </div>
         <div className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest">
           {(["fr", "en"] as const).map((l) => (
@@ -87,10 +87,13 @@ function Preloader({ done }: { done: boolean }) {
         <motion.div
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className="fixed inset-0 z-[200] flex items-end justify-between bg-void p-6 md:p-12"
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-8 bg-void"
         >
-          <span className="font-display text-5xl md:text-7xl">IXAN BOY</span>
-          <span className="font-mono text-xl md:text-3xl text-violet">{String(n).padStart(3, "0")}</span>
+          <img src={logoImg} alt="IXAN BOY" className="h-24 w-auto pulse-scale drop-shadow-[0_0_30px_rgba(167,100,255,0.4)] md:h-32" />
+          <div className="flex w-full items-end justify-between px-6 md:px-12">
+            <span className="font-display text-3xl md:text-5xl">IXAN BOY</span>
+            <span className="font-mono text-lg md:text-2xl text-violet">{String(n).padStart(3, "0")}</span>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -105,29 +108,30 @@ function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const t = useT(); // CTA labels not language-critical visually, simplified
   return (
-    <section ref={ref} className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
+    <section ref={ref} className="relative h-[100svh] min-h-[680px] w-full overflow-hidden">
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <img
           src={heroImg}
-          alt="IXAN BOY portrait"
-          className="h-full w-full object-cover object-center opacity-90"
+          alt="IXAN BOY"
+          className="h-full w-full object-cover object-[center_20%] md:object-[center_30%]"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-void/40 via-void/20 to-void" />
-        <div className="absolute inset-0 smoke opacity-50 mix-blend-overlay drift" />
+        <div className="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,transparent,var(--void)_75%)]" />
+        <div className="absolute inset-0 smoke opacity-30 mix-blend-screen drift" />
       </motion.div>
 
-      <motion.div style={{ opacity }} className="relative z-10 flex h-full flex-col justify-end px-5 pb-20 md:px-12 md:pb-24">
+      <motion.div style={{ opacity }} className="relative z-10 flex h-full flex-col justify-end px-5 pb-16 md:px-12 md:pb-20">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
           {t.hero.sub} · {t.hero.ready}
         </div>
-        <h1 className="font-display mt-4 text-[clamp(4.5rem,18vw,17rem)] leading-[0.85] tracking-tight">
+        <h1 className="font-display mt-3 text-[clamp(4rem,16vw,15rem)] leading-[0.85] tracking-tight">
           IXAN<br className="md:hidden" /><span className="md:ml-6">BOY</span>
         </h1>
-        <p className="font-serif-i mt-4 text-2xl text-bone/85 md:text-4xl">
+        <p className="font-serif-i mt-4 text-xl text-bone/85 md:text-3xl">
           {t.hero.tag}
         </p>
-        <div className="mt-8 flex flex-wrap gap-2 md:gap-3">
+        <div className="mt-7 flex flex-wrap gap-2 md:gap-3">
           <Cta href="#tracks" label={t.nav.listen} primary />
           <Cta href="#live" label={t.nav.live} />
           <Cta href="#contact" label={t.nav.booking} />
@@ -344,11 +348,29 @@ function MusicalDNA() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           05 · {t.dna.kicker}
         </div>
-        <div className="mt-10 max-w-5xl">
-          <RevealText
-            text={t.dna.body}
-            className="font-display block text-[clamp(2rem,6vw,5rem)] leading-[1.05] text-balance"
-          />
+        <div className="mt-10 grid gap-12 md:grid-cols-12 md:gap-16">
+          <div className="md:col-span-7">
+            <RevealText
+              text={t.dna.body}
+              className="font-display block text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.05] text-balance"
+            />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8 }}
+            className="relative md:col-span-5"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden rounded-sm border border-bone/10 pulse-scale">
+              <img src={tunnelImg} alt="IXAN BOY" loading="lazy" className="h-full w-full object-cover grayscale-[20%] contrast-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent,oklch(0.55_0.28_295/0.18))]" />
+              <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                ID · 0X · IXAN
+              </span>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
