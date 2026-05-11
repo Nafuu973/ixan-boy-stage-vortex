@@ -389,12 +389,12 @@
   /* Handwritten chrome signature — IXAN BOY */
   .hand-signature {
     isolation: isolate;
-    font-family: "Yellowtail", "Allura", cursive;
+    font-family: "Kolker Brush", "Mea Culpa", cursive;
     font-weight: 400;
-    line-height: 1;
-    font-size: clamp(2.6rem, 7.2vw, 5rem);
-    letter-spacing: 0.005em;
-    padding: 0.35em 0.7em 0.45em 0.6em;
+    line-height: 0.9;
+    font-size: clamp(3.4rem, 9.5vw, 6.4rem);
+    letter-spacing: -0.005em;
+    padding: 0.4em 0.7em 0.5em 0.6em;
     margin-left: -0.35em;
     animation: hand-float 7s ease-in-out infinite;
     will-change: transform;
