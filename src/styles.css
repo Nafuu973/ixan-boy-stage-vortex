@@ -126,28 +126,51 @@
   }
   /* Mainstage / festival treatment for the biggest section titles */
   h1.font-display,
-  h2.font-display {
-    /* Scantraxx-inspired gradient: bright white top-left to deep violet bottom-right */
-    background: linear-gradient(
-      155deg,
-      #ffffff 0%,
-      #ede0fb 12%,
-      #c8a3f0 28%,
-      oklch(0.62 0.27 295) 48%,
-      oklch(0.48 0.29 295) 72%,
-      oklch(0.30 0.22 290) 100%
-    );
+  h2.font-display,
+  h3.font-display {
+    /* Cinematic chrome → violet → deep aubergine. Soft silver highlights, premium festival feel. */
+    background:
+      linear-gradient(
+        158deg,
+        #ffffff 0%,
+        #f5ecff 9%,
+        #e2cdf7 20%,
+        #b88be8 34%,
+        oklch(0.62 0.27 295) 50%,
+        oklch(0.46 0.29 295) 72%,
+        oklch(0.26 0.18 290) 100%
+      );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.12))
-      drop-shadow(0 0 0.5em color-mix(in oklab, var(--violet) 38%, transparent))
-      drop-shadow(0 0 1.4em color-mix(in oklab, var(--violet) 18%, transparent));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.18))
+      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 0 0.55em color-mix(in oklab, var(--violet) 40%, transparent))
+      drop-shadow(0 0 1.6em color-mix(in oklab, var(--violet) 18%, transparent));
     text-shadow: none;
   }
+  /* Subtle silver sheen overlay on big titles */
+  h1.font-display::before,
+  h2.font-display::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      110deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.10) 48%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.10) 52%,
+      transparent 65%
+    );
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+  }
+  h1.font-display, h2.font-display { position: relative; }
   h1.font-display::selection,
   h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
