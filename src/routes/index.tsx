@@ -6,7 +6,9 @@ import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { startPulse } from "@/lib/pulse";
 import { TrackPlayer } from "@/components/epk/TrackPlayer";
 import { RevealText } from "@/components/epk/RevealText";
-import heroImg from "@/assets/hero-portrait.jpg";
+import heroImg from "@/assets/portrait-hero.jpg";
+import tunnelImg from "@/assets/portrait-tunnel.jpg";
+import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
 
