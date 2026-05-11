@@ -65,14 +65,14 @@ function Index() {
 
 function TopBar({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-5 py-4 md:px-10 md:py-6">
-      <div className="flex items-center gap-3">
+    <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-5 py-5 md:px-10 md:py-7">
+      <div className="flex items-center gap-4">
         <img
           src={logoImg}
           alt="IXAN BOY"
-          className="h-7 w-auto md:h-9 drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]"
+          className="h-10 w-auto md:h-12 drop-shadow-[0_0_18px_rgba(170,130,255,0.35)]"
         />
-        <span className="hidden font-mono text-[10px] uppercase tracking-[0.25em] text-bone/60 sm:inline">
+        <span className="hidden font-mono text-[11px] uppercase tracking-[0.32em] text-bone/75 sm:inline">
           EPK · 2026
         </span>
       </div>
