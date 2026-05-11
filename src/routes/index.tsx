@@ -225,18 +225,31 @@ function Hero() {
   );
 }
 
-/* Floating cinematic chrome signature */
+/* Floating cinematic handwritten signature */
 function ChromeSignature({ text }: { text: string }) {
+  const clean = text.replace(/\.$/, "");
   return (
-    <p
-      className="font-serif-i chrome-signature relative inline-block text-2xl leading-none md:text-4xl"
+    <figure
+      className="hand-signature relative inline-block select-none"
       aria-label={text}
     >
-      <span className="chrome-signature__text">{text}</span>
-      <span aria-hidden className="chrome-signature__ghost">
-        {text}
-      </span>
-    </p>
+      <span aria-hidden className="hand-signature__halo">{clean}</span>
+      <span className="hand-signature__ink">{clean}</span>
+      <svg
+        aria-hidden
+        viewBox="0 0 300 18"
+        preserveAspectRatio="none"
+        className="hand-signature__flourish"
+      >
+        <path
+          d="M2 9 C 60 2, 120 16, 180 8 S 280 4, 298 11"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeLinecap="round"
+        />
+      </svg>
+    </figure>
   );
 }
 
