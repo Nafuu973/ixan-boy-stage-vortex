@@ -349,22 +349,23 @@
     animation: sig-scan-glitch 1.4s steps(3) forwards;
   }
 
-  /* HUD brackets */
+  /* HUD brackets — only the violet L corners, no fill, no square box */
   .sig-scan__bracket {
     position: absolute;
     width: 26px;
     height: 26px;
-    border: 1.5px solid color-mix(in oklab, var(--violet) 80%, white);
+    background: transparent;
+    border: 0 solid color-mix(in oklab, var(--violet) 80%, white);
     opacity: 0;
     animation: sig-scan-bracket 1.4s cubic-bezier(0.5, 0, 0.2, 1) forwards;
-    box-shadow:
-      0 0 8px color-mix(in oklab, var(--violet) 80%, white),
-      0 0 20px color-mix(in oklab, var(--violet) 50%, transparent);
+    filter:
+      drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 75%, white))
+      drop-shadow(0 0 14px color-mix(in oklab, var(--violet) 55%, transparent));
   }
-  .sig-scan__bracket--tl { top: 18px; left: 18px; border-right: none; border-bottom: none; }
-  .sig-scan__bracket--tr { top: 18px; right: 18px; border-left: none; border-bottom: none; }
-  .sig-scan__bracket--bl { bottom: 18px; left: 18px; border-right: none; border-top: none; }
-  .sig-scan__bracket--br { bottom: 18px; right: 18px; border-left: none; border-top: none; }
+  .sig-scan__bracket--tl { top: 18px; left: 18px; border-top-width: 1.5px; border-left-width: 1.5px; }
+  .sig-scan__bracket--tr { top: 18px; right: 18px; border-top-width: 1.5px; border-right-width: 1.5px; }
+  .sig-scan__bracket--bl { bottom: 18px; left: 18px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+  .sig-scan__bracket--br { bottom: 18px; right: 18px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
 
   .sig-scan__label {
     position: absolute;
