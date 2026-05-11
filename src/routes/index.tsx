@@ -722,7 +722,7 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
 
 function ContactFinal() {
   const t = useT();
-  const links: { label: string; href: string; Icon: (p: React.SVGProps<SVGSVGElement>) => JSX.Element }[] = [
+  const links: { label: string; href: string; Icon: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement }[] = [
     { label: "Instagram", href: SOCIALS.instagram, Icon: (p) => <Instagram {...p} /> },
     { label: "TikTok", href: SOCIALS.tiktok, Icon: TikTokIcon },
     { label: "Spotify", href: SOCIALS.spotify, Icon: SpotifyIcon },
