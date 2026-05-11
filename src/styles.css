@@ -131,11 +131,11 @@
     background: linear-gradient(
       155deg,
       #ffffff 0%,
-      #f4eefc 18%,
-      #d9c2f5 38%,
-      oklch(0.68 0.24 295) 58%,
-      oklch(0.52 0.28 295) 78%,
-      oklch(0.36 0.22 290) 100%
+      #ede0fb 12%,
+      #c8a3f0 28%,
+      oklch(0.62 0.27 295) 48%,
+      oklch(0.48 0.29 295) 72%,
+      oklch(0.30 0.22 290) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
