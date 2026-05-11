@@ -153,23 +153,6 @@
     text-shadow: none;
   }
   /* Subtle silver sheen overlay on big titles */
-  h1.font-display::before,
-  h2.font-display::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      110deg,
-      transparent 35%,
-      rgba(255, 255, 255, 0.10) 48%,
-      rgba(255, 255, 255, 0.18) 50%,
-      rgba(255, 255, 255, 0.10) 52%,
-      transparent 65%
-    );
-    mix-blend-mode: overlay;
-    opacity: 0.5;
-  }
   h1.font-display, h2.font-display { position: relative; }
   h1.font-display::selection,
   h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
