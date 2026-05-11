@@ -381,7 +381,7 @@ function ExperienceLive() {
             {t.live.side.map((l, i) => (
               <p
                 key={i}
-                className="font-serif-i text-2xl leading-tight text-bone/90 md:text-3xl"
+                className="font-serif-i text-2xl leading-tight text-bone/90 md:text-3xl break-words hyphens-auto"
               >
                 {l}
               </p>
@@ -692,7 +692,7 @@ function BookingReady() {
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
                 0{i + 1} — {c.k}
               </span>
-              <p className="font-display mt-4 text-xl leading-tight md:text-2xl">
+              <p className="font-display mt-4 text-lg leading-tight md:text-xl break-words hyphens-auto">
                 {c.p}
               </p>
             </div>

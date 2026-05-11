@@ -17,7 +17,7 @@ export const dict = {
       title: "Disséquer pour mieux frapper.",
       paragraphs: [
         "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
-        "Musicien et ingénieur son de formation, il développe un hardstyle / raw où la tension mélodique prépare des impacts d’une précision chirurgicale.",
+        "Musicien et ingénieur son de formation, il développe un hardstyle / raw où la tension mélodique prépare les impacts avec une précision chirurgicale.",
         "Chaque montée est calculée. Chaque impact est amplifié.",
         "Découvertes des platines vinyles à 15 ans, immersion dans l’univers techno, hardcore et hardstyle façonnée par Thunderdome, puis années d’analyse sonore autour de Wildstylez, Ran-D, Regain, D-Sturb ou Kronos : IXAN BOY construit depuis 2020 une identité pensée pour l’impact live.",
       ],
@@ -25,7 +25,7 @@ export const dict = {
     live: {
       kicker: "Expérience Live",
       headline: ["Construit", "pour l’impact."],
-      side: ["Construit pour l’impact.", "Le silence prépare l’impact."],
+      side: [],
     },
     why: {
       kicker: "Pourquoi booker IXAN BOY",
@@ -112,7 +112,7 @@ export const dict = {
     live: {
       kicker: "Live Experience",
       headline: ["Built", "for impact."],
-      side: ["Built for impact.", "Silence prepares the impact."],
+      side: [],
     },
     why: {
       kicker: "Why book IXAN BOY",
