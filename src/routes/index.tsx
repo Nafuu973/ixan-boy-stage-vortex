@@ -11,6 +11,9 @@ import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-fire.jpg";
 import coverRun from "@/assets/cover-run.jpg";
+import liveDecks from "@/assets/live-decks.jpg";
+import labelScantraxx from "@/assets/label-scantraxx.png";
+import labelHFR from "@/assets/label-hardstyle-france.png";
 
 export const Route = createFileRoute("/")({
   component: Index,
