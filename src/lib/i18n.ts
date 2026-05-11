@@ -101,12 +101,12 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
     presentation: {
       kicker: "Presentation",
-      title: "Dissect to strike harder.",
+      title: "Precision before chaos.",
       paragraphs: [
         "IXAN BOY doesn’t copy his influences — he dissects them to build his own language.",
-        "Musician and trained sound engineer, he develops a hardstyle / raw where melodic tension prepares impacts of surgical precision.",
+        "Musician, producer and trained sound engineer, IXAN BOY shapes a hardstyle/raw where melodies carry you, tension keeps rising and every sonic detail is orchestrated with surgical precision to form a true raw symphony.",
         "Every build-up is calculated. Every impact is amplified.",
-        "Discovering vinyl turntables at 15, an immersion into techno, hardcore and hardstyle shaped by Thunderdome, then years of sonic analysis around Wildstylez, Ran-D, Regain, D-Sturb or Kronos: since 2020 IXAN BOY has been crafting an identity built for live impact.",
+        "Since 2020, IXAN BOY has been shaping an identity built around tension, control and sonic precision.",
       ],
     },
     live: {
