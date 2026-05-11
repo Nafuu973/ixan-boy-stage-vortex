@@ -386,85 +386,60 @@
     animation: sig-reveal 1.4s cubic-bezier(0.55, 0, 0.2, 1) 0.25s both;
   }
 
-  /* Handwritten cinematic signature — IXAN BOY */
+  /* Handwritten chrome signature — IXAN BOY */
   .hand-signature {
     isolation: isolate;
-    font-family: "Allura", "Pinyon Script", cursive;
-    font-weight: 400;
-    line-height: 0.9;
-    font-size: clamp(2.6rem, 7.5vw, 5.25rem);
+    font-family: "Dancing Script", "Allura", cursive;
+    font-weight: 700;
+    line-height: 1;
+    font-size: clamp(2.4rem, 7vw, 4.75rem);
     letter-spacing: 0.005em;
-    color: #f3eefb;
-    padding: 0.15em 0.4em 0.55em 0.2em;
+    padding: 0.2em 0.35em 0.35em 0.2em;
     animation: hand-float 8s ease-in-out infinite;
     will-change: transform;
+    transform: rotate(-2deg);
   }
   .hand-signature__ink {
     position: relative;
     display: inline-block;
     background: linear-gradient(
-      175deg,
+      170deg,
       #ffffff 0%,
-      #f1e9ff 30%,
-      #c9b3ee 55%,
-      #ffffff 72%,
-      #b89be0 100%
+      #e8e8ee 18%,
+      #9a9aa8 38%,
+      #fafafd 52%,
+      #c4c4d0 70%,
+      #6f6f7e 88%,
+      #d8d8e2 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.45))
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 0 22px color-mix(in oklab, var(--violet) 38%, transparent));
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.55))
+      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65))
+      drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 0 24px rgba(255, 255, 255, 0.08));
   }
   .hand-signature__halo {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
-    padding: 0.15em 0.4em 0.55em 0.2em;
-    color: color-mix(in oklab, var(--violet) 55%, white);
-    filter: blur(22px);
-    opacity: 0.55;
+    padding: 0.2em 0.35em 0.35em 0.2em;
+    color: rgba(255, 255, 255, 0.35);
+    filter: blur(20px);
+    opacity: 0.5;
     z-index: -1;
     pointer-events: none;
   }
-  .hand-signature__flourish {
-    position: absolute;
-    left: 0.4em;
-    right: 0.4em;
-    bottom: 0.18em;
-    width: calc(100% - 0.8em);
-    height: 0.55em;
-    color: color-mix(in oklab, var(--violet) 65%, #efe4ff);
-    opacity: 0.85;
-    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 55%, transparent));
-    transform-origin: left center;
-    animation: flourish-draw 1.6s cubic-bezier(0.65, 0, 0.2, 1) 0.6s both;
-  }
-  .hand-signature__flourish path {
-    stroke-dasharray: 320;
-    stroke-dashoffset: 320;
-    animation: flourish-stroke 1.8s cubic-bezier(0.65, 0, 0.2, 1) 0.55s forwards;
-  }
-  @keyframes flourish-stroke {
-    to { stroke-dashoffset: 0; }
-  }
-  @keyframes flourish-draw {
-    from { opacity: 0; }
-    to   { opacity: 0.85; }
-  }
   @keyframes hand-float {
-    0%, 100% { transform: translateY(0) rotate(-0.4deg); }
-    50%      { transform: translateY(-4px) rotate(0.2deg); }
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50%      { transform: rotate(-1.6deg) translateY(-3px); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hand-signature, .hand-signature__flourish, .hand-signature__flourish path {
-      animation: none;
-    }
-    .hand-signature__flourish path { stroke-dashoffset: 0; }
+    .hand-signature { animation: none; }
   }
 
   /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
