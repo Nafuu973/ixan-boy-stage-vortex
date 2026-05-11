@@ -251,14 +251,20 @@ function Cta({
   return (
     <a
       href={href}
-      className={`group relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-5 py-2.5 font-mono text-[11px] uppercase tracking-widest transition-all ${
+      className={`group relative inline-flex items-center gap-2 overflow-hidden rounded-full border px-6 py-3 font-mono text-[11px] uppercase tracking-widest transition-all duration-300 will-change-transform hover:-translate-y-0.5 ${
         primary
-          ? "border-violet bg-violet text-bone hover:shadow-[0_0_30px_var(--violet)]"
-          : "border-bone/20 bg-bone/5 text-bone backdrop-blur hover:border-bone/60"
+          ? "border-violet/70 bg-gradient-to-b from-violet to-[oklch(0.45_0.26_295)] text-bone shadow-[0_8px_24px_-8px_var(--violet),inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_12px_36px_-6px_var(--violet),inset_0_1px_0_rgba(255,255,255,0.35)]"
+          : "border-bone/15 bg-bone/[0.04] text-bone/90 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-bone/40 hover:bg-bone/[0.08] hover:text-bone"
       }`}
     >
+      {primary && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"
+        />
+      )}
       <span className="relative z-10">{label}</span>
-      <span className="relative z-10 transition-transform group-hover:translate-x-1">
+      <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">
         →
       </span>
     </a>
