@@ -348,11 +348,29 @@ function MusicalDNA() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           05 · {t.dna.kicker}
         </div>
-        <div className="mt-10 max-w-5xl">
-          <RevealText
-            text={t.dna.body}
-            className="font-display block text-[clamp(2rem,6vw,5rem)] leading-[1.05] text-balance"
-          />
+        <div className="mt-10 grid gap-12 md:grid-cols-12 md:gap-16">
+          <div className="md:col-span-7">
+            <RevealText
+              text={t.dna.body}
+              className="font-display block text-[clamp(2rem,5.5vw,4.5rem)] leading-[1.05] text-balance"
+            />
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8 }}
+            className="relative md:col-span-5"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden rounded-sm border border-bone/10 pulse-scale">
+              <img src={tunnelImg} alt="IXAN BOY" loading="lazy" className="h-full w-full object-cover grayscale-[20%] contrast-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent,oklch(0.55_0.28_295/0.18))]" />
+              <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                ID · 0X · IXAN
+              </span>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
