@@ -210,7 +210,7 @@ function Hero() {
           {t.hero.intro}
         </p>
 
-        <div className="mt-14 mb-10 sig-reveal">
+        <div className="mt-20 mb-16 sig-reveal flex justify-center md:justify-start">
           <ChromeSignature text={t.hero.tag} />
         </div>
 
