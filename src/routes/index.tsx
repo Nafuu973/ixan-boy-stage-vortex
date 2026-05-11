@@ -142,11 +142,11 @@ function SignatureScan() {
     const schedule = (delay: number) => {
       const id = window.setTimeout(() => {
         setKey((k) => k + 1);
-        schedule(6000 + Math.random() * 4000);
+        schedule(2800 + Math.random() * 1400);
       }, delay);
       timeouts.push(id);
     };
-    schedule(3200);
+    schedule(1200);
     return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
@@ -281,10 +281,8 @@ function PulseBar() {
               key={i}
               className="flex-1 bg-bone/60"
               style={{
-                height: `calc(${
-                  15 + Math.abs(Math.sin(i * 0.4)) * 70
-                }% * (0.6 + var(--pulse) * 0.9))`,
-                opacity: 0.5 + Math.sin(i * 0.3) * 0.3,
+                height: `calc(${(15 + Math.abs(Math.sin(i * 0.4)) * 70).toFixed(2)}% * (0.6 + var(--pulse) * 0.9))`,
+                opacity: Number((0.5 + Math.sin(i * 0.3) * 0.3).toFixed(3)),
               }}
             />
           ))}
