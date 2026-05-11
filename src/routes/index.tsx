@@ -195,7 +195,7 @@ function Hero() {
 
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex h-full flex-col justify-end px-5 pb-16 md:px-12 md:pb-20"
+        className="relative z-10 flex h-full flex-col justify-end px-5 pb-14 md:px-12 md:pb-20"
       >
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
           {t.hero.sub}
@@ -206,18 +206,18 @@ function Hero() {
           <span className="md:ml-6 text-violet">BOY</span>
         </h1>
 
-        <p className="mt-5 max-w-xl text-balance text-sm leading-relaxed text-bone/75 md:text-base">
-          {t.hero.intro}
-        </p>
-
-        <div className="mt-20 mb-16 sig-reveal flex justify-center md:justify-start">
+        <div className="mt-12 mb-12 sig-reveal flex justify-center md:justify-start md:-ml-2">
           <ChromeSignature text={t.hero.tag} />
         </div>
 
-        <div className="mt-2 flex flex-wrap gap-2 md:gap-3">
+        <div className="flex flex-wrap gap-2 md:gap-3">
           <Cta href="#live" label={t.nav.live} primary />
           <Cta href="#contact" label={t.nav.booking} />
         </div>
+
+        <p className="mt-8 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:text-xs">
+          {t.hero.intro}
+        </p>
       </motion.div>
 
       <SignatureScan />
