@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
-import { LangCtx, dict, SOCIALS, type Lang } from "@/lib/i18n";
+import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { startPulse } from "@/lib/pulse";
 import { TrackPlayer } from "@/components/epk/TrackPlayer";
 import { RevealText } from "@/components/epk/RevealText";
@@ -103,7 +103,7 @@ function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const t = dict.fr; // CTA labels not language-critical visually, simplified
+  const t = useT(); // CTA labels not language-critical visually, simplified
   return (
     <section ref={ref} className="relative h-[100svh] min-h-[640px] w-full overflow-hidden">
       <motion.div style={{ y, scale }} className="absolute inset-0">
@@ -181,7 +181,7 @@ function PulseBar() {
 }
 
 function ExperienceLive() {
-  const t = dict.fr;
+  const t = useT();
   return (
     <section id="live" className="relative isolate overflow-hidden bg-void py-24 md:py-40">
       {/* video placeholder — animated gradient until real footage */}
@@ -239,7 +239,7 @@ function ExperienceLive() {
 }
 
 function WhyBook() {
-  const t = dict.fr;
+  const t = useT();
   return (
     <section className="relative bg-obsidian/40 py-24 md:py-40">
       <div className="px-5 md:px-12">
@@ -271,7 +271,7 @@ function WhyBook() {
 }
 
 function Silence() {
-  const t = dict.fr;
+  const t = useT();
   return (
     <section className="relative flex min-h-[60vh] items-center justify-center bg-void px-5 py-24">
       <RevealText
@@ -283,7 +283,7 @@ function Silence() {
 }
 
 function SignatureTracks() {
-  const t = dict.fr;
+  const t = useT();
   const tracks = [
     { ...t.tracks.list[0], cover: coverFire, link: SOCIALS.spotify },
     { ...t.tracks.list[1], cover: coverRun, link: SOCIALS.spotify },
@@ -336,7 +336,7 @@ function SignatureTracks() {
 }
 
 function MusicalDNA() {
-  const t = dict.fr;
+  const t = useT();
   return (
     <section className="relative overflow-hidden bg-obsidian/40 py-32 md:py-48">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)]" />
@@ -356,7 +356,7 @@ function MusicalDNA() {
 }
 
 function Proof() {
-  const t = dict.fr;
+  const t = useT();
   const labels = ["Scantraxx Prospexx", "Hardstyle France"];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
@@ -395,7 +395,7 @@ function Proof() {
 }
 
 function BookingReady() {
-  const t = dict.fr;
+  const t = useT();
   return (
     <section className="relative bg-obsidian/40 py-24 md:py-32">
       <div className="px-5 md:px-12">
@@ -414,7 +414,7 @@ function BookingReady() {
 }
 
 function ContactFinal() {
-  const t = dict.fr;
+  const t = useT();
   const links: [string, string][] = [
     ["Instagram", SOCIALS.instagram],
     ["TikTok", SOCIALS.tiktok],
