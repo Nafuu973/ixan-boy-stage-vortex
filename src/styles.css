@@ -148,11 +148,107 @@
     transform: scale(calc(1 + var(--pulse) * 0.04));
   }
 
-  @keyframes scan {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100vh); }
+  /* Cinematic optical scan — premium photocopier sweep */
+  @keyframes cine-scan-move {
+    0%   { transform: translateY(-10%); opacity: 0; }
+    8%   { opacity: 1; }
+    55%  { opacity: 1; }
+    70%  { transform: translateY(110%); opacity: 0; }
+    100% { transform: translateY(110%); opacity: 0; }
   }
-  .scanline { animation: scan 8s linear infinite; }
+  @keyframes cine-scan-flash {
+    0%, 6%   { opacity: 0; }
+    10%      { opacity: 0.55; }
+    18%      { opacity: 0.18; }
+    55%      { opacity: 0.18; }
+    68%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+  .cine-scan-line {
+    position: absolute;
+    inset-inline: -5%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--violet) 60%, white) 30%,
+      white 50%,
+      color-mix(in oklab, var(--violet) 60%, white) 70%,
+      transparent 100%
+    );
+    box-shadow:
+      0 0 12px 1px color-mix(in oklab, var(--violet) 70%, white),
+      0 0 40px 6px color-mix(in oklab, var(--violet) 35%, transparent),
+      0 0 90px 14px color-mix(in oklab, var(--violet) 18%, transparent);
+    filter: blur(0.4px);
+    animation: cine-scan-move 9s cubic-bezier(0.65, 0.02, 0.35, 1) infinite;
+    will-change: transform, opacity;
+  }
+  .cine-scan-bloom {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse at 50% 50%,
+        color-mix(in oklab, var(--violet) 12%, transparent) 0%,
+        transparent 55%
+      );
+    mix-blend-mode: screen;
+    animation: cine-scan-flash 9s ease-in-out infinite;
+    will-change: opacity;
+  }
+
+  /* Chrome cinematic signature */
+  .chrome-signature {
+    isolation: isolate;
+  }
+  .chrome-signature__text {
+    background: linear-gradient(
+      180deg,
+      #fefefe 0%,
+      #d8d8e6 30%,
+      #8a8aa0 50%,
+      #ececf5 70%,
+      #b8b8cc 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35))
+      drop-shadow(0 0 18px color-mix(in oklab, var(--violet) 35%, transparent));
+    animation: chrome-float 7s ease-in-out infinite;
+    display: inline-block;
+  }
+  .chrome-signature__ghost {
+    position: absolute;
+    inset: 0;
+    color: color-mix(in oklab, var(--violet) 22%, transparent);
+    filter: blur(14px);
+    z-index: -1;
+    animation: chrome-float 7s ease-in-out infinite;
+  }
+  @keyframes chrome-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+  }
+
+  /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
+  @keyframes track-breathe {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--violet) 0%, transparent);
+    }
+    50% {
+      transform: scale(1.008);
+      box-shadow: 0 0 60px -10px color-mix(in oklab, var(--violet) 25%, transparent);
+    }
+  }
+  .track-breathe {
+    animation: track-breathe 6s ease-in-out infinite;
+    will-change: transform, box-shadow;
+  }
+
 
   @keyframes flicker {
     0%, 100% { opacity: 1; }
