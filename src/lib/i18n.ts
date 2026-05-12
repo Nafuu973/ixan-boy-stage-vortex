@@ -117,7 +117,8 @@ export const dict = {
       side: [],
     },
     why: {
-      kicker: "Why book IXAN BOY",
+      kicker: "Credibility signals",
+      title: "Credibility signals.",
       cards: [
         {
           k: "01 — Label credibility",
@@ -127,11 +128,12 @@ export const dict = {
         {
           k: "02 — Sonic identity",
           h: "Every track engineered as a tension mechanism.",
-          p: "Set the wait. Trigger the reaction. Leave a mark.",
+          p: ["Set the wait.", "Trigger the reaction.", "Leave a mark."],
         },
         {
-          k: "03 — Scene recognition",
-          h: "His productions are already played by Kronos, Damien RK, Fury, Miss Pepper.",
+          k: "03 — Stage relays",
+          h: "Stage relays.",
+          artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
           p: "A signature acknowledged by the artists defining modern raw.",
         },
       ],
