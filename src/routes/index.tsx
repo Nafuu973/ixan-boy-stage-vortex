@@ -490,37 +490,124 @@ function ExperienceLive() {
 function WhyBook() {
   const t = useT();
   return (
-    <section className="relative bg-obsidian/40 py-24 md:py-40">
-      <div className="px-5 md:px-12">
+    <section className="relative overflow-hidden bg-obsidian/40 py-28 md:py-44">
+      {/* ambient background — texture scan, micro grid, soft volumetric light */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.18]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)",
+            backgroundSize: "120px 120px, 120px 120px",
+            maskImage: "radial-gradient(ellipse at 20% 40%, black 30%, transparent 75%)",
+          }}
+        />
+      </div>
+      <div
+        className="pointer-events-none absolute -left-32 top-1/3 h-[420px] w-[420px] rounded-full opacity-40 blur-[120px]"
+        style={{ background: "radial-gradient(circle, rgba(140,90,230,0.35), transparent 70%)" }}
+      />
+      <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-violet/30 to-transparent md:block" />
+
+      <div className="relative px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           03 · {t.why.kicker}
         </div>
-        <div className="mt-12 grid gap-4 md:grid-cols-12">
-          {t.why.cards.map((c, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-void/60 p-6 backdrop-blur md:p-8 ${
-                i === 0
-                  ? "md:col-span-5 md:mt-0"
-                  : i === 1
-                    ? "md:col-span-4 md:mt-12"
-                    : "md:col-span-3 md:mt-4"
-              }`}
-            >
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
-                {c.k}
-              </span>
-              <h3 className="font-display mt-4 text-2xl leading-tight md:text-3xl">
-                {c.h}
-              </h3>
-              <p className="mt-3 text-sm text-bone/65">{c.p}</p>
-              <span className="absolute -bottom-px left-0 h-px w-0 bg-violet transition-all duration-500 group-hover:w-full" />
-            </motion.div>
-          ))}
+        <h2 className="font-display mt-5 max-w-3xl text-balance text-[clamp(2.25rem,6vw,4.5rem)] leading-[0.95]">
+          {t.why.title}
+        </h2>
+        <div className="mt-4 h-px w-16 bg-violet/60" />
+
+        <div className="mt-16 grid gap-5 md:mt-20 md:grid-cols-12">
+          {t.why.cards.map((c, i) => {
+            const isArtists = "artists" in c && Array.isArray((c as any).artists);
+            const isList = Array.isArray((c as any).p);
+            return (
+              <motion.article
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-void/70 p-7 backdrop-blur md:p-10 ${
+                  i === 0
+                    ? "md:col-span-5 md:mt-0"
+                    : i === 1
+                      ? "md:col-span-4 md:mt-16"
+                      : "md:col-span-3 md:mt-6"
+                }`}
+              >
+                {/* corner brackets */}
+                <span className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-violet/50" />
+                <span className="pointer-events-none absolute right-3 top-3 h-3 w-3 border-r border-t border-violet/50" />
+                <span className="pointer-events-none absolute bottom-3 left-3 h-3 w-3 border-b border-l border-violet/50" />
+                <span className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-violet/50" />
+
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+                  {c.k}
+                </span>
+
+                {isArtists ? (
+                  <>
+                    <h3 className="font-display mt-5 text-xl uppercase tracking-[0.08em] text-bone/90 md:text-2xl">
+                      {(c as any).h}
+                    </h3>
+                    <div className="mt-2 h-px w-10 bg-violet/50" />
+                    <ul className="mt-7 space-y-4">
+                      {(c as any).artists.map((a: string, k: number) => (
+                        <motion.li
+                          key={a}
+                          initial={{ opacity: 0, x: -8 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true, margin: "-80px" }}
+                          transition={{ delay: 0.25 + k * 0.12, duration: 0.55 }}
+                          className="flex items-baseline gap-3"
+                        >
+                          <span className="font-mono text-[10px] text-violet/70">
+                            0{k + 1}
+                          </span>
+                          <span
+                            className="font-display text-xl tracking-wide text-bone md:text-2xl"
+                            style={{ textShadow: "0 0 18px rgba(160,110,240,0.25)" }}
+                          >
+                            {a}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                    <p className="mt-8 text-[13px] leading-relaxed text-bone/55">
+                      {c.p as string}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="font-display mt-5 text-xl leading-[1.15] md:text-2xl">
+                      {(c as any).h}
+                    </h3>
+                    <div className="mt-3 h-px w-10 bg-violet/40" />
+                    {isList ? (
+                      <ul className="mt-6 space-y-2.5">
+                        {((c as any).p as readonly string[]).map((line, k) => (
+                          <li
+                            key={k}
+                            className="font-display text-base leading-relaxed text-bone/80 md:text-lg"
+                          >
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mt-6 text-[15px] leading-relaxed text-bone/70">
+                        {c.p as string}
+                      </p>
+                    )}
+                  </>
+                )}
+
+                <span className="absolute -bottom-px left-0 h-px w-0 bg-violet transition-all duration-700 group-hover:w-full" />
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -28,7 +28,8 @@ export const dict = {
       side: [],
     },
     why: {
-      kicker: "Pourquoi booker IXAN BOY",
+      kicker: "Signaux de crédibilité",
+      title: "Signals de crédibilité.",
       cards: [
         {
           k: "01 — Crédibilité Labels",
@@ -38,11 +39,12 @@ export const dict = {
         {
           k: "02 — Identité sonore",
           h: "Chaque morceau pensé comme une mécanique de tension.",
-          p: "Installer l’attente. Déclencher la réaction. Laisser une empreinte.",
+          p: ["Installer l’attente.", "Déclencher la réaction.", "Laisser une empreinte."],
         },
         {
-          k: "03 — Reconnaissance scène",
-          h: "Ses productions trouvent des relais dans les sets de Kronos, Damien RK, Fury, Miss Pepper.",
+          k: "03 — Relais scène",
+          h: "Relais scène.",
+          artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
           p: "Une signature déjà identifiée par les artistes qui définissent le raw moderne.",
         },
       ],
@@ -115,7 +117,8 @@ export const dict = {
       side: [],
     },
     why: {
-      kicker: "Why book IXAN BOY",
+      kicker: "Credibility signals",
+      title: "Credibility signals.",
       cards: [
         {
           k: "01 — Label credibility",
@@ -125,11 +128,12 @@ export const dict = {
         {
           k: "02 — Sonic identity",
           h: "Every track engineered as a tension mechanism.",
-          p: "Set the wait. Trigger the reaction. Leave a mark.",
+          p: ["Set the wait.", "Trigger the reaction.", "Leave a mark."],
         },
         {
-          k: "03 — Scene recognition",
-          h: "His productions are already played by Kronos, Damien RK, Fury, Miss Pepper.",
+          k: "03 — Stage relays",
+          h: "Stage relays.",
+          artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
           p: "A signature acknowledged by the artists defining modern raw.",
         },
       ],
