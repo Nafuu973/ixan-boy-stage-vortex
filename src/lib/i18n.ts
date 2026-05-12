@@ -28,7 +28,8 @@ export const dict = {
       side: [],
     },
     why: {
-      kicker: "Pourquoi booker IXAN BOY",
+      kicker: "Signaux de crédibilité",
+      title: "Signals de crédibilité.",
       cards: [
         {
           k: "01 — Crédibilité Labels",
@@ -38,11 +39,12 @@ export const dict = {
         {
           k: "02 — Identité sonore",
           h: "Chaque morceau pensé comme une mécanique de tension.",
-          p: "Installer l’attente. Déclencher la réaction. Laisser une empreinte.",
+          p: ["Installer l’attente.", "Déclencher la réaction.", "Laisser une empreinte."],
         },
         {
-          k: "03 — Reconnaissance scène",
-          h: "Ses productions trouvent des relais dans les sets de Kronos, Damien RK, Fury, Miss Pepper.",
+          k: "03 — Relais scène",
+          h: "Relais scène.",
+          artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
           p: "Une signature déjà identifiée par les artistes qui définissent le raw moderne.",
         },
       ],
