@@ -29,23 +29,23 @@ export const dict = {
     },
     why: {
       kicker: "Signaux de crédibilité",
-      title: "Signals de crédibilité.",
+      title: "Pourquoi booker IXAN BOY.",
       cards: [
         {
           k: "01 — Crédibilité Labels",
           h: "Déjà repéré par les structures qui façonnent le raw moderne.",
-          p: "Signé sur Scantraxx Prospexx & Hardstyle France.",
+          p: "Signé chez Scantraxx Prospexx et Hardstyle France.",
         },
         {
           k: "02 — Identité sonore",
-          h: "Chaque morceau pensé comme une mécanique de tension.",
+          h: "Rien n’est laissé au hasard.",
           p: ["Installer l’attente.", "Déclencher la réaction.", "Laisser une empreinte."],
         },
         {
           k: "03 — Relais scène",
-          h: "Relais scène.",
+          h: "Des morceaux déjà joués en set par :",
           artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
-          p: "Une signature déjà identifiée par les artistes qui définissent le raw moderne.",
+          p: "Des productions déjà intégrées dans l’écosystème raw actuel.",
         },
       ],
     },
