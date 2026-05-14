@@ -118,23 +118,23 @@ export const dict = {
     },
     why: {
       kicker: "Credibility signals",
-      title: "Credibility signals.",
+      title: "Why book IXAN BOY.",
       cards: [
         {
           k: "01 — Label credibility",
           h: "Already spotted by the structures shaping modern raw.",
-          p: "Signed on Scantraxx Prospexx & Hardstyle France.",
+          p: "Signed on Scantraxx Prospexx and Hardstyle France.",
         },
         {
           k: "02 — Sonic identity",
-          h: "Every track engineered as a tension mechanism.",
+          h: "Nothing is left to chance.",
           p: ["Set the wait.", "Trigger the reaction.", "Leave a mark."],
         },
         {
           k: "03 — Stage relays",
-          h: "Stage relays.",
+          h: "Tracks already played in sets by:",
           artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
-          p: "A signature acknowledged by the artists defining modern raw.",
+          p: "Productions already circulating in today’s raw ecosystem.",
         },
       ],
     },
