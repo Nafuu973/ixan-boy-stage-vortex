@@ -29,23 +29,23 @@ export const dict = {
     },
     why: {
       kicker: "Signaux de crédibilité",
-      title: "Signals de crédibilité.",
+      title: "Pourquoi booker IXAN BOY.",
       cards: [
         {
           k: "01 — Crédibilité Labels",
           h: "Déjà repéré par les structures qui façonnent le raw moderne.",
-          p: "Signé sur Scantraxx Prospexx & Hardstyle France.",
+          p: "Signé chez Scantraxx Prospexx et Hardstyle France.",
         },
         {
           k: "02 — Identité sonore",
-          h: "Chaque morceau pensé comme une mécanique de tension.",
+          h: "Rien n’est laissé au hasard.",
           p: ["Installer l’attente.", "Déclencher la réaction.", "Laisser une empreinte."],
         },
         {
           k: "03 — Relais scène",
-          h: "Relais scène.",
+          h: "Des morceaux déjà joués en set par :",
           artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
-          p: "Une signature déjà identifiée par les artistes qui définissent le raw moderne.",
+          p: "Des productions déjà intégrées dans l’écosystème raw actuel.",
         },
       ],
     },
@@ -118,23 +118,23 @@ export const dict = {
     },
     why: {
       kicker: "Credibility signals",
-      title: "Credibility signals.",
+      title: "Why book IXAN BOY.",
       cards: [
         {
           k: "01 — Label credibility",
           h: "Already spotted by the structures shaping modern raw.",
-          p: "Signed on Scantraxx Prospexx & Hardstyle France.",
+          p: "Signed on Scantraxx Prospexx and Hardstyle France.",
         },
         {
           k: "02 — Sonic identity",
-          h: "Every track engineered as a tension mechanism.",
+          h: "Nothing is left to chance.",
           p: ["Set the wait.", "Trigger the reaction.", "Leave a mark."],
         },
         {
           k: "03 — Stage relays",
-          h: "Stage relays.",
+          h: "Tracks already played in sets by:",
           artists: ["Kronos", "Damien RK", "Fury", "Miss Pepper"],
-          p: "A signature acknowledged by the artists defining modern raw.",
+          p: "Productions already circulating in today’s raw ecosystem.",
         },
       ],
     },
