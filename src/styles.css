@@ -156,6 +156,19 @@
   h1.font-display, h2.font-display { position: relative; }
   h1.font-display::selection,
   h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
+  /* Lower-glow variant for editorial sections */
+  h2.font-display.glow-soft,
+  .font-display.glow-soft {
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.10))
+      drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5))
+      drop-shadow(0 0 0.35em color-mix(in oklab, var(--violet) 18%, transparent));
+  }
+  /* Safe line-height/padding so descenders (g, p, y) never clip in tracked uppercase kickers */
+  .kicker-safe {
+    line-height: 1.75;
+    padding-bottom: 0.4em;
+  }
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
   .font-mono { font-family: var(--font-mono); }
 
