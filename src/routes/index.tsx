@@ -553,7 +553,7 @@ function WhyBook() {
 
                 {isArtists ? (
                   <>
-                    <h3 className="font-display mt-6 text-sm font-light uppercase tracking-[0.06em] text-bone/55 md:text-base">
+                    <h3 className="font-display mt-6 text-sm font-light uppercase tracking-[0.06em] text-bone/40 md:text-base">
                       {(c as any).h}
                     </h3>
                     <div className="mt-3 h-px w-10 bg-violet/10" />
@@ -577,7 +577,7 @@ function WhyBook() {
                   </>
                 ) : (
                   <>
-                    <h3 className="font-display mt-6 text-base font-light leading-[1.3] text-bone/55 md:text-lg">
+                    <h3 className="font-display mt-6 text-base font-light leading-[1.3] text-bone/40 md:text-lg">
                       {(c as any).h}
                     </h3>
                     <div className="mt-4 h-px w-10 bg-violet/10" />
