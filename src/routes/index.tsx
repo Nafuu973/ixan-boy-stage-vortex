@@ -544,10 +544,13 @@ function WhyBook() {
                 <span className="pointer-events-none absolute bottom-3 left-3 h-3 w-3 border-b border-l border-violet/35" />
                 <span className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-violet/35" />
 
-                {/* card index — sober, technical, editorial */}
-                <span className="font-mono text-[9.5px] uppercase tracking-[0.32em] text-violet/65">
-                  {c.k}
-                </span>
+                {/* card index — HUD metadata, whispered */}
+                <div className="flex items-center gap-2.5">
+                  <span className="h-px w-3 bg-violet/25" />
+                  <span className="font-mono text-[9px] font-light uppercase tracking-[0.45em] text-violet/45">
+                    {c.k}
+                  </span>
+                </div>
 
                 {isArtists ? (
                   <>
