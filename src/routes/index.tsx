@@ -553,7 +553,7 @@ function WhyBook() {
 
                 {isArtists ? (
                   <>
-                    <h3 className="font-display glow-editorial mt-6 text-base font-normal uppercase tracking-[0.06em] md:text-lg">
+                    <h3 className="font-display glow-whisper mt-6 text-base font-normal uppercase tracking-[0.06em] md:text-lg">
                       {(c as any).h}
                     </h3>
                     <div className="mt-3 h-px w-10 bg-violet/30" />
