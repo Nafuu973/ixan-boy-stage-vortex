@@ -510,10 +510,11 @@ function WhyBook() {
       <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-violet/20 to-transparent md:block" />
 
       <div className="relative px-5 md:px-12">
-        <div className="kicker-safe font-mono text-[10px] uppercase tracking-[0.3em] text-violet/80">
-          03 — {t.why.kicker}
+        <div className="kicker-safe flex items-center gap-3 font-mono text-[9.5px] uppercase tracking-[0.42em] text-violet/55">
+          <span className="h-px w-6 bg-violet/25" />
+          <span>03 — {t.why.kicker}</span>
         </div>
-        <h2 className="font-display glow-soft mt-6 max-w-3xl text-balance text-[clamp(2rem,5.6vw,4.25rem)] leading-[1.02]">
+        <h2 className="font-display glow-editorial mt-6 max-w-3xl text-balance text-[clamp(2rem,5.6vw,4.25rem)] leading-[1.02]">
           {t.why.title}
         </h2>
         <div className="mt-5 h-px w-16 bg-violet/40" />
