@@ -553,10 +553,10 @@ function WhyBook() {
 
                 {isArtists ? (
                   <>
-                    <h3 className="font-display glow-whisper mt-6 text-base font-normal uppercase tracking-[0.06em] md:text-lg">
+                    <h3 className="font-display mt-6 text-base font-normal uppercase tracking-[0.06em] text-bone/90 md:text-lg">
                       {(c as any).h}
                     </h3>
-                    <div className="mt-3 h-px w-10 bg-violet/30" />
+                    <div className="mt-3 h-px w-10 bg-violet/15" />
                     <ul className="mt-7 space-y-2.5 md:space-y-3">
                       {(c as any).artists.map((a: string, k: number) => (
                         <motion.li
@@ -577,10 +577,10 @@ function WhyBook() {
                   </>
                 ) : (
                   <>
-                    <h3 className="font-display glow-whisper mt-6 text-xl leading-[1.2] md:text-2xl">
+                    <h3 className="font-display mt-6 text-xl leading-[1.2] text-bone/90 md:text-2xl">
                       {(c as any).h}
                     </h3>
-                    <div className="mt-4 h-px w-10 bg-violet/30" />
+                    <div className="mt-4 h-px w-10 bg-violet/15" />
                     {isList ? (
                       <ul className="mt-7 space-y-2 text-[13px] leading-relaxed text-bone/55">
                         {((c as any).p as readonly string[]).map((line, k) => (
