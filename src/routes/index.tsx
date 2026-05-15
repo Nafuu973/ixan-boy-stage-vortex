@@ -529,13 +529,13 @@ function WhyBook() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-7 backdrop-blur md:p-10 ${
-                  i === 0
-                    ? "md:col-span-5 md:mt-0"
-                    : i === 1
-                      ? "md:col-span-5 md:mt-16"
-                      : "md:col-span-2 md:mt-6"
-                }`}
+                 className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-7 backdrop-blur md:p-10 md:col-span-4 ${
+                   i === 0
+                     ? "md:mt-0"
+                     : i === 1
+                       ? "md:mt-16"
+                       : "md:mt-6"
+                 }`}
               >
                 {/* corner brackets */}
                 <span className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-violet/35" />
