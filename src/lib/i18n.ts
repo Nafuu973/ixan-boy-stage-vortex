@@ -29,7 +29,7 @@ export const dict = {
     },
     why: {
       kicker: "Signaux de crédibilité",
-      title: "Pourquoi booker IXAN BOY.",
+      title: "Pourquoi booker IXAN BOY ?",
       cards: [
         {
           k: "01 — Crédibilité Labels",
