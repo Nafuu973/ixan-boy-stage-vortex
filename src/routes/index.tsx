@@ -513,7 +513,7 @@ function WhyBook() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           03 · {t.why.kicker}
         </div>
-        <h2 className="font-display mt-4 max-w-3xl text-balance text-[clamp(3rem,11vw,9rem)] leading-[0.9]">
+        <h2 className="font-display mt-4 max-w-none whitespace-nowrap text-balance text-[clamp(1.75rem,7.2vw,9rem)] leading-[0.9]">
           {t.why.title}
         </h2>
         <div className="mt-5 h-px w-16 bg-violet/40" />
