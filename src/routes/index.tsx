@@ -533,8 +533,8 @@ function WhyBook() {
                   i === 0
                     ? "md:col-span-5 md:mt-0"
                     : i === 1
-                      ? "md:col-span-4 md:mt-16"
-                      : "md:col-span-3 md:mt-6"
+                      ? "md:col-span-5 md:mt-16"
+                      : "md:col-span-2 md:mt-6"
                 }`}
               >
                 {/* corner brackets */}
@@ -554,7 +554,7 @@ function WhyBook() {
                       {(c as any).h}
                     </h3>
                     <div className="mt-3 h-px w-10 bg-violet/30" />
-                    <ul className="mt-8 space-y-6 md:space-y-7">
+                    <ul className="mt-7 space-y-2.5 md:space-y-3">
                       {(c as any).artists.map((a: string, k: number) => (
                         <motion.li
                           key={a}
