@@ -118,7 +118,7 @@ export const dict = {
     },
     why: {
       kicker: "Credibility signals",
-      title: "Why book IXAN BOY.",
+      title: "Why book IXAN BOY?",
       cards: [
         {
           k: "01 — Label credibility",
