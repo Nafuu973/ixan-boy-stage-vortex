@@ -577,7 +577,7 @@ function WhyBook() {
                   </>
                 ) : (
                   <>
-                    <h3 className="font-display glow-editorial mt-6 text-xl leading-[1.2] md:text-2xl">
+                    <h3 className="font-display glow-whisper mt-6 text-xl leading-[1.2] md:text-2xl">
                       {(c as any).h}
                     </h3>
                     <div className="mt-4 h-px w-10 bg-violet/30" />
