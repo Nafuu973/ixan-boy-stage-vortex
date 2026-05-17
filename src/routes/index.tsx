@@ -688,11 +688,6 @@ function SignatureTracks() {
                         ? "border-violet/40 shadow-[0_0_60px_-10px_var(--violet)]"
                         : "border-bone/10"
                     }`}
-                    style={
-                      isActive
-                        ? { transform: `scale(${1 + 0.005 + 0.01 * Number(getComputedStyle(document.documentElement).getPropertyValue("--pulse") || 0)})` }
-                        : undefined
-                    }
                   >
                     <img
                       src={tr.cover}
