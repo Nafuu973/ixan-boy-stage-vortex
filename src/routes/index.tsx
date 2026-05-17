@@ -518,7 +518,7 @@ function WhyBook() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.5rem,6.4vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.4rem,6.2vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
         >
           {t.why.title}
         </motion.h2>
