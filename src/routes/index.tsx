@@ -626,84 +626,153 @@ function Silence() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, link: SOCIALS.spotify },
-    { ...t.tracks.list[1], cover: coverRun, link: SOCIALS.spotify },
+    { ...t.tracks.list[0], cover: coverFire, src: "" },
+    { ...t.tracks.list[1], cover: coverRun, src: "" },
   ];
+  const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggle = async (i: number) => {
+    const audios = audioRefs.current;
+    const target = audios[i];
+    if (!target) return;
+    // pause others
+    audios.forEach((a, idx) => {
+      if (a && idx !== i) {
+        a.pause();
+        a.currentTime = 0;
+      }
+    });
+    if (activeIndex === i) {
+      target.pause();
+      setActiveIndex(null);
+    } else {
+      try {
+        await target.play();
+        setActiveIndex(i);
+      } catch {
+        // no source yet — still toggle visual state for preview
+        setActiveIndex(i);
+      }
+    }
+  };
+
   return (
     <section id="tracks" className="relative bg-void py-24 md:py-40">
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
         </div>
-        <h2 className="font-display mt-4 text-[clamp(3rem,11vw,9rem)] leading-[0.9]">
+        <h2 className="font-display mt-6 max-w-[18ch] text-balance text-[clamp(2.25rem,7.4vw,7rem)] leading-[0.95] tracking-[-0.01em] md:mt-8">
           {t.tracks.title}
         </h2>
 
-        <div className="mt-16 space-y-20 md:space-y-32">
-          {tracks.map((tr, i) => (
-            <motion.div
-              key={tr.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7 }}
-              className={`grid gap-8 md:grid-cols-12 md:gap-12 ${
-                i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
-              }`}
-            >
-              <div className="relative md:col-span-5">
-                <div className="track-breathe relative aspect-square overflow-hidden rounded-sm border border-bone/10">
-                  <img
-                    src={tr.cover}
-                    alt={tr.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
+        <div className="mt-20 space-y-24 md:mt-28 md:space-y-36">
+          {tracks.map((tr, i) => {
+            const isActive = activeIndex === i;
+            return (
+              <motion.div
+                key={tr.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7 }}
+                className={`grid gap-8 md:grid-cols-12 md:gap-12 ${
+                  i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
+                }`}
+              >
+                <div className="relative md:col-span-5">
+                  <div
+                    className={`relative aspect-square overflow-hidden rounded-sm border transition-all duration-700 ${
+                      isActive
+                        ? "border-violet/40 shadow-[0_0_60px_-10px_var(--violet)]"
+                        : "border-bone/10"
+                    }`}
+                    style={
+                      isActive
+                        ? { transform: `scale(${1 + 0.005 + 0.01 * Number(getComputedStyle(document.documentElement).getPropertyValue("--pulse") || 0)})` }
+                        : undefined
+                    }
+                  >
+                    <img
+                      src={tr.cover}
+                      alt={tr.title}
+                      loading="lazy"
+                      className={`h-full w-full object-cover transition-transform duration-[3000ms] ease-out ${
+                        isActive ? "scale-[1.06]" : "scale-100"
+                      }`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-void/60 to-transparent" />
+                    {isActive && (
+                      <div
+                        className="pointer-events-none absolute inset-0 opacity-60"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--violet) calc(15% * var(--pulse)), transparent), transparent 65%)",
+                        }}
+                      />
+                    )}
+                    <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                      TRACK · 0{i + 1}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center md:col-span-7">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-bone/40">
+                    IXAN BOY — Track 0{i + 1}
+                  </p>
+                  <h3 className="mt-2 font-mono text-xl uppercase tracking-[0.08em] text-bone md:text-2xl">
+                    {tr.title}
+                  </h3>
+                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.25em] text-violet/80">
+                    {tr.mood}
+                  </p>
+                  <div className="mt-8 flex items-center gap-4">
+                    <button
+                      onClick={() => toggle(i)}
+                      aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
+                      className="group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-violet/40 bg-violet/10 text-bone transition-all hover:bg-violet hover:shadow-[0_0_30px_var(--violet)]"
+                    >
+                      {isActive ? (
+                        <span className="flex gap-1">
+                          <span className="h-3 w-1 bg-bone" />
+                          <span className="h-3 w-1 bg-bone" />
+                        </span>
+                      ) : (
+                        <span className="ml-0.5 h-0 w-0 border-y-[7px] border-l-[10px] border-y-transparent border-l-bone" />
+                      )}
+                    </button>
+                    <div className="flex h-8 items-end gap-[2px]">
+                      {Array.from({ length: 14 }).map((_, b) => (
+                        <span
+                          key={b}
+                          className="w-[2px] origin-bottom bg-violet/70"
+                          style={{
+                            height: isActive
+                              ? `calc(${20 + Math.abs(Math.sin(b * 0.7)) * 70}% * (0.4 + var(--pulse) * 1.1))`
+                              : "10%",
+                            opacity: isActive ? 0.9 : 0.2,
+                            transition: "opacity 0.3s",
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/40">
+                      {isActive ? "Now Playing" : "Press Play"}
+                    </span>
+                  </div>
+                  <audio
+                    ref={(el) => {
+                      audioRefs.current[i] = el;
+                    }}
+                    src={tr.src || undefined}
+                    preload="none"
+                    onEnded={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-void/60 to-transparent" />
-                  <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
-                    TRACK · 0{i + 1}
-                  </span>
                 </div>
-              </div>
-              <div className="flex flex-col justify-center md:col-span-7">
-                <h3 className="font-display text-5xl leading-none md:text-7xl">
-                  {tr.title}
-                </h3>
-                <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.25em] text-violet">
-                  {tr.mood}
-                </p>
-                <div className="mt-8">
-                  <TrackPlayer title={tr.title} />
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a
-                    href={tr.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono text-[11px] uppercase tracking-widest text-bone/70 underline-offset-4 hover:text-bone hover:underline"
-                  >
-                    Spotify ↗
-                  </a>
-                  <a
-                    href={SOCIALS.youtube}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono text-[11px] uppercase tracking-widest text-bone/70 underline-offset-4 hover:text-bone hover:underline"
-                  >
-                    YouTube ↗
-                  </a>
-                  <a
-                    href={SOCIALS.soundcloud}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono text-[11px] uppercase tracking-widest text-bone/70 underline-offset-4 hover:text-bone hover:underline"
-                  >
-                    SoundCloud ↗
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
