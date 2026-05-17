@@ -10,8 +10,8 @@ import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
-import coverFire from "@/assets/cover-fire.jpg";
-import coverRun from "@/assets/cover-run.jpg";
+import coverFire from "@/assets/cover-take-me-body.png";
+import coverRun from "@/assets/cover-sex-bomb.png";
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
@@ -626,8 +626,8 @@ function Silence() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, src: "" },
-    { ...t.tracks.list[1], cover: coverRun, src: "" },
+    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body.mp3" },
+    { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb.mp3" },
   ];
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
