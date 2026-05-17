@@ -140,11 +140,11 @@ export const dict = {
     },
     silence: "Silence prepares the impact.",
     tracks: {
-      kicker: "Signature Tracks",
-      title: "Signature.",
+      kicker: "Sonic Matter",
+      title: "Two tracks. Two visions.",
       list: [
-        { title: "Through The Fire", mood: "Emotion · Rise · Break" },
-        { title: "Better Not Run", mood: "Tension · Precision · Impact" },
+        { title: "Take Me Body", mood: "Emotion · Rise · Break" },
+        { title: "Sex Bomb", mood: "Tension · Precision · Impact" },
       ],
     },
     dna: {
