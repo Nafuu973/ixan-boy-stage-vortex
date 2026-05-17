@@ -513,9 +513,15 @@ function WhyBook() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           03 · {t.why.kicker}
         </div>
-        <h2 className="font-display mt-4 max-w-none whitespace-nowrap text-balance text-[clamp(1.75rem,7.2vw,9rem)] leading-[0.9]">
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8 }}
+          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.5rem,6.4vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+        >
           {t.why.title}
-        </h2>
+        </motion.h2>
         <div className="mt-5 h-px w-16 bg-violet/40" />
 
         <div className="mt-16 grid gap-5 md:mt-20 md:grid-cols-12">
