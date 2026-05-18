@@ -683,27 +683,38 @@ function SignatureTracks() {
               >
                 <div className="relative md:col-span-5">
                   <div
-                    className={`relative aspect-square overflow-hidden rounded-sm border transition-all duration-700 ${
+                    className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-all duration-700 ${
                       isActive
-                        ? "border-violet/40 shadow-[0_0_60px_-10px_var(--violet)]"
-                        : "border-bone/10"
+                        ? "border-violet/50 shadow-[0_0_80px_-12px_var(--violet)]"
+                        : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
                     <img
                       src={tr.cover}
                       alt={tr.title}
                       loading="lazy"
-                      className={`h-full w-full object-cover transition-transform duration-[3000ms] ease-out ${
-                        isActive ? "scale-[1.06]" : "scale-100"
+                      className={`h-full w-full object-cover will-change-transform ${
+                        isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-void/60 to-transparent" />
+                    {/* light sweep */}
+                    <div
+                      className={`pointer-events-none absolute inset-0 ${
+                        isActive ? "track-cover-sweep" : "opacity-0"
+                      }`}
+                      style={{
+                        background:
+                          "linear-gradient(115deg, transparent 35%, color-mix(in oklab, var(--bone) 14%, transparent) 50%, transparent 65%)",
+                        mixBlendMode: "screen",
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
                     {isActive && (
                       <div
-                        className="pointer-events-none absolute inset-0 opacity-60"
+                        className="pointer-events-none absolute inset-0"
                         style={{
                           background:
-                            "radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--violet) calc(15% * var(--pulse)), transparent), transparent 65%)",
+                            "radial-gradient(circle at 50% 65%, color-mix(in oklab, var(--violet) calc(22% * var(--pulse) + 6%), transparent), transparent 65%)",
                         }}
                       />
                     )}
@@ -723,70 +734,90 @@ function SignatureTracks() {
                     <button
                       onClick={() => toggle(i)}
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className={`group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out ${
+                      className={`group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out hover:scale-[1.06] active:scale-[0.97] ${
                         isActive
-                          ? "border-violet/60 bg-violet/15 shadow-[0_0_24px_-6px_var(--violet)]"
-                          : "border-bone/15 bg-bone/[0.04] hover:border-violet/40 hover:bg-violet/10"
+                          ? "border-violet/70 bg-gradient-to-br from-violet/30 to-violet/5 shadow-[0_0_36px_-6px_var(--violet),inset_0_1px_0_color-mix(in_oklab,var(--bone)_18%,transparent)]"
+                          : "border-bone/20 bg-gradient-to-br from-bone/[0.08] to-bone/[0.02] hover:border-violet/50 hover:from-violet/15 hover:to-violet/5 hover:shadow-[0_0_28px_-8px_var(--violet)]"
                       }`}
                     >
+                      {/* glass reflection */}
                       <span
-                        className="pointer-events-none absolute inset-0 rounded-full opacity-60"
+                        className="pointer-events-none absolute inset-0 rounded-full"
                         style={{
                           background:
-                            "radial-gradient(circle at 30% 25%, color-mix(in oklab, var(--bone) 8%, transparent), transparent 60%)",
+                            "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 18%, transparent), transparent 55%)",
                         }}
                       />
+                      {/* outer pulse ring while playing */}
+                      {isActive && (
+                        <span
+                          className="pointer-events-none absolute -inset-[3px] rounded-full border border-violet/40"
+                          style={{
+                            transform: "scale(calc(1 + var(--pulse) * 0.18))",
+                            opacity: "calc(0.45 - var(--pulse) * 0.25)",
+                            transition: "transform 0.12s ease-out, opacity 0.12s ease-out",
+                          }}
+                        />
+                      )}
                       {isActive ? (
                         <span className="relative flex gap-[3px]">
-                          <span className="h-[10px] w-[2px] bg-bone/90" />
-                          <span className="h-[10px] w-[2px] bg-bone/90" />
+                          <span className="h-[12px] w-[2.5px] rounded-[1px] bg-bone" />
+                          <span className="h-[12px] w-[2.5px] rounded-[1px] bg-bone" />
                         </span>
                       ) : (
                         <svg
                           viewBox="0 0 12 12"
-                          className="relative ml-[1px] h-[11px] w-[11px] text-bone/90"
+                          className="relative ml-[1.5px] h-[13px] w-[13px] text-bone"
                           fill="currentColor"
                         >
                           <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
                         </svg>
                       )}
                     </button>
-                    <div className="flex h-5 flex-1 items-center gap-[3px] md:max-w-[260px]">
-                      {Array.from({ length: 28 }).map((_, b) => (
-                        <span
-                          key={b}
-                          className={`h-full w-[1px] origin-center rounded-full transition-colors duration-300 ${
-                            isActive ? "bg-violet/80" : "bg-bone/15"
-                          }`}
-                          style={{
-                            transform: isActive
-                              ? `scaleY(calc(${0.15 + Math.abs(Math.sin(b * 0.55 + i)) * 0.55} + var(--pulse) * 0.6))`
-                              : "scaleY(0.18)",
-                            transition: "transform 0.18s ease-out",
-                          }}
-                        />
-                      ))}
+                    <div className="flex h-8 flex-1 items-center gap-[3px] md:max-w-[280px]">
+                      {Array.from({ length: 32 }).map((_, b) => {
+                        const base = 0.18 + Math.abs(Math.sin(b * 0.5 + i * 1.3)) * 0.55;
+                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.35;
+                        return (
+                          <span
+                            key={b}
+                            className={`h-full w-[2px] origin-center rounded-full transition-colors duration-300 ${
+                              isActive
+                                ? "bg-gradient-to-t from-violet/40 via-violet to-violet shadow-[0_0_6px_var(--violet)]"
+                                : "bg-bone/15"
+                            }`}
+                            style={{
+                              transform: isActive
+                                ? `scaleY(calc(${base} + var(--pulse) * ${0.5 + secondary}))`
+                                : "scaleY(0.22)",
+                              transition: "transform 0.14s cubic-bezier(0.2,0.8,0.2,1)",
+                            }}
+                          />
+                        );
+                      })}
                     </div>
                     <div className="flex items-center gap-2">
                       <span
-                        className={`relative inline-block h-[5px] w-[5px] rounded-full transition-colors duration-500 ${
-                          isActive ? "bg-violet" : "bg-bone/25"
+                        className={`relative inline-block h-[6px] w-[6px] rounded-full transition-colors duration-500 ${
+                          isActive ? "bg-violet shadow-[0_0_10px_var(--violet)]" : "bg-bone/25"
                         }`}
                       >
                         {isActive && (
                           <span
-                            className="absolute inset-0 rounded-full bg-violet/60"
+                            className="absolute inset-0 rounded-full bg-violet/70"
                             style={{
-                              transform: "scale(calc(1 + var(--pulse) * 1.4))",
-                              opacity: "calc(0.4 - var(--pulse) * 0.25)",
+                              transform: "scale(calc(1 + var(--pulse) * 1.8))",
+                              opacity: "calc(0.55 - var(--pulse) * 0.3)",
                               transition: "transform 0.12s ease-out",
                             }}
                           />
                         )}
                       </span>
                       <span
-                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
-                          isActive ? "text-violet/90" : "text-bone/30"
+                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-all duration-500 ${
+                          isActive
+                            ? "text-violet [text-shadow:0_0_12px_color-mix(in_oklab,var(--violet)_60%,transparent)]"
+                            : "text-bone/30"
                         }`}
                       >
                         {isActive ? "Now Playing" : "Stand By"}
