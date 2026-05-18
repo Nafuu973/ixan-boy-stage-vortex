@@ -719,42 +719,79 @@ function SignatureTracks() {
                   <h3 className="mt-2 font-mono text-xl uppercase tracking-[0.08em] text-bone md:text-2xl">
                     {tr.title}
                   </h3>
-                  <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.25em] text-violet/80">
-                    {tr.mood}
-                  </p>
-                  <div className="mt-8 flex items-center gap-4">
+                  <div className="mt-8 flex items-center gap-5">
                     <button
                       onClick={() => toggle(i)}
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className="group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-violet/40 bg-violet/10 text-bone transition-all hover:bg-violet hover:shadow-[0_0_30px_var(--violet)]"
+                      className={`group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out ${
+                        isActive
+                          ? "border-violet/60 bg-violet/15 shadow-[0_0_24px_-6px_var(--violet)]"
+                          : "border-bone/15 bg-bone/[0.04] hover:border-violet/40 hover:bg-violet/10"
+                      }`}
                     >
+                      <span
+                        className="pointer-events-none absolute inset-0 rounded-full opacity-60"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 30% 25%, color-mix(in oklab, var(--bone) 8%, transparent), transparent 60%)",
+                        }}
+                      />
                       {isActive ? (
-                        <span className="flex gap-1">
-                          <span className="h-3 w-1 bg-bone" />
-                          <span className="h-3 w-1 bg-bone" />
+                        <span className="relative flex gap-[3px]">
+                          <span className="h-[10px] w-[2px] bg-bone/90" />
+                          <span className="h-[10px] w-[2px] bg-bone/90" />
                         </span>
                       ) : (
-                        <span className="ml-0.5 h-0 w-0 border-y-[7px] border-l-[10px] border-y-transparent border-l-bone" />
+                        <svg
+                          viewBox="0 0 12 12"
+                          className="relative ml-[1px] h-[11px] w-[11px] text-bone/90"
+                          fill="currentColor"
+                        >
+                          <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
+                        </svg>
                       )}
                     </button>
-                    <div className="flex h-8 items-end gap-[2px]">
-                      {Array.from({ length: 14 }).map((_, b) => (
+                    <div className="flex h-5 flex-1 items-center gap-[3px] md:max-w-[260px]">
+                      {Array.from({ length: 28 }).map((_, b) => (
                         <span
                           key={b}
-                          className="w-[2px] origin-bottom bg-violet/70"
+                          className={`h-full w-[1px] origin-center rounded-full transition-colors duration-300 ${
+                            isActive ? "bg-violet/80" : "bg-bone/15"
+                          }`}
                           style={{
-                            height: isActive
-                              ? `calc(${20 + Math.abs(Math.sin(b * 0.7)) * 70}% * (0.4 + var(--pulse) * 1.1))`
-                              : "10%",
-                            opacity: isActive ? 0.9 : 0.2,
-                            transition: "opacity 0.3s",
+                            transform: isActive
+                              ? `scaleY(calc(${0.15 + Math.abs(Math.sin(b * 0.55 + i)) * 0.55} + var(--pulse) * 0.6))`
+                              : "scaleY(0.18)",
+                            transition: "transform 0.18s ease-out",
                           }}
                         />
                       ))}
                     </div>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/40">
-                      {isActive ? "Now Playing" : "Press Play"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`relative inline-block h-[5px] w-[5px] rounded-full transition-colors duration-500 ${
+                          isActive ? "bg-violet" : "bg-bone/25"
+                        }`}
+                      >
+                        {isActive && (
+                          <span
+                            className="absolute inset-0 rounded-full bg-violet/60"
+                            style={{
+                              transform: "scale(calc(1 + var(--pulse) * 1.4))",
+                              opacity: "calc(0.4 - var(--pulse) * 0.25)",
+                              transition: "transform 0.12s ease-out",
+                            }}
+                          />
+                        )}
+                      </span>
+                      <span
+                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
+                          isActive ? "text-violet/90" : "text-bone/30"
+                        }`}
+                      >
+                        {isActive ? "Now Playing" : "Stand By"}
+                      </span>
+                    </div>
                   </div>
                   <audio
                     ref={(el) => {
