@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { attachLiveAudio, startPulse } from "@/lib/pulse";
+import { attachLiveAudio, setPulseIdle, startPulse } from "@/lib/pulse";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -646,6 +646,7 @@ function SignatureTracks() {
     });
     if (!target.paused) {
       target.pause();
+      setPulseIdle();
       return;
     }
 
@@ -660,6 +661,7 @@ function SignatureTracks() {
     const p = target.play();
     if (p && typeof p.catch === "function") {
       p.catch(() => {
+        setPulseIdle();
         setActiveIndex((cur) => (cur === i ? null : cur));
       });
     }
@@ -701,7 +703,7 @@ function SignatureTracks() {
                       src={tr.cover}
                       alt={tr.title}
                       loading="lazy"
-                      className={`h-full w-full object-cover will-change-transform ${
+                      className={`h-full w-full object-cover transition-transform duration-700 ${
                         isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
                     />
@@ -840,12 +842,19 @@ function SignatureTracks() {
                     preload="auto"
                     playsInline
                     onPlaying={() => setActiveIndex(i)}
-                    onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
-                    onEnded={(event) => {
-                      event.currentTarget.currentTime = 0;
+                    onPause={() => {
+                      setPulseIdle();
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
-                    onError={() => setActiveIndex((cur) => (cur === i ? null : cur))}
+                    onEnded={(event) => {
+                      event.currentTarget.currentTime = 0;
+                      setPulseIdle();
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
+                    onError={() => {
+                      setPulseIdle();
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
                   />
 
                 </div>
