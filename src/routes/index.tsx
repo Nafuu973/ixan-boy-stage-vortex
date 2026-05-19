@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { startPulse } from "@/lib/pulse";
+import { attachLiveAudio, startPulse } from "@/lib/pulse";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -626,17 +626,18 @@ function Silence() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body.mp3" },
-    { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb.mp3" },
+    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3" },
+    { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb-player.mp3" },
   ];
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const attachedAudioRefs = useRef(new WeakSet<HTMLAudioElement>());
 
   const toggle = (i: number) => {
     const audios = audioRefs.current;
     const target = audios[i];
     if (!target) return;
-    // pause others (state will sync via onPause)
+    // Pause every other track first; visual state is synced by real media events.
     audios.forEach((a, idx) => {
       if (a && idx !== i && !a.paused) {
         a.pause();
@@ -647,11 +648,19 @@ function SignatureTracks() {
       target.pause();
       return;
     }
-    // SYNC play() inside the user gesture — do NOT await
+
+    if (!attachedAudioRefs.current.has(target)) {
+      attachLiveAudio(target);
+      attachedAudioRefs.current.add(target);
+    } else {
+      attachLiveAudio(target);
+    }
+
+    // Keep play() directly inside the user gesture; visuals activate on onPlaying.
     const p = target.play();
     if (p && typeof p.catch === "function") {
       p.catch(() => {
-        /* gesture blocked / no source */
+        setActiveIndex((cur) => (cur === i ? null : cur));
       });
     }
   };
@@ -830,9 +839,13 @@ function SignatureTracks() {
                     src={tr.src || undefined}
                     preload="auto"
                     playsInline
-                    onPlay={() => setActiveIndex(i)}
+                    onPlaying={() => setActiveIndex(i)}
                     onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
-                    onEnded={() => setActiveIndex((cur) => (cur === i ? null : cur))}
+                    onEnded={(event) => {
+                      event.currentTarget.currentTime = 0;
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
+                    onError={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                   />
 
                 </div>
