@@ -777,16 +777,30 @@ function SignatureTracks() {
                             "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 18%, transparent), transparent 55%)",
                         }}
                       />
-                      {/* outer pulse ring while playing */}
+                      {/* outer pulse ring while playing — reacts to selected kicks */}
                       {isActive && (
-                        <span
-                          className="pointer-events-none absolute -inset-[3px] rounded-full border border-violet/40"
-                          style={{
-                            transform: "scale(calc(1 + var(--pulse) * 0.18))",
-                            opacity: "calc(0.45 - var(--pulse) * 0.25)",
-                            transition: "transform 0.12s ease-out, opacity 0.12s ease-out",
-                          }}
-                        />
+                        <>
+                          <span
+                            className="pointer-events-none absolute -inset-[3px] rounded-full border border-violet/40"
+                            style={{
+                              transform:
+                                "scale(calc(1 + var(--pulse) * 0.06 + var(--pulse-kick, 0) * 0.22))",
+                              opacity:
+                                "calc((0.35 + var(--pulse-kick, 0) * 0.5) * var(--pulse-activation, 1))",
+                              transition: "transform 0.12s ease-out, opacity 0.12s ease-out",
+                            }}
+                          />
+                          {/* activation halo — soft violet wake-up glow */}
+                          <span
+                            className="pointer-events-none absolute -inset-[10px] rounded-full"
+                            style={{
+                              background:
+                                "radial-gradient(circle, color-mix(in oklab, var(--violet) calc(30% * var(--pulse-activation, 0)), transparent), transparent 70%)",
+                              opacity: "calc(0.6 + var(--pulse-kick, 0) * 0.4)",
+                              transition: "opacity 0.2s ease-out",
+                            }}
+                          />
+                        </>
                       )}
                       {isActive ? (
                         <span className="relative flex gap-[3px]">
