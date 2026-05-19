@@ -849,9 +849,11 @@ function SignatureTracks() {
                           <span
                             className="absolute inset-0 rounded-full bg-violet/70"
                             style={{
-                              transform: "scale(calc(1 + var(--pulse) * 1.8))",
-                              opacity: "calc(0.55 - var(--pulse) * 0.3)",
-                              transition: "transform 0.12s ease-out",
+                              transform:
+                                "scale(calc(1 + var(--pulse-kick, 0) * 2.2 + var(--pulse) * 0.4))",
+                              opacity:
+                                "calc((0.15 + var(--pulse-kick, 0) * 0.6) * var(--pulse-activation, 1))",
+                              transition: "transform 0.12s ease-out, opacity 0.18s ease-out",
                             }}
                           />
                         )}
