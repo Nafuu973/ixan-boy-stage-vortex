@@ -727,13 +727,25 @@ function SignatureTracks() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
                     {isActive && (
-                      <div
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          background:
-                            "radial-gradient(circle at 50% 65%, color-mix(in oklab, var(--violet) calc(22% * var(--pulse) + 6%), transparent), transparent 65%)",
-                        }}
-                      />
+                      <>
+                        <div
+                          className="pointer-events-none absolute inset-0"
+                          style={{
+                            background:
+                              "radial-gradient(circle at 50% 65%, color-mix(in oklab, var(--violet) calc((18% * var(--pulse) + 6%) * var(--pulse-activation, 1)), transparent), transparent 65%)",
+                            transition: "background 0.18s ease-out",
+                          }}
+                        />
+                        {/* impact flash — only on selected major kicks */}
+                        <div
+                          className="pointer-events-none absolute inset-0"
+                          style={{
+                            background:
+                              "radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--violet) calc(28% * var(--pulse-kick, 0)), transparent), transparent 70%)",
+                            mixBlendMode: "screen",
+                          }}
+                        />
+                      </>
                     )}
                     <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
                       TRACK · 0{i + 1}
