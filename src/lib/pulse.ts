@@ -76,11 +76,14 @@ export function attachLiveAudio(audio: HTMLAudioElement) {
 
     src.connect(analyser);
     currentSource = src;
-    mode = "live";
     return { ctx: audioCtx, analyser, dataArray };
   } catch {
     return null;
   }
+}
+
+export function setPulseLive() {
+  mode = "live";
 }
 
 export function setSimMode() {
