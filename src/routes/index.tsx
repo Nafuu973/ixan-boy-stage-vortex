@@ -828,9 +828,13 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="none"
+                    preload="auto"
+                    playsInline
+                    onPlay={() => setActiveIndex(i)}
+                    onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                     onEnded={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                   />
+
                 </div>
               </motion.div>
             );
