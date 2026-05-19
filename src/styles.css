@@ -632,26 +632,51 @@
 }
 
 @layer utilities {
-  @keyframes track-breathe {
-    0%, 100% { transform: scale(1.006); }
-    50% { transform: scale(1.016); }
+  /* Responsive intensity tokens — identical logic, scale adapts per breakpoint */
+  :root {
+    --fx-glow: 1;
+    --fx-blur: 1;
+    --fx-amp: 1;
+    --fx-eq-max: 28px;
+    --fx-pulse-cap: 0.018;
   }
+  @media (max-width: 767px) {
+    :root {
+      --fx-glow: 0.35;
+      --fx-blur: 0.5;
+      --fx-amp: 0.6;
+      --fx-eq-max: 24px;
+      --fx-pulse-cap: 0.015;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    :root {
+      --fx-glow: 1.35;
+      --fx-blur: 1.25;
+      --fx-amp: 1.25;
+      --fx-eq-max: 34px;
+      --fx-pulse-cap: 0.02;
+    }
+  }
+
   @keyframes track-breathe-active {
-    0%, 100% { transform: scale(1.015); }
-    50% { transform: scale(1.035); }
+    from { transform: scale(1); filter: brightness(1); }
+    to   { transform: scale(calc(1 + var(--fx-pulse-cap))); filter: brightness(1.06); }
   }
   @keyframes track-light-drift {
-    0%   { transform: translate3d(-6%, -3%, 0); opacity: 0.5; }
-    50%  { transform: translate3d(5%, 4%, 0);  opacity: 0.8; }
-    100% { transform: translate3d(-6%, -3%, 0); opacity: 0.5; }
+    0%   { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
+    50%  { transform: translate3d(4%, 3%, 0);  opacity: 0.55; }
+    100% { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
   }
-  @keyframes track-sweep {
-    0% { transform: translateX(-110%); opacity: 0; }
-    25% { opacity: 1; }
-    100% { transform: translateX(110%); opacity: 0; }
+  @keyframes track-button-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    50%      { box-shadow: 0 0 calc(10px * var(--fx-glow)) 0 color-mix(in oklab, var(--violet) calc(26% * var(--fx-glow)), transparent); }
   }
   .track-cover-breathe { transform: scale(1); }
-  .track-cover-breathe-active { animation: track-breathe-active 9s ease-in-out infinite; }
-  .track-cover-sweep { animation: track-sweep 7s ease-in-out infinite; }
-  .track-light-drift { animation: track-light-drift 11s ease-in-out infinite; }
+  .track-cover-breathe-active {
+    animation: track-breathe-active 6s ease-in-out infinite alternate;
+    will-change: transform, filter;
+  }
+  .track-light-drift { animation: track-light-drift 14s ease-in-out infinite; }
+  .track-button-pulse { animation: track-button-pulse 2.4s ease-in-out infinite; }
 }
