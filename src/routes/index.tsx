@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { attachLiveAudio, startPulse } from "@/lib/pulse";
+import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse } from "@/lib/pulse";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -633,6 +633,13 @@ function SignatureTracks() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const attachedAudioRefs = useRef(new WeakSet<HTMLAudioElement>());
 
+  const setCalmIfNoAudioPlaying = () => {
+    const anyAudioPlaying = audioRefs.current.some(
+      (audio) => audio && !audio.paused && !audio.ended,
+    );
+    if (!anyAudioPlaying) setPulseIdle();
+  };
+
   const toggle = (i: number) => {
     const audios = audioRefs.current;
     const target = audios[i];
@@ -646,6 +653,7 @@ function SignatureTracks() {
     });
     if (!target.paused) {
       target.pause();
+      setCalmIfNoAudioPlaying();
       return;
     }
 
@@ -660,6 +668,7 @@ function SignatureTracks() {
     const p = target.play();
     if (p && typeof p.catch === "function") {
       p.catch(() => {
+        setPulseIdle();
         setActiveIndex((cur) => (cur === i ? null : cur));
       });
     }
@@ -701,7 +710,7 @@ function SignatureTracks() {
                       src={tr.cover}
                       alt={tr.title}
                       loading="lazy"
-                      className={`h-full w-full object-cover will-change-transform ${
+                      className={`h-full w-full object-cover transition-transform duration-700 ${
                         isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
                     />
@@ -839,13 +848,23 @@ function SignatureTracks() {
                     src={tr.src || undefined}
                     preload="auto"
                     playsInline
-                    onPlaying={() => setActiveIndex(i)}
-                    onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
-                    onEnded={(event) => {
-                      event.currentTarget.currentTime = 0;
+                    onPlaying={() => {
+                      setPulseLive();
+                      setActiveIndex(i);
+                    }}
+                    onPause={() => {
+                      setCalmIfNoAudioPlaying();
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
-                    onError={() => setActiveIndex((cur) => (cur === i ? null : cur))}
+                    onEnded={(event) => {
+                      event.currentTarget.currentTime = 0;
+                      setCalmIfNoAudioPlaying();
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
+                    onError={() => {
+                      setCalmIfNoAudioPlaying();
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
                   />
 
                 </div>
