@@ -699,11 +699,22 @@ function SignatureTracks() {
                 }`}
               >
                 <div className="relative md:col-span-5">
+                  {/* ambient atmosphere behind cover — only when playing, capped for consistency */}
+                  {isActive && (
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-6 md:-inset-10"
+                      style={{
+                        background:
+                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((10% + 8% * var(--pulse)) * var(--pulse-activation, 0)), transparent), transparent 70%)",
+                        filter: "blur(28px)",
+                        transition: "background 0.25s ease-out",
+                      }}
+                    />
+                  )}
                   <div
-                    className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-all duration-700 ${
-                      isActive
-                        ? "border-violet/50 shadow-[0_0_80px_-12px_var(--violet)]"
-                        : "border-bone/10 hover:border-bone/25"
+                    className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
+                      isActive ? "border-violet/40" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
                     <img
@@ -714,34 +725,48 @@ function SignatureTracks() {
                         isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
                     />
-                    {/* light sweep */}
+                    {/* slow drifting light — soft cinematic depth */}
+                    {isActive && (
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute -inset-[20%] track-light-drift"
+                        style={{
+                          background:
+                            "radial-gradient(40% 35% at 35% 30%, color-mix(in oklab, var(--violet) 22%, transparent), transparent 70%)",
+                          mixBlendMode: "screen",
+                          opacity: "calc(var(--pulse-activation, 0) * 0.9)",
+                        }}
+                      />
+                    )}
+                    {/* very subtle highlight sweep */}
                     <div
                       className={`pointer-events-none absolute inset-0 ${
                         isActive ? "track-cover-sweep" : "opacity-0"
                       }`}
                       style={{
                         background:
-                          "linear-gradient(115deg, transparent 35%, color-mix(in oklab, var(--bone) 14%, transparent) 50%, transparent 65%)",
+                          "linear-gradient(115deg, transparent 40%, color-mix(in oklab, var(--bone) 8%, transparent) 50%, transparent 60%)",
                         mixBlendMode: "screen",
                       }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
                     {isActive && (
                       <>
+                        {/* energy pressure — bound to bass envelope, gently capped */}
                         <div
                           className="pointer-events-none absolute inset-0"
                           style={{
                             background:
-                              "radial-gradient(circle at 50% 65%, color-mix(in oklab, var(--violet) calc((18% * var(--pulse) + 6%) * var(--pulse-activation, 1)), transparent), transparent 65%)",
+                              "radial-gradient(circle at 50% 70%, color-mix(in oklab, var(--violet) calc((6% + 10% * var(--pulse)) * var(--pulse-activation, 0)), transparent), transparent 70%)",
                             transition: "background 0.18s ease-out",
                           }}
                         />
-                        {/* impact flash — only on selected major kicks */}
+                        {/* selective kick — brief micro flash */}
                         <div
                           className="pointer-events-none absolute inset-0"
                           style={{
                             background:
-                              "radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--violet) calc(28% * var(--pulse-kick, 0)), transparent), transparent 70%)",
+                              "radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--violet) calc(18% * var(--pulse-kick, 0)), transparent), transparent 70%)",
                             mixBlendMode: "screen",
                           }}
                         />
@@ -759,15 +784,24 @@ function SignatureTracks() {
                   <h3 className="mt-2 font-mono text-xl uppercase tracking-[0.08em] text-bone md:text-2xl">
                     {tr.title}
                   </h3>
-                  <div className="mt-8 flex items-center gap-5">
+                  <div className="mt-8 flex items-center gap-4 md:gap-5">
                     <button
                       onClick={() => toggle(i)}
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className={`group relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out hover:scale-[1.06] active:scale-[0.97] ${
+                      className={`group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.97] ${
                         isActive
-                          ? "border-violet/70 bg-gradient-to-br from-violet/30 to-violet/5 shadow-[0_0_36px_-6px_var(--violet),inset_0_1px_0_color-mix(in_oklab,var(--bone)_18%,transparent)]"
-                          : "border-bone/20 bg-gradient-to-br from-bone/[0.08] to-bone/[0.02] hover:border-violet/50 hover:from-violet/15 hover:to-violet/5 hover:shadow-[0_0_28px_-8px_var(--violet)]"
+                          ? "border-violet/60 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_22%,transparent),color-mix(in_oklab,var(--violet)_4%,transparent))]"
+                          : "border-bone/20 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_8%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/45"
                       }`}
+                      style={
+                        isActive
+                          ? {
+                              boxShadow:
+                                "0 0 calc(14px + 10px * var(--pulse)) -4px color-mix(in oklab, var(--violet) calc(55% * var(--pulse-activation, 0)), transparent), inset 0 1px 0 color-mix(in oklab, var(--bone) 16%, transparent)",
+                              transform: `scale(calc(1 + var(--pulse) * 0.025 + var(--pulse-kick, 0) * 0.05))`,
+                            }
+                          : undefined
+                      }
                     >
                       {/* glass reflection */}
                       <span
@@ -777,63 +811,50 @@ function SignatureTracks() {
                             "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 18%, transparent), transparent 55%)",
                         }}
                       />
-                      {/* outer pulse ring while playing — reacts to selected kicks */}
+                      {/* thin breathing ring while playing */}
                       {isActive && (
-                        <>
-                          <span
-                            className="pointer-events-none absolute -inset-[3px] rounded-full border border-violet/40"
-                            style={{
-                              transform:
-                                "scale(calc(1 + var(--pulse) * 0.06 + var(--pulse-kick, 0) * 0.22))",
-                              opacity:
-                                "calc((0.35 + var(--pulse-kick, 0) * 0.5) * var(--pulse-activation, 1))",
-                              transition: "transform 0.12s ease-out, opacity 0.12s ease-out",
-                            }}
-                          />
-                          {/* activation halo — soft violet wake-up glow */}
-                          <span
-                            className="pointer-events-none absolute -inset-[10px] rounded-full"
-                            style={{
-                              background:
-                                "radial-gradient(circle, color-mix(in oklab, var(--violet) calc(30% * var(--pulse-activation, 0)), transparent), transparent 70%)",
-                              opacity: "calc(0.6 + var(--pulse-kick, 0) * 0.4)",
-                              transition: "opacity 0.2s ease-out",
-                            }}
-                          />
-                        </>
+                        <span
+                          className="pointer-events-none absolute -inset-[2px] rounded-full border border-violet/35"
+                          style={{
+                            transform:
+                              "scale(calc(1 + var(--pulse) * 0.04 + var(--pulse-kick, 0) * 0.10))",
+                            opacity:
+                              "calc((0.4 + var(--pulse-kick, 0) * 0.35) * var(--pulse-activation, 1))",
+                            transition: "transform 0.18s ease-out, opacity 0.18s ease-out",
+                          }}
+                        />
                       )}
                       {isActive ? (
                         <span className="relative flex gap-[3px]">
-                          <span className="h-[12px] w-[2.5px] rounded-[1px] bg-bone" />
-                          <span className="h-[12px] w-[2.5px] rounded-[1px] bg-bone" />
+                          <span className="h-[10px] w-[2px] rounded-[1px] bg-bone" />
+                          <span className="h-[10px] w-[2px] rounded-[1px] bg-bone" />
                         </span>
                       ) : (
                         <svg
                           viewBox="0 0 12 12"
-                          className="relative ml-[1.5px] h-[13px] w-[13px] text-bone"
+                          className="relative ml-[1px] h-[11px] w-[11px] text-bone"
                           fill="currentColor"
                         >
                           <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
                         </svg>
                       )}
                     </button>
-                    <div className="flex h-8 flex-1 items-center gap-[3px] md:max-w-[280px]">
-                      {Array.from({ length: 32 }).map((_, b) => {
-                        const base = 0.18 + Math.abs(Math.sin(b * 0.5 + i * 1.3)) * 0.55;
-                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.35;
+                    {/* premium equalizer — thin, identical across breakpoints */}
+                    <div className="flex h-7 flex-1 items-center gap-[3px] md:max-w-[300px]">
+                      {Array.from({ length: 28 }).map((_, b) => {
+                        const base = 0.16 + Math.abs(Math.sin(b * 0.55 + i * 1.3)) * 0.5;
+                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.28;
                         return (
                           <span
                             key={b}
-                            className={`h-full w-[2px] origin-center rounded-full transition-colors duration-300 ${
-                              isActive
-                                ? "bg-gradient-to-t from-violet/40 via-violet to-violet shadow-[0_0_6px_var(--violet)]"
-                                : "bg-bone/15"
+                            className={`h-full w-px origin-center rounded-full transition-colors duration-500 ${
+                              isActive ? "bg-violet/85" : "bg-bone/15"
                             }`}
                             style={{
                               transform: isActive
-                                ? `scaleY(calc((${base} + var(--pulse) * ${0.5 + secondary} + var(--pulse-kick, 0) * ${0.35 + secondary * 0.4}) * (0.35 + var(--pulse-activation, 1) * 0.65)))`
-                                : "scaleY(0.22)",
-                              transition: "transform 0.14s cubic-bezier(0.2,0.8,0.2,1)",
+                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.38 + secondary).toFixed(3)} + var(--pulse-kick, 0) * ${(0.22 + secondary * 0.3).toFixed(3)}) * (0.4 + var(--pulse-activation, 1) * 0.6)))`
+                                : "scaleY(0.18)",
+                              transition: "transform 0.16s cubic-bezier(0.2,0.8,0.2,1)",
                             }}
                           />
                         );
@@ -842,27 +863,33 @@ function SignatureTracks() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`relative inline-block h-[6px] w-[6px] rounded-full transition-colors duration-500 ${
-                          isActive ? "bg-violet shadow-[0_0_10px_var(--violet)]" : "bg-bone/25"
+                          isActive ? "bg-violet" : "bg-bone/25"
                         }`}
+                        style={
+                          isActive
+                            ? {
+                                boxShadow:
+                                  "0 0 calc(6px + 6px * var(--pulse)) color-mix(in oklab, var(--violet) calc(70% * var(--pulse-activation, 0)), transparent)",
+                              }
+                            : undefined
+                        }
                       >
                         {isActive && (
                           <span
-                            className="absolute inset-0 rounded-full bg-violet/70"
+                            className="absolute inset-0 rounded-full bg-violet/60"
                             style={{
                               transform:
-                                "scale(calc(1 + var(--pulse-kick, 0) * 2.2 + var(--pulse) * 0.4))",
+                                "scale(calc(1 + var(--pulse-kick, 0) * 1.4 + var(--pulse) * 0.25))",
                               opacity:
-                                "calc((0.15 + var(--pulse-kick, 0) * 0.6) * var(--pulse-activation, 1))",
-                              transition: "transform 0.12s ease-out, opacity 0.18s ease-out",
+                                "calc((0.12 + var(--pulse-kick, 0) * 0.45) * var(--pulse-activation, 1))",
+                              transition: "transform 0.18s ease-out, opacity 0.2s ease-out",
                             }}
                           />
                         )}
                       </span>
                       <span
-                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-all duration-500 ${
-                          isActive
-                            ? "text-violet [text-shadow:0_0_12px_color-mix(in_oklab,var(--violet)_60%,transparent)]"
-                            : "text-bone/30"
+                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
+                          isActive ? "text-violet/90" : "text-bone/30"
                         }`}
                       >
                         {isActive ? "Now Playing" : "Stand By"}
