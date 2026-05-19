@@ -4,8 +4,11 @@
 type Mode = "sim" | "live";
 
 let mode: Mode = "sim";
+let audioCtx: AudioContext | null = null;
 let analyser: AnalyserNode | null = null;
 let dataArray: Uint8Array | null = null;
+let currentSource: MediaElementAudioSourceNode | null = null;
+const sourceNodes = new WeakMap<HTMLAudioElement, MediaElementAudioSourceNode>();
 let rafId = 0;
 let started = false;
 
@@ -46,16 +49,43 @@ export function stopPulse() {
 export function attachLiveAudio(audio: HTMLAudioElement) {
   try {
     const Ctx = (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
-    const ctx = new Ctx();
-    const src = ctx.createMediaElementSource(audio);
-    const a = ctx.createAnalyser();
-    a.fftSize = 128;
-    src.connect(a);
-    a.connect(ctx.destination);
-    analyser = a;
-    dataArray = new Uint8Array(a.frequencyBinCount);
+    audioCtx = audioCtx ?? new Ctx();
+
+    if (!analyser) {
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 128;
+      analyser.connect(audioCtx.destination);
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+
+    if (audioCtx.state === "suspended") {
+      void audioCtx.resume().catch(() => undefined);
+    }
+
+    let src = sourceNodes.get(audio);
+    if (!src) {
+      src = audioCtx.createMediaElementSource(audio);
+      sourceNodes.set(audio, src);
+    }
+
+    if (currentSource && currentSource !== src) {
+      try {
+        currentSource.disconnect();
+      } catch {
+        // already disconnected
+      }
+    }
+
+    try {
+      src.disconnect();
+    } catch {
+      // not connected yet
+    }
+
+    src.connect(analyser);
+    currentSource = src;
     mode = "live";
-    return { ctx, analyser: a, dataArray };
+    return { ctx: audioCtx, analyser, dataArray };
   } catch {
     return null;
   }
