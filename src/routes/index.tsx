@@ -699,22 +699,23 @@ function SignatureTracks() {
                 }`}
               >
                 <div className="relative md:col-span-5">
-                  {/* ambient atmosphere behind cover — only when playing, capped for consistency */}
+                  {/* localized ambient atmosphere behind cover — capped, never full-screen */}
                   {isActive && (
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute -inset-6 md:-inset-10"
+                      className="pointer-events-none absolute -inset-4 md:-inset-8"
                       style={{
                         background:
-                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((10% + 8% * var(--pulse)) * var(--pulse-activation, 0)), transparent), transparent 70%)",
-                        filter: "blur(28px)",
-                        transition: "background 0.25s ease-out",
+                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((8% + 4% * var(--pulse)) * var(--pulse-activation, 0) * var(--fx-glow)), transparent), transparent 72%)",
+                        filter: "blur(calc(24px * var(--fx-blur)))",
+                        opacity: "calc(0.18 * var(--fx-glow))",
+                        transition: "background 0.25s ease-out, opacity 0.25s ease-out",
                       }}
                     />
                   )}
                   <div
                     className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
-                      isActive ? "border-violet/40" : "border-bone/10 hover:border-bone/25"
+                      isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
                     <img
@@ -724,53 +725,40 @@ function SignatureTracks() {
                       className={`h-full w-full object-cover transition-transform duration-700 ${
                         isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
+                      style={
+                        isActive
+                          ? {
+                              // micro kick bump on cover: +0.008 scale, ~100ms decay via kick envelope
+                              transform: "scale(calc(1 + var(--pulse-kick, 0) * 0.008))",
+                            }
+                          : undefined
+                      }
                     />
-                    {/* slow drifting light — soft cinematic depth */}
+                    {/* slow drifting cinematic light, opacity capped */}
                     {isActive && (
                       <div
                         aria-hidden
-                        className="pointer-events-none absolute -inset-[20%] track-light-drift"
+                        className="pointer-events-none absolute -inset-[15%] track-light-drift"
                         style={{
                           background:
-                            "radial-gradient(40% 35% at 35% 30%, color-mix(in oklab, var(--violet) 22%, transparent), transparent 70%)",
+                            "radial-gradient(38% 32% at 35% 30%, color-mix(in oklab, var(--violet) 16%, transparent), transparent 72%)",
                           mixBlendMode: "screen",
-                          opacity: "calc(var(--pulse-activation, 0) * 0.9)",
+                          opacity: "calc(var(--pulse-activation, 0) * 0.5 * var(--fx-glow))",
                         }}
                       />
                     )}
-                    {/* very subtle highlight sweep */}
-                    <div
-                      className={`pointer-events-none absolute inset-0 ${
-                        isActive ? "track-cover-sweep" : "opacity-0"
-                      }`}
-                      style={{
-                        background:
-                          "linear-gradient(115deg, transparent 40%, color-mix(in oklab, var(--bone) 8%, transparent) 50%, transparent 60%)",
-                        mixBlendMode: "screen",
-                      }}
-                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
                     {isActive && (
-                      <>
-                        {/* energy pressure — bound to bass envelope, gently capped */}
-                        <div
-                          className="pointer-events-none absolute inset-0"
-                          style={{
-                            background:
-                              "radial-gradient(circle at 50% 70%, color-mix(in oklab, var(--violet) calc((6% + 10% * var(--pulse)) * var(--pulse-activation, 0)), transparent), transparent 70%)",
-                            transition: "background 0.18s ease-out",
-                          }}
-                        />
-                        {/* selective kick — brief micro flash */}
-                        <div
-                          className="pointer-events-none absolute inset-0"
-                          style={{
-                            background:
-                              "radial-gradient(circle at 50% 55%, color-mix(in oklab, var(--violet) calc(18% * var(--pulse-kick, 0)), transparent), transparent 70%)",
-                            mixBlendMode: "screen",
-                          }}
-                        />
-                      </>
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--violet) calc(10% * var(--pulse-kick, 0) * var(--fx-glow)), transparent), transparent 70%)",
+                          mixBlendMode: "screen",
+                          transition: "background 0.12s ease-out",
+                        }}
+                      />
                     )}
                     <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
                       TRACK · 0{i + 1}
@@ -788,73 +776,74 @@ function SignatureTracks() {
                     <button
                       onClick={() => toggle(i)}
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className={`group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-all duration-500 ease-out hover:scale-[1.05] active:scale-[0.97] ${
+                      className={`group relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-[background,border-color,transform] duration-500 ease-out hover:brightness-[1.08] active:scale-[0.97] ${
                         isActive
-                          ? "border-violet/60 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_22%,transparent),color-mix(in_oklab,var(--violet)_4%,transparent))]"
-                          : "border-bone/20 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_8%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/45"
+                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse"
+                          : "border-bone/15 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_7%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/35"
                       }`}
-                      style={
-                        isActive
-                          ? {
-                              boxShadow:
-                                "0 0 calc(14px + 10px * var(--pulse)) -4px color-mix(in oklab, var(--violet) calc(55% * var(--pulse-activation, 0)), transparent), inset 0 1px 0 color-mix(in oklab, var(--bone) 16%, transparent)",
-                              transform: `scale(calc(1 + var(--pulse) * 0.025 + var(--pulse-kick, 0) * 0.05))`,
-                            }
-                          : undefined
-                      }
+                      style={{
+                        boxShadow: isActive
+                          ? "inset 0 1px 0 color-mix(in oklab, var(--bone) 14%, transparent), inset 0 -6px 12px -6px color-mix(in oklab, var(--violet) calc(30% * var(--fx-glow)), transparent)"
+                          : "inset 0 1px 0 color-mix(in oklab, var(--bone) 10%, transparent), inset 0 -6px 12px -8px rgba(0,0,0,0.5)",
+                      }}
                     >
                       {/* glass reflection */}
                       <span
+                        aria-hidden
                         className="pointer-events-none absolute inset-0 rounded-full"
                         style={{
                           background:
-                            "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 18%, transparent), transparent 55%)",
+                            "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 16%, transparent), transparent 55%)",
                         }}
                       />
-                      {/* thin breathing ring while playing */}
+                      {/* kick-only pressure ring — short impulse, not continuous */}
                       {isActive && (
                         <span
-                          className="pointer-events-none absolute -inset-[2px] rounded-full border border-violet/35"
+                          aria-hidden
+                          className="pointer-events-none absolute -inset-[2px] rounded-full border border-violet/40"
                           style={{
                             transform:
-                              "scale(calc(1 + var(--pulse) * 0.04 + var(--pulse-kick, 0) * 0.10))",
+                              "scale(calc(1 + var(--pulse-kick, 0) * 0.08 * var(--fx-amp)))",
                             opacity:
-                              "calc((0.4 + var(--pulse-kick, 0) * 0.35) * var(--pulse-activation, 1))",
-                            transition: "transform 0.18s ease-out, opacity 0.18s ease-out",
+                              "calc(var(--pulse-kick, 0) * 0.55 * var(--pulse-activation, 1) * var(--fx-glow))",
+                            transition: "transform 0.12s ease-out, opacity 0.18s ease-out",
                           }}
                         />
                       )}
                       {isActive ? (
                         <span className="relative flex gap-[3px]">
-                          <span className="h-[10px] w-[2px] rounded-[1px] bg-bone" />
-                          <span className="h-[10px] w-[2px] rounded-[1px] bg-bone" />
+                          <span className="h-[9px] w-[2px] rounded-[1px] bg-bone" />
+                          <span className="h-[9px] w-[2px] rounded-[1px] bg-bone" />
                         </span>
                       ) : (
                         <svg
                           viewBox="0 0 12 12"
-                          className="relative ml-[1px] h-[11px] w-[11px] text-bone"
+                          className="relative ml-[1px] h-[10px] w-[10px] text-bone"
                           fill="currentColor"
                         >
                           <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
                         </svg>
                       )}
                     </button>
-                    {/* premium equalizer — thin, identical across breakpoints */}
-                    <div className="flex h-7 flex-1 items-center gap-[3px] md:max-w-[300px]">
-                      {Array.from({ length: 28 }).map((_, b) => {
-                        const base = 0.16 + Math.abs(Math.sin(b * 0.55 + i * 1.3)) * 0.5;
-                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.28;
+                    {/* premium thin equalizer — identical logic, height adapts per breakpoint */}
+                    <div
+                      className="flex flex-1 items-center gap-[3px] md:max-w-[300px]"
+                      style={{ height: "var(--fx-eq-max)" }}
+                    >
+                      {Array.from({ length: 32 }).map((_, b) => {
+                        const base = 0.14 + Math.abs(Math.sin(b * 0.55 + i * 1.3)) * 0.42;
+                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.22;
                         return (
                           <span
                             key={b}
-                            className={`h-full w-px origin-center rounded-full transition-colors duration-500 ${
-                              isActive ? "bg-violet/85" : "bg-bone/15"
+                            className={`h-full w-[2px] origin-center rounded-full transition-colors duration-500 ${
+                              isActive ? "bg-violet/80" : "bg-bone/15"
                             }`}
                             style={{
                               transform: isActive
-                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.38 + secondary).toFixed(3)} + var(--pulse-kick, 0) * ${(0.22 + secondary * 0.3).toFixed(3)}) * (0.4 + var(--pulse-activation, 1) * 0.6)))`
-                                : "scaleY(0.18)",
-                              transition: "transform 0.16s cubic-bezier(0.2,0.8,0.2,1)",
+                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.3 + secondary).toFixed(3)} * var(--fx-amp) + var(--pulse-kick, 0) * ${(0.2 + secondary * 0.3).toFixed(3)} * var(--fx-amp)) * (0.45 + var(--pulse-activation, 1) * 0.55)))`
+                                : "scaleY(0.16)",
+                              transition: "transform 0.22s cubic-bezier(0.22,0.61,0.36,1)",
                             }}
                           />
                         );
