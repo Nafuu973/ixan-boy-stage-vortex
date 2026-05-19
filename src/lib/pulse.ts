@@ -1,9 +1,9 @@
-// Global pulse driver — simulated BPM 150 by default, switches to live FFT when audio plays.
+// Global pulse driver — calm by default, switches to live FFT only while audio plays.
 // Updates CSS variable --pulse (0..1) on document root each rAF.
 
-type Mode = "sim" | "live";
+type Mode = "idle" | "live";
 
-let mode: Mode = "sim";
+let mode: Mode = "idle";
 let audioCtx: AudioContext | null = null;
 let analyser: AnalyserNode | null = null;
 let dataArray: Uint8Array | null = null;
@@ -11,9 +11,6 @@ let currentSource: MediaElementAudioSourceNode | null = null;
 const sourceNodes = new WeakMap<HTMLAudioElement, MediaElementAudioSourceNode>();
 let rafId = 0;
 let started = false;
-
-const BPM = 150;
-const BEAT_MS = (60 / BPM) * 1000;
 
 function tick() {
   let v = 0;
@@ -24,12 +21,6 @@ function tick() {
     const n = Math.min(8, dataArray.length);
     for (let i = 0; i < n; i++) sum += dataArray[i];
     v = Math.min(1, sum / (n * 255) * 1.6);
-  } else {
-    // simulated kick envelope
-    const t = performance.now() % BEAT_MS;
-    const phase = t / BEAT_MS;
-    // sharp attack, exp decay
-    v = Math.pow(1 - phase, 4) * 0.9 + 0.05;
   }
   document.documentElement.style.setProperty("--pulse", v.toFixed(3));
   rafId = requestAnimationFrame(tick);
@@ -44,6 +35,7 @@ export function startPulse() {
 export function stopPulse() {
   cancelAnimationFrame(rafId);
   started = false;
+  document.documentElement.style.setProperty("--pulse", "0");
 }
 
 export function attachLiveAudio(audio: HTMLAudioElement) {
@@ -92,5 +84,10 @@ export function attachLiveAudio(audio: HTMLAudioElement) {
 }
 
 export function setSimMode() {
-  mode = "sim";
+  setPulseIdle();
+}
+
+export function setPulseIdle() {
+  mode = "idle";
+  document.documentElement.style.setProperty("--pulse", "0");
 }
