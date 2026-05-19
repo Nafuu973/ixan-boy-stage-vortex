@@ -831,7 +831,7 @@ function SignatureTracks() {
                             }`}
                             style={{
                               transform: isActive
-                                ? `scaleY(calc(${base} + var(--pulse) * ${0.5 + secondary}))`
+                                ? `scaleY(calc((${base} + var(--pulse) * ${0.5 + secondary} + var(--pulse-kick, 0) * ${0.35 + secondary * 0.4}) * (0.35 + var(--pulse-activation, 1) * 0.65)))`
                                 : "scaleY(0.22)",
                               transition: "transform 0.14s cubic-bezier(0.2,0.8,0.2,1)",
                             }}
