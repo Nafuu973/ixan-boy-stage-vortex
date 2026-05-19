@@ -633,6 +633,13 @@ function SignatureTracks() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const attachedAudioRefs = useRef(new WeakSet<HTMLAudioElement>());
 
+  const setCalmIfNoAudioPlaying = () => {
+    const anyAudioPlaying = audioRefs.current.some(
+      (audio) => audio && !audio.paused && !audio.ended,
+    );
+    if (!anyAudioPlaying) setPulseIdle();
+  };
+
   const toggle = (i: number) => {
     const audios = audioRefs.current;
     const target = audios[i];
@@ -646,7 +653,7 @@ function SignatureTracks() {
     });
     if (!target.paused) {
       target.pause();
-      setPulseIdle();
+      setCalmIfNoAudioPlaying();
       return;
     }
 
@@ -846,16 +853,16 @@ function SignatureTracks() {
                       setActiveIndex(i);
                     }}
                     onPause={() => {
-                      setPulseIdle();
+                      setCalmIfNoAudioPlaying();
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
                     onEnded={(event) => {
                       event.currentTarget.currentTime = 0;
-                      setPulseIdle();
+                      setCalmIfNoAudioPlaying();
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
                     onError={() => {
-                      setPulseIdle();
+                      setCalmIfNoAudioPlaying();
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
                   />
