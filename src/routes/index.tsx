@@ -839,9 +839,13 @@ function SignatureTracks() {
                     src={tr.src || undefined}
                     preload="auto"
                     playsInline
-                    onPlay={() => setActiveIndex(i)}
+                    onPlaying={() => setActiveIndex(i)}
                     onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
-                    onEnded={() => setActiveIndex((cur) => (cur === i ? null : cur))}
+                    onEnded={(event) => {
+                      event.currentTarget.currentTime = 0;
+                      setActiveIndex((cur) => (cur === i ? null : cur));
+                    }}
+                    onError={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                   />
 
                 </div>
