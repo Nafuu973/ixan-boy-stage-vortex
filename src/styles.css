@@ -633,8 +633,8 @@
 
 @layer utilities {
   @keyframes track-breathe {
-    0%, 100% { transform: scale(1.02); }
-    50% { transform: scale(1.06); }
+    0%, 100% { transform: scale(1.006); }
+    50% { transform: scale(1.016); }
   }
   @keyframes track-breathe-active {
     0%, 100% { transform: scale(1.05); }
@@ -645,7 +645,7 @@
     25% { opacity: 1; }
     100% { transform: translateX(110%); opacity: 0; }
   }
-  .track-cover-breathe { animation: track-breathe 12s ease-in-out infinite; }
+  .track-cover-breathe { animation: track-breathe 18s ease-in-out infinite; }
   .track-cover-breathe-active { animation: track-breathe-active 7s ease-in-out infinite; }
   .track-cover-sweep { animation: track-sweep 5.5s ease-in-out infinite; }
 }
