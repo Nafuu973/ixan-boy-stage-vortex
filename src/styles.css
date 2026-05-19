@@ -637,8 +637,13 @@
     50% { transform: scale(1.016); }
   }
   @keyframes track-breathe-active {
-    0%, 100% { transform: scale(1.05); }
-    50% { transform: scale(1.11); }
+    0%, 100% { transform: scale(1.015); }
+    50% { transform: scale(1.035); }
+  }
+  @keyframes track-light-drift {
+    0%   { transform: translate3d(-6%, -3%, 0); opacity: 0.5; }
+    50%  { transform: translate3d(5%, 4%, 0);  opacity: 0.8; }
+    100% { transform: translate3d(-6%, -3%, 0); opacity: 0.5; }
   }
   @keyframes track-sweep {
     0% { transform: translateX(-110%); opacity: 0; }
@@ -646,6 +651,7 @@
     100% { transform: translateX(110%); opacity: 0; }
   }
   .track-cover-breathe { transform: scale(1); }
-  .track-cover-breathe-active { animation: track-breathe-active 7s ease-in-out infinite; }
-  .track-cover-sweep { animation: track-sweep 5.5s ease-in-out infinite; }
+  .track-cover-breathe-active { animation: track-breathe-active 9s ease-in-out infinite; }
+  .track-cover-sweep { animation: track-sweep 7s ease-in-out infinite; }
+  .track-light-drift { animation: track-light-drift 11s ease-in-out infinite; }
 }
