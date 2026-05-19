@@ -632,28 +632,27 @@ function SignatureTracks() {
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const toggle = async (i: number) => {
+  const toggle = (i: number) => {
     const audios = audioRefs.current;
     const target = audios[i];
     if (!target) return;
-    // pause others
+    // pause others (state will sync via onPause)
     audios.forEach((a, idx) => {
-      if (a && idx !== i) {
+      if (a && idx !== i && !a.paused) {
         a.pause();
         a.currentTime = 0;
       }
     });
-    if (activeIndex === i) {
+    if (!target.paused) {
       target.pause();
-      setActiveIndex(null);
-    } else {
-      try {
-        await target.play();
-        setActiveIndex(i);
-      } catch {
-        // no source yet — still toggle visual state for preview
-        setActiveIndex(i);
-      }
+      return;
+    }
+    // SYNC play() inside the user gesture — do NOT await
+    const p = target.play();
+    if (p && typeof p.catch === "function") {
+      p.catch(() => {
+        /* gesture blocked / no source */
+      });
     }
   };
 
@@ -829,9 +828,13 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="none"
+                    preload="auto"
+                    playsInline
+                    onPlay={() => setActiveIndex(i)}
+                    onPause={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                     onEnded={() => setActiveIndex((cur) => (cur === i ? null : cur))}
                   />
+
                 </div>
               </motion.div>
             );
