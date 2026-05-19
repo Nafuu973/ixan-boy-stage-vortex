@@ -1106,9 +1106,9 @@ function ContactFinal() {
           ))}
         </div>
 
-        <p className="mt-24 text-center">
+        <div className="mt-24 text-center">
           <ChromeSignature text={t.contact.end} />
-        </p>
+        </div>
       </div>
     </section>
   );
