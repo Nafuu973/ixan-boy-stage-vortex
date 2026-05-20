@@ -47,7 +47,12 @@
   --font-serif: "Instrument Serif", "Times New Roman", serif;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Tablet displays the mobile layout — md/lg only kick in on real desktops. */
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1024px;
 }
+
 
 :root {
   --radius: 0.25rem;
