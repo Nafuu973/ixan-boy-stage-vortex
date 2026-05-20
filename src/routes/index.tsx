@@ -718,6 +718,7 @@ function SignatureTracks() {
                 }`}
               >
                 <div className="relative md:col-span-5">
+                  {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
                   <div
                     className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
@@ -728,7 +729,7 @@ function SignatureTracks() {
                         src={tr.cover}
                         alt={tr.title}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className={`h-full w-full object-cover ${isActive ? "track-activate-cover" : ""}`}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
