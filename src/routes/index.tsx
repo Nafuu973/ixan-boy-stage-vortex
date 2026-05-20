@@ -632,6 +632,9 @@ function SignatureTracks() {
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const attachedAudioRefs = useRef(new WeakSet<HTMLAudioElement>());
+  // Tracks whether a paused track was paused by the user clicking its OWN pause
+  // button (resume-from-position) vs. paused due to a switch/end/error (restart).
+  const selfPausedRef = useRef<boolean[]>([false, false]);
 
   const setCalmIfNoAudioPlaying = () => {
     const anyAudioPlaying = audioRefs.current.some(
@@ -646,12 +649,18 @@ function SignatureTracks() {
     if (!target) return;
     // Pause every other track first; visual state is synced by real media events.
     audios.forEach((a, idx) => {
-      if (a && idx !== i && !a.paused) {
-        a.pause();
-        a.currentTime = 0;
+      if (a && idx !== i) {
+        if (!a.paused) {
+          a.pause();
+          a.currentTime = 0;
+        }
+        // Any other track being touched is NOT a self-pause for that track.
+        selfPausedRef.current[idx] = false;
       }
     });
     if (!target.paused) {
+      // User is pausing this exact track → allow resume from current position.
+      selfPausedRef.current[i] = true;
       target.pause();
       setCalmIfNoAudioPlaying();
       return;
@@ -663,6 +672,16 @@ function SignatureTracks() {
     } else {
       attachLiveAudio(target);
     }
+
+    // Start fresh unless this is a resume after the user's own pause.
+    if (!selfPausedRef.current[i] || target.ended) {
+      try {
+        target.currentTime = 0;
+      } catch {
+        // ignore — some browsers throw if metadata isn't ready yet.
+      }
+    }
+    selfPausedRef.current[i] = false;
 
     // Keep play() directly inside the user gesture; visuals activate on onPlaying.
     const p = target.play();
