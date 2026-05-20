@@ -626,7 +626,7 @@ function Silence() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3" },
+    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3?v=3" },
     { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb-player.mp3" },
   ];
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
