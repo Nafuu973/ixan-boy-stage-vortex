@@ -626,7 +626,7 @@ function Silence() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3" },
+    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3?v=3" },
     { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb-player.mp3" },
   ];
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
@@ -673,9 +673,8 @@ function SignatureTracks() {
       attachLiveAudio(target);
     }
 
-    // Track 0 (Take Me Body) must always start from the very first note.
-    // Other tracks: start fresh unless resuming after a self-pause.
-    if (i === 0 || !selfPausedRef.current[i] || target.ended) {
+    // Start fresh unless this is a resume after the user's own pause.
+    if (!selfPausedRef.current[i] || target.ended) {
       try {
         target.currentTime = 0;
       } catch {
