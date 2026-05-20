@@ -725,9 +725,9 @@ function SignatureTracks() {
                       className="pointer-events-none absolute -inset-4 md:-inset-8"
                       style={{
                         background:
-                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((8% + 4% * var(--pulse)) * var(--pulse-activation, 0) * var(--fx-glow)), transparent), transparent 72%)",
+                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((8% + 4% * var(--pulse)) * var(--pulse-activation, 0) * var(--fx-glow) * var(--fx-cover-active, 1)), transparent), transparent 72%)",
                         filter: "blur(calc(24px * var(--fx-blur)))",
-                        opacity: "calc(0.18 * var(--fx-glow))",
+                        opacity: "calc(0.18 * var(--fx-glow) * var(--fx-cover-active, 1))",
                         transition: "background 0.25s ease-out, opacity 0.25s ease-out",
                       }}
                     />
@@ -769,7 +769,7 @@ function SignatureTracks() {
                           background:
                             "radial-gradient(38% 32% at 35% 30%, color-mix(in oklab, var(--violet) 16%, transparent), transparent 72%)",
                           mixBlendMode: "screen",
-                          opacity: "calc(var(--pulse-activation, 0) * 0.5 * var(--fx-glow))",
+                          opacity: "calc(var(--pulse-activation, 0) * 0.5 * var(--fx-glow) * var(--fx-cover-active, 1))",
                         }}
                       />
                     )}
@@ -782,6 +782,7 @@ function SignatureTracks() {
                           background:
                             "radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--violet) calc(10% * var(--pulse-kick, 0) * var(--fx-glow) * var(--fx-cover-kick, 1)), transparent), transparent 70%)",
                           mixBlendMode: "screen",
+                          opacity: "var(--fx-cover-active, 1)",
                           transition: "background 0.42s cubic-bezier(0.22,0.61,0.36,1)",
                         }}
                       />
