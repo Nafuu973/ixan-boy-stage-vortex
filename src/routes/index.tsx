@@ -800,7 +800,7 @@ function SignatureTracks() {
                     </button>
                     {/* premium thin equalizer — identical logic, height adapts per breakpoint */}
                     <div
-                      className="flex flex-1 items-center gap-[3px] md:max-w-[300px]"
+                      className={`flex flex-1 items-center gap-[3px] md:max-w-[300px] ${isActive ? "track-activate-eq" : ""}`}
                       style={{ height: "var(--fx-eq-max)" }}
                     >
                       {Array.from({ length: 32 }).map((_, b) => {
