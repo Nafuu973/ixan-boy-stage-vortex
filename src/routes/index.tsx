@@ -718,75 +718,20 @@ function SignatureTracks() {
                 }`}
               >
                 <div className="relative md:col-span-5">
-                  {/* localized ambient atmosphere behind cover — capped, never full-screen */}
-                  {isActive && (
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute -inset-4 md:-inset-8"
-                      style={{
-                        background:
-                          "radial-gradient(closest-side, color-mix(in oklab, var(--violet) calc((8% + 4% * var(--pulse)) * var(--pulse-activation, 0) * var(--fx-glow) * var(--fx-cover-active, 1)), transparent), transparent 72%)",
-                        filter: "blur(calc(24px * var(--fx-blur)))",
-                        opacity: "calc(0.18 * var(--fx-glow) * var(--fx-cover-active, 1))",
-                        transition: "background 0.25s ease-out, opacity 0.25s ease-out",
-                      }}
-                    />
-                  )}
                   <div
                     className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
-                    <div
-                      className={`absolute inset-0 ${
-                        isActive ? "track-cover-breathe-active" : "track-cover-breathe"
-                      }`}
-                    >
+                    <div className="absolute inset-0 track-cover-breathe">
                       <img
                         src={tr.cover}
                         alt={tr.title}
                         loading="lazy"
                         className="h-full w-full object-cover"
-                        style={
-                          isActive
-                            ? {
-                                // kick boost only — slow breathing lives on the wrapper.
-                                transform:
-                                  "scale(calc(1 + var(--pulse-kick, 0) * 0.006 * var(--fx-amp) * var(--fx-cover-kick, 1)))",
-                                transition: "transform 0.42s cubic-bezier(0.22,0.61,0.36,1)",
-                                willChange: "transform",
-                              }
-                            : undefined
-                        }
                       />
                     </div>
-                    {/* slow drifting cinematic light, opacity capped */}
-                    {isActive && (
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -inset-[15%] track-light-drift"
-                        style={{
-                          background:
-                            "radial-gradient(38% 32% at 35% 30%, color-mix(in oklab, var(--violet) 16%, transparent), transparent 72%)",
-                          mixBlendMode: "screen",
-                          opacity: "calc(var(--pulse-activation, 0) * 0.5 * var(--fx-glow) * var(--fx-cover-active, 1))",
-                        }}
-                      />
-                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
-                    {isActive && (
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          background:
-                            "radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--violet) calc(10% * var(--pulse-kick, 0) * var(--fx-glow) * var(--fx-cover-kick, 1)), transparent), transparent 70%)",
-                          mixBlendMode: "screen",
-                          opacity: "var(--fx-cover-active, 1)",
-                          transition: "background 0.42s cubic-bezier(0.22,0.61,0.36,1)",
-                        }}
-                      />
-                    )}
                     <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
                       TRACK · 0{i + 1}
                     </span>
