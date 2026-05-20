@@ -829,9 +829,9 @@ function SignatureTracks() {
                           className="pointer-events-none absolute -inset-[2px] rounded-full border border-violet/40"
                           style={{
                             transform:
-                              "scale(calc(1 + var(--pulse-kick, 0) * 0.08 * var(--fx-amp)))",
+                              "scale(calc(1 + var(--pulse-kick, 0) * 0.08 * var(--fx-amp) * var(--fx-kick)))",
                             opacity:
-                              "calc(var(--pulse-kick, 0) * 0.55 * var(--pulse-activation, 1) * var(--fx-glow))",
+                              "calc(var(--pulse-kick, 0) * 0.55 * var(--pulse-activation, 1) * var(--fx-glow) * var(--fx-kick))",
                             transition: "transform 0.12s ease-out, opacity 0.18s ease-out",
                           }}
                         />
