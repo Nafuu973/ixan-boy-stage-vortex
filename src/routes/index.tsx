@@ -718,22 +718,29 @@ function SignatureTracks() {
                       isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
-                    <img
-                      src={tr.cover}
-                      alt={tr.title}
-                      loading="lazy"
-                      className={`h-full w-full object-cover transition-transform duration-700 ${
+                    <div
+                      className={`absolute inset-0 ${
                         isActive ? "track-cover-breathe-active" : "track-cover-breathe"
                       }`}
-                      style={
-                        isActive
-                          ? {
-                              // micro kick bump on cover: +0.008 scale, ~100ms decay via kick envelope
-                              transform: "scale(calc(1 + var(--pulse-kick, 0) * 0.008))",
-                            }
-                          : undefined
-                      }
-                    />
+                    >
+                      <img
+                        src={tr.cover}
+                        alt={tr.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                        style={
+                          isActive
+                            ? {
+                                // kick boost only — slow breathing lives on the wrapper.
+                                transform:
+                                  "scale(calc(1 + var(--pulse-kick, 0) * 0.006 * var(--fx-amp)))",
+                                transition: "transform 0.18s ease-out",
+                                willChange: "transform",
+                              }
+                            : undefined
+                        }
+                      />
+                    </div>
                     {/* slow drifting cinematic light, opacity capped */}
                     {isActive && (
                       <div
