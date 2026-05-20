@@ -1,11 +1,9 @@
-// Global pulse driver — calm by default, switches to live FFT only while audio plays.
+// Global pulse driver — calm by default, switches to balanced FFT analysis while audio plays.
 // Drives multiple CSS variables on document root each rAF:
-//   --pulse           : smoothed cinematic bass envelope (0..1), slow follow — feeds atmosphere
-//   --pulse-kick      : short impulse on SELECTED major kicks only (0..1, fast decay ~0.25s)
-//   --pulse-activation: 0→1 ramp on play start (~1.2s ease) and back to 0 on idle
-//
-// Design intent: the visuals breathe with the music's structure, react only to
-// impactful moments, and wake up progressively rather than exploding at t=0.
+//   --pulse           : smoothed total energy envelope (0..1) — drives general motion
+//   --pulse-kick      : short impulse from low-band transients (0..1, fast decay)
+//   --pulse-activation: 0→1 ramp on play start, back to 0 on idle
+//   --pulse-low / --pulse-mid / --pulse-high : optional band envelopes (0..1)
 
 type Mode = "idle" | "live";
 
@@ -19,79 +17,104 @@ let rafId = 0;
 let started = false;
 
 // Envelopes
-let energy = 0;          // smoothed bass envelope (0..1)
-let longTermEnergy = 0;  // very slow average — kick detection baseline
-let kick = 0;            // current kick impulse (0..1)
-let activation = 0;      // 0 (idle) → 1 (active), eased
-let lastKickTime = 0;    // ms — cooldown gate
-let liveStartTime = 0;   // ms — when live mode started
+let totalEnv = 0;
+let lowEnv = 0;
+let midEnv = 0;
+let highEnv = 0;
+let lowBaseline = 0;   // slow long-term average of low band — adaptive kick threshold
+let kick = 0;
+let activation = 0;
+let lastKickTime = 0;
+let liveStartTime = 0;
 
 function now() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
 }
 
+function bandAverage(data: Uint8Array, from: number, to: number) {
+  const lo = Math.max(0, from);
+  const hi = Math.min(data.length, to);
+  if (hi <= lo) return 0;
+  let sum = 0;
+  for (let i = lo; i < hi; i++) sum += data[i];
+  return sum / ((hi - lo) * 255);
+}
+
 function tick() {
   const t = now();
-  let instant = 0;
+  let instantTotal = 0;
+  let instantLow = 0;
+  let instantMid = 0;
+  let instantHigh = 0;
 
   if (mode === "live" && analyser && dataArray) {
     analyser.getByteFrequencyData(dataArray as unknown as Uint8Array<ArrayBuffer>);
-    // bass focus: first ~6 bins
-    let sum = 0;
-    const n = Math.min(6, dataArray.length);
-    for (let i = 0; i < n; i++) sum += dataArray[i];
-    instant = Math.min(1, (sum / (n * 255)) * 1.5);
+    // Balanced band analysis — no longer bass-dominated.
+    instantLow = Math.min(1, bandAverage(dataArray, 2, 10) * 1.35);
+    instantMid = Math.min(1, bandAverage(dataArray, 12, 48) * 1.25);
+    instantHigh = Math.min(1, bandAverage(dataArray, 50, 96) * 1.2);
+    // Weighted total — mids carry musical motion, lows add weight, highs add sparkle.
+    instantTotal = Math.min(
+      1,
+      instantLow * 0.35 + instantMid * 0.45 + instantHigh * 0.2,
+    );
   }
 
-  // Smoothed envelope — slow attack, slower release ⇒ cinematic breathing
-  // Faster on rise, gentler on fall.
-  const attack = 0.12;
-  const release = 0.04;
-  if (instant > energy) energy += (instant - energy) * attack;
-  else energy += (instant - energy) * release;
+  // Smoothed envelopes — fast attack, slower release.
+  const attack = 0.22;
+  const release = 0.07;
+  const smooth = (env: number, target: number) =>
+    env + (target - env) * (target > env ? attack : release);
 
-  // Long-term average for kick threshold (very slow)
-  longTermEnergy += (instant - longTermEnergy) * 0.01;
+  totalEnv = smooth(totalEnv, instantTotal);
+  lowEnv = smooth(lowEnv, instantLow);
+  midEnv = smooth(midEnv, instantMid);
+  highEnv = smooth(highEnv, instantHigh);
 
-  // Selective kick detection: instant must significantly exceed baseline AND
-  // be loud enough AND respect a cooldown. This filters every-beat reactions
-  // down to impactful moments.
-  const minLevel = 0.45;
-  const ratioGate = 1.55;
-  const cooldownMs = 260;
+  // Adaptive baseline for kick detection (slow follow on low band only).
+  lowBaseline += (instantLow - lowBaseline) * 0.012;
+
+  // Controlled kick detection — low band only, adaptive threshold, 320ms cooldown.
+  const minLevel = 0.42;
+  const ratioGate = 1.5;
+  const cooldownMs = 320;
   if (
     mode === "live" &&
-    instant >= minLevel &&
-    instant > longTermEnergy * ratioGate &&
+    instantLow >= minLevel &&
+    instantLow > lowBaseline * ratioGate &&
     t - lastKickTime > cooldownMs
   ) {
-    kick = Math.min(1, kick + 0.85);
+    kick = Math.min(1, kick + 0.8);
     lastKickTime = t;
   }
-  // Fast decay (~0.25s to near zero)
-  kick *= 0.88;
+  // Fast release (~0.2s)
+  kick *= 0.84;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
   const targetActivation = mode === "live" ? 1 : 0;
-  const activationStep = mode === "live" ? 0.018 : 0.06; // wake slowly, sleep faster
+  const activationStep = mode === "live" ? 0.02 : 0.06;
   activation += (targetActivation - activation) * activationStep;
   if (mode === "idle" && activation < 0.001) activation = 0;
 
-  // Gentle warm-up window: dampen energy/kick during the first ~800ms after play
+  // Warm-up window: dampen during the first ~1200ms after play.
   let warmup = 1;
   if (mode === "live" && liveStartTime > 0) {
     const dt = t - liveStartTime;
     if (dt < 1200) warmup = Math.max(0, Math.min(1, dt / 1200));
   }
 
-  const pulseOut = mode === "live" ? energy * activation * warmup : 0;
-  const kickOut = mode === "live" ? kick * activation * warmup : 0;
+  const gate = mode === "live" ? activation * warmup : 0;
+  const pulseOut = totalEnv * gate;
+  const kickOut = kick * gate;
 
   const root = document.documentElement;
   root.style.setProperty("--pulse", pulseOut.toFixed(3));
   root.style.setProperty("--pulse-kick", kickOut.toFixed(3));
   root.style.setProperty("--pulse-activation", activation.toFixed(3));
+  root.style.setProperty("--pulse-low", (lowEnv * gate).toFixed(3));
+  root.style.setProperty("--pulse-mid", (midEnv * gate).toFixed(3));
+  root.style.setProperty("--pulse-high", (highEnv * gate).toFixed(3));
 
   rafId = requestAnimationFrame(tick);
 }
@@ -109,6 +132,9 @@ export function stopPulse() {
   root.style.setProperty("--pulse", "0");
   root.style.setProperty("--pulse-kick", "0");
   root.style.setProperty("--pulse-activation", "0");
+  root.style.setProperty("--pulse-low", "0");
+  root.style.setProperty("--pulse-mid", "0");
+  root.style.setProperty("--pulse-high", "0");
 }
 
 export function attachLiveAudio(audio: HTMLAudioElement) {
@@ -119,7 +145,7 @@ export function attachLiveAudio(audio: HTMLAudioElement) {
     if (!analyser) {
       analyser = audioCtx.createAnalyser();
       analyser.fftSize = 256;
-      analyser.smoothingTimeConstant = 0.7;
+      analyser.smoothingTimeConstant = 0.72;
       analyser.connect(audioCtx.destination);
       dataArray = new Uint8Array(analyser.frequencyBinCount);
     }
@@ -159,9 +185,11 @@ export function attachLiveAudio(audio: HTMLAudioElement) {
 export function setPulseLive() {
   if (mode !== "live") {
     liveStartTime = now();
-    // Reset envelopes so the activation feels intentional, not stale.
-    energy = 0;
-    longTermEnergy = 0;
+    totalEnv = 0;
+    lowEnv = 0;
+    midEnv = 0;
+    highEnv = 0;
+    lowBaseline = 0;
     kick = 0;
   }
   mode = "live";
@@ -174,6 +202,4 @@ export function setSimMode() {
 export function setPulseIdle() {
   mode = "idle";
   liveStartTime = 0;
-  // Don't slam to 0 — let activation ease down via tick() so the section
-  // calms gracefully instead of snapping.
 }
