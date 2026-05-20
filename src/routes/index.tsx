@@ -718,6 +718,7 @@ function SignatureTracks() {
                 }`}
               >
                 <div className="relative md:col-span-5">
+                  {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
                   <div
                     className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
@@ -728,7 +729,7 @@ function SignatureTracks() {
                         src={tr.cover}
                         alt={tr.title}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className={`h-full w-full object-cover ${isActive ? "track-activate-cover" : ""}`}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
@@ -750,7 +751,7 @@ function SignatureTracks() {
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
                       className={`group relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-[background,border-color,transform] duration-500 ease-out hover:brightness-[1.08] active:scale-[0.97] ${
                         isActive
-                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse"
+                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse track-activate-button"
                           : "border-bone/15 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_7%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/35"
                       }`}
                       style={{
@@ -799,7 +800,7 @@ function SignatureTracks() {
                     </button>
                     {/* premium thin equalizer — identical logic, height adapts per breakpoint */}
                     <div
-                      className="flex flex-1 items-center gap-[3px] md:max-w-[300px]"
+                      className={`flex flex-1 items-center gap-[3px] md:max-w-[300px] ${isActive ? "track-activate-eq" : ""}`}
                       style={{ height: "var(--fx-eq-max)" }}
                     >
                       {Array.from({ length: 32 }).map((_, b) => {
@@ -850,7 +851,7 @@ function SignatureTracks() {
                       </span>
                       <span
                         className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
-                          isActive ? "text-violet/90" : "text-bone/30"
+                          isActive ? "text-violet/90 track-activate-now-playing" : "text-bone/30"
                         }`}
                       >
                         {isActive ? "Now Playing" : "Stand By"}
