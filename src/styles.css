@@ -48,8 +48,8 @@
   --font-sans: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  /* Tablet displays the mobile layout — md/lg only kick in on real desktops. */
-  --breakpoint-md: 1024px;
+  /* Restored standard breakpoints — tablet retrouve la mise en page desktop. */
+  --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
 }
 
