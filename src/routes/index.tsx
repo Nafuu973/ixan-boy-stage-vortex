@@ -751,7 +751,7 @@ function SignatureTracks() {
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
                       className={`group relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-[background,border-color,transform] duration-500 ease-out hover:brightness-[1.08] active:scale-[0.97] ${
                         isActive
-                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse"
+                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse track-activate-button"
                           : "border-bone/15 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_7%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/35"
                       }`}
                       style={{
