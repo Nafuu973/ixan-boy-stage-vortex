@@ -884,7 +884,7 @@ function SignatureTracks() {
                           isActive
                             ? {
                                 boxShadow:
-                                  "0 0 calc(6px + 6px * var(--pulse)) color-mix(in oklab, var(--violet) calc(70% * var(--pulse-activation, 0)), transparent)",
+                                  "0 0 calc(6px + 6px * var(--pulse) * var(--fx-amp)) color-mix(in oklab, var(--violet) calc(70% * var(--pulse-activation, 0) * var(--fx-glow)), transparent)",
                               }
                             : undefined
                         }
@@ -894,10 +894,10 @@ function SignatureTracks() {
                             className="absolute inset-0 rounded-full bg-violet/60"
                             style={{
                               transform:
-                                "scale(calc(1 + var(--pulse-kick, 0) * 1.4 + var(--pulse) * 0.25))",
+                                "scale(calc(1 + var(--pulse-kick, 0) * 1.4 * var(--fx-kick) + var(--pulse) * 0.25 * var(--fx-amp)))",
                               opacity:
-                                "calc((0.12 + var(--pulse-kick, 0) * 0.45) * var(--pulse-activation, 1))",
-                              transition: "transform 0.18s ease-out, opacity 0.2s ease-out",
+                                "calc((0.12 + var(--pulse-kick, 0) * 0.45 * var(--fx-kick)) * var(--pulse-activation, 1) * var(--fx-glow))",
+                              transition: "transform 0.22s ease-out, opacity 0.26s ease-out",
                             }}
                           />
                         )}
