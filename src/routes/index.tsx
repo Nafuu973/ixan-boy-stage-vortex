@@ -867,9 +867,9 @@ function SignatureTracks() {
                             }`}
                             style={{
                               transform: isActive
-                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.3 + secondary).toFixed(3)} * var(--fx-amp) + var(--pulse-kick, 0) * ${(0.2 + secondary * 0.3).toFixed(3)} * var(--fx-amp)) * (0.45 + var(--pulse-activation, 1) * 0.55)))`
+                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.3 + secondary).toFixed(3)} * var(--fx-amp) + var(--pulse-kick, 0) * ${(0.2 + secondary * 0.3).toFixed(3)} * var(--fx-amp) * var(--fx-kick)) * (0.45 + var(--pulse-activation, 1) * 0.55)))`
                                 : "scaleY(0.16)",
-                              transition: "transform 0.22s cubic-bezier(0.22,0.61,0.36,1)",
+                              transition: "transform 0.28s cubic-bezier(0.22,0.61,0.36,1)",
                             }}
                           />
                         );
