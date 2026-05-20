@@ -752,8 +752,8 @@ function SignatureTracks() {
                             ? {
                                 // kick boost only — slow breathing lives on the wrapper.
                                 transform:
-                                  "scale(calc(1 + var(--pulse-kick, 0) * 0.006 * var(--fx-amp)))",
-                                transition: "transform 0.18s ease-out",
+                                  "scale(calc(1 + var(--pulse-kick, 0) * 0.006 * var(--fx-amp) * var(--fx-cover-kick, 1)))",
+                                transition: "transform 0.42s cubic-bezier(0.22,0.61,0.36,1)",
                                 willChange: "transform",
                               }
                             : undefined
@@ -780,9 +780,9 @@ function SignatureTracks() {
                         className="pointer-events-none absolute inset-0"
                         style={{
                           background:
-                            "radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--violet) calc(10% * var(--pulse-kick, 0) * var(--fx-glow)), transparent), transparent 70%)",
+                            "radial-gradient(circle at 50% 60%, color-mix(in oklab, var(--violet) calc(10% * var(--pulse-kick, 0) * var(--fx-glow) * var(--fx-cover-kick, 1)), transparent), transparent 70%)",
                           mixBlendMode: "screen",
-                          transition: "background 0.12s ease-out",
+                          transition: "background 0.42s cubic-bezier(0.22,0.61,0.36,1)",
                         }}
                       />
                     )}
