@@ -637,6 +637,7 @@
     --fx-glow: 0.85;
     --fx-blur: 0.85;
     --fx-amp: 0.85;
+    --fx-kick: 0.85;
     --fx-eq-max: 28px;
     --fx-pulse-cap: 0.014;
     --fx-breathe-dur: 6s;
@@ -646,14 +647,15 @@
   /* MOBILE — calmer, slower, controlled (no hyperactive blinking) */
   @media (max-width: 767px) {
     :root {
-      --fx-glow: 0.47;
-      --fx-blur: 0.47;
-      --fx-amp: 0.51;
-      --fx-eq-max: 20px;
-      --fx-pulse-cap: 0.009;
-      --fx-breathe-dur: 9s;
-      --fx-drift-dur: 20s;
-      --fx-button-dur: 3.6s;
+      --fx-glow: 0.38;
+      --fx-blur: 0.45;
+      --fx-amp: 0.34;
+      --fx-kick: 0.12;
+      --fx-eq-max: 18px;
+      --fx-pulse-cap: 0.006;
+      --fx-breathe-dur: 10s;
+      --fx-drift-dur: 22s;
+      --fx-button-dur: 4.2s;
     }
   }
   /* TABLET — immersive, more atmosphere without being aggressive */
@@ -662,6 +664,7 @@
       --fx-glow: 1.06;
       --fx-blur: 0.94;
       --fx-amp: 0.94;
+      --fx-kick: 0.9;
       --fx-eq-max: 34px;
       --fx-pulse-cap: 0.0154;
       --fx-breathe-dur: 6s;
