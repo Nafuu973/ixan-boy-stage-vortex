@@ -673,9 +673,8 @@ function SignatureTracks() {
       attachLiveAudio(target);
     }
 
-    // Track 0 (Take Me Body) must always start from the very first note.
-    // Other tracks: start fresh unless resuming after a self-pause.
-    if (i === 0 || !selfPausedRef.current[i] || target.ended) {
+    // Start fresh unless this is a resume after the user's own pause.
+    if (!selfPausedRef.current[i] || target.ended) {
       try {
         target.currentTime = 0;
       } catch {
