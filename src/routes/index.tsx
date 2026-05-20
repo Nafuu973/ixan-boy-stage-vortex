@@ -851,7 +851,7 @@ function SignatureTracks() {
                       </span>
                       <span
                         className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
-                          isActive ? "text-violet/90" : "text-bone/30"
+                          isActive ? "text-violet/90 track-activate-now-playing" : "text-bone/30"
                         }`}
                       >
                         {isActive ? "Now Playing" : "Stand By"}
