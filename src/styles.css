@@ -646,8 +646,8 @@
     --fx-drift-dur: 14s;
     --fx-button-dur: 2.4s;
   }
-  /* MOBILE — calmer, slower, controlled (no hyperactive blinking) */
-  @media (max-width: 767px) {
+  /* MOBILE + TABLET — identical experience, calmer, controlled */
+  @media (max-width: 1023px) {
     :root {
       --fx-glow: 0.38;
       --fx-blur: 0.45;
@@ -662,22 +662,7 @@
       --fx-button-dur: 4.2s;
     }
   }
-  /* TABLET — immersive, more atmosphere without being aggressive */
-  @media (min-width: 768px) and (max-width: 1023px) {
-    :root {
-      --fx-glow: 1.06;
-      --fx-blur: 0.94;
-      --fx-amp: 0.94;
-      --fx-kick: 0.9;
-      --fx-cover-kick: 1;
-      --fx-cover-active: 1;
-      --fx-eq-max: 34px;
-      --fx-pulse-cap: 0.0154;
-      --fx-breathe-dur: 6s;
-      --fx-drift-dur: 14s;
-      --fx-button-dur: 2.4s;
-    }
-  }
+
 
   /* Slow breathing lives on a WRAPPER element so the inline kick transform
      on the <img> never collides with this keyframe. */
