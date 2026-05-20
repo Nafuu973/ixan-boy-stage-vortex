@@ -685,7 +685,7 @@
     will-change: transform, filter;
     transform-origin: center;
   }
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     .track-cover-breathe-active {
       animation: none;
       filter: none;
@@ -693,6 +693,7 @@
       will-change: auto;
     }
   }
+
   .track-light-drift { animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite; }
   .track-button-pulse { animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite; }
 }
