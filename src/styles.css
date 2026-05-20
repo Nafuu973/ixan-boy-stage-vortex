@@ -639,6 +639,7 @@
     --fx-amp: 0.85;
     --fx-kick: 0.85;
     --fx-cover-kick: 1;
+    --fx-cover-active: 1;
     --fx-eq-max: 28px;
     --fx-pulse-cap: 0.014;
     --fx-breathe-dur: 6s;
@@ -653,6 +654,7 @@
       --fx-amp: 0.34;
       --fx-kick: 0.12;
       --fx-cover-kick: 0;
+      --fx-cover-active: 0;
       --fx-eq-max: 18px;
       --fx-pulse-cap: 0.006;
       --fx-breathe-dur: 10s;
@@ -668,6 +670,7 @@
       --fx-amp: 0.94;
       --fx-kick: 0.9;
       --fx-cover-kick: 1;
+      --fx-cover-active: 1;
       --fx-eq-max: 34px;
       --fx-pulse-cap: 0.0154;
       --fx-breathe-dur: 6s;
@@ -696,6 +699,14 @@
     animation: track-breathe-active var(--fx-breathe-dur) ease-in-out infinite alternate;
     will-change: transform, filter;
     transform-origin: center;
+  }
+  @media (max-width: 767px) {
+    .track-cover-breathe-active {
+      animation: none;
+      filter: none;
+      transform: scale(1);
+      will-change: auto;
+    }
   }
   .track-light-drift { animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite; }
   .track-button-pulse { animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite; }
