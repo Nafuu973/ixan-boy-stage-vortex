@@ -724,7 +724,21 @@ function SignatureTracks() {
                       isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
-                    <div className="absolute inset-0 track-cover-breathe">
+                    <div
+                      className="absolute inset-0 track-cover-breathe"
+                      style={
+                        isActive
+                          ? {
+                              transform:
+                                "scale(calc(1 + var(--pulse) * 0.045 * var(--fx-cover-active, 1) + var(--pulse-kick, 0) * 0.06 * var(--fx-cover-kick, 1)))",
+                              filter:
+                                "brightness(calc(1 + var(--pulse) * 0.10 + var(--pulse-kick, 0) * 0.18)) contrast(calc(1 + var(--pulse) * 0.05)) saturate(calc(1 + var(--pulse) * 0.12))",
+                              transition: "transform 90ms ease-out, filter 120ms ease-out",
+                              willChange: "transform, filter",
+                            }
+                          : undefined
+                      }
+                    >
                       <img
                         src={tr.cover}
                         alt={tr.title}
