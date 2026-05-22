@@ -651,8 +651,24 @@
     --fx-drift-dur: 14s;
     --fx-button-dur: 2.4s;
   }
-  /* MOBILE + TABLET — same effects as desktop, slightly softened */
+  /* TABLET — softened tokens that feel right on touch screens */
   @media (max-width: 1023px) {
+    :root {
+      --fx-glow: 0.7;
+      --fx-blur: 0.7;
+      --fx-amp: 0.7;
+      --fx-kick: 0.65;
+      --fx-cover-kick: 0.8;
+      --fx-cover-active: 0.85;
+      --fx-eq-max: 22px;
+      --fx-pulse-cap: 0.012;
+      --fx-breathe-dur: 7s;
+      --fx-drift-dur: 16s;
+      --fx-button-dur: 2.8s;
+    }
+  }
+  /* MOBILE — inherit tablet tokens (identical effects, just rendered at phone width) */
+  @media (max-width: 767px) {
     :root {
       --fx-glow: 0.7;
       --fx-blur: 0.7;
