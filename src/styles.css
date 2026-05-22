@@ -651,20 +651,20 @@
     --fx-drift-dur: 14s;
     --fx-button-dur: 2.4s;
   }
-  /* MOBILE + TABLET — identical experience, calmer, controlled */
+  /* MOBILE + TABLET — same effects as desktop, slightly softened */
   @media (max-width: 1023px) {
     :root {
-      --fx-glow: 0.38;
-      --fx-blur: 0.45;
-      --fx-amp: 0.34;
-      --fx-kick: 0.12;
-      --fx-cover-kick: 0;
-      --fx-cover-active: 0;
-      --fx-eq-max: 18px;
-      --fx-pulse-cap: 0.006;
-      --fx-breathe-dur: 10s;
-      --fx-drift-dur: 22s;
-      --fx-button-dur: 4.2s;
+      --fx-glow: 0.7;
+      --fx-blur: 0.7;
+      --fx-amp: 0.7;
+      --fx-kick: 0.65;
+      --fx-cover-kick: 0.8;
+      --fx-cover-active: 0.85;
+      --fx-eq-max: 22px;
+      --fx-pulse-cap: 0.012;
+      --fx-breathe-dur: 7s;
+      --fx-drift-dur: 16s;
+      --fx-button-dur: 2.8s;
     }
   }
 
@@ -690,14 +690,7 @@
     will-change: transform, filter;
     transform-origin: center;
   }
-  @media (max-width: 1023px) {
-    .track-cover-breathe-active {
-      animation: none;
-      filter: none;
-      transform: scale(1);
-      will-change: auto;
-    }
-  }
+
 
   .track-light-drift { animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite; }
   .track-button-pulse { animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite; }
