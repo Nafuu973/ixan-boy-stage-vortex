@@ -675,11 +675,11 @@
       --fx-blur: 0.85;
       --fx-amp: 1;
       --fx-kick: 1;
-      --fx-cover-kick: 1.45;
-      --fx-cover-active: 1.45;
+      --fx-cover-kick: 2.35;
+      --fx-cover-active: 2.15;
       --fx-eq-max: 24px;
-      --fx-pulse-cap: 0.016;
-      --fx-breathe-dur: 6s;
+      --fx-pulse-cap: 0.02;
+      --fx-breathe-dur: 4.2s;
       --fx-drift-dur: 14s;
       --fx-button-dur: 2.4s;
     }
@@ -706,6 +706,25 @@
     animation: track-breathe-active 3.8s ease-in-out infinite alternate;
     will-change: transform, filter;
     transform-origin: center;
+  }
+
+  @media (max-width: 767px) {
+    @keyframes track-breathe-active {
+      from { transform: scale(1);      filter: brightness(1)    contrast(1); }
+      to   { transform: scale(1.085);  filter: brightness(1.16) contrast(1.08); }
+    }
+    @keyframes track-cover-shell-active {
+      from { transform: scale(1); }
+      to   { transform: scale(1.055); }
+    }
+    .track-cover-shell-active {
+      animation: track-cover-shell-active var(--fx-breathe-dur) ease-in-out infinite alternate;
+      transform-origin: center;
+      will-change: transform;
+    }
+    .track-cover-breathe-active {
+      animation-duration: var(--fx-breathe-dur);
+    }
   }
 
 

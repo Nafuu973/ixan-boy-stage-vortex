@@ -721,7 +721,7 @@ function SignatureTracks() {
                   {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
                   <div
                     className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
-                      isActive ? "border-violet/30" : "border-bone/10 hover:border-bone/25"
+                      isActive ? "track-cover-shell-active border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
                     <div
