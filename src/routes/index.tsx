@@ -743,7 +743,7 @@ function SignatureTracks() {
                         src={tr.cover}
                         alt={tr.title}
                         loading="lazy"
-                        className={`h-full w-full object-cover ${isActive ? "track-activate-cover" : ""}`}
+                        className={`h-full w-full object-cover ${isActive ? "track-cover-breathe-active" : ""}`}
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
