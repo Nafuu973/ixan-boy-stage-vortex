@@ -713,6 +713,15 @@
       from { transform: scale(1);      filter: brightness(1)    contrast(1); }
       to   { transform: scale(1.085);  filter: brightness(1.16) contrast(1.08); }
     }
+    @keyframes track-cover-shell-active {
+      from { transform: scale(1); }
+      to   { transform: scale(1.055); }
+    }
+    .track-cover-shell-active {
+      animation: track-cover-shell-active var(--fx-breathe-dur) ease-in-out infinite alternate;
+      transform-origin: center;
+      will-change: transform;
+    }
     .track-cover-breathe-active {
       animation-duration: var(--fx-breathe-dur);
     }
