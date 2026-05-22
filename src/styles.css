@@ -672,8 +672,8 @@
   /* Slow breathing lives on a WRAPPER element so the inline kick transform
      on the <img> never collides with this keyframe. */
   @keyframes track-breathe-active {
-    from { transform: scale(1); filter: brightness(1); }
-    to   { transform: scale(calc(1 + var(--fx-pulse-cap))); filter: brightness(1.05); }
+    from { transform: scale(1);    filter: brightness(1)    contrast(1); }
+    to   { transform: scale(1.03); filter: brightness(1.10) contrast(1.04); }
   }
   @keyframes track-light-drift {
     0%   { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
@@ -686,7 +686,7 @@
   }
   .track-cover-breathe { transform: scale(1); }
   .track-cover-breathe-active {
-    animation: track-breathe-active var(--fx-breathe-dur) ease-in-out infinite alternate;
+    animation: track-breathe-active 3.8s ease-in-out infinite alternate;
     will-change: transform, filter;
     transform-origin: center;
   }
