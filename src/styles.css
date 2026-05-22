@@ -667,20 +667,21 @@
       --fx-button-dur: 2.8s;
     }
   }
-  /* MOBILE — inherit tablet tokens (identical effects, just rendered at phone width) */
+  /* MOBILE — boosted to compensate for smaller cover size so the felt
+     intensity matches the tablet experience. */
   @media (max-width: 767px) {
     :root {
-      --fx-glow: 0.7;
-      --fx-blur: 0.7;
-      --fx-amp: 0.7;
-      --fx-kick: 0.65;
-      --fx-cover-kick: 0.8;
-      --fx-cover-active: 0.85;
-      --fx-eq-max: 22px;
-      --fx-pulse-cap: 0.012;
-      --fx-breathe-dur: 7s;
-      --fx-drift-dur: 16s;
-      --fx-button-dur: 2.8s;
+      --fx-glow: 0.95;
+      --fx-blur: 0.85;
+      --fx-amp: 1;
+      --fx-kick: 1;
+      --fx-cover-kick: 1.45;
+      --fx-cover-active: 1.45;
+      --fx-eq-max: 24px;
+      --fx-pulse-cap: 0.016;
+      --fx-breathe-dur: 6s;
+      --fx-drift-dur: 14s;
+      --fx-button-dur: 2.4s;
     }
   }
 
