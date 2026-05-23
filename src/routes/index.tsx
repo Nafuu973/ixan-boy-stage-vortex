@@ -179,7 +179,7 @@ function Hero() {
   return (
     <section
       ref={ref}
-      className="relative h-[120svh] min-h-[700px] w-full overflow-hidden md:h-[100svh] md:min-h-[600px]"
+      className="relative h-[120svh] min-h-[700px] w-full overflow-hidden lg:h-[100svh]"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <img
