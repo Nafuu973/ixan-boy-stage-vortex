@@ -185,7 +185,7 @@ function Hero() {
         <img
           src={heroImg}
           alt="IXAN BOY"
-          className="h-full w-full object-cover object-[top_center] md:object-top lg:object-[center_top]"
+          className="h-full w-full object-cover object-[top_center] md:object-top lg:object-contain lg:object-top lg:bg-void"
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void" />
