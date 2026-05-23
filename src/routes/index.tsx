@@ -210,14 +210,14 @@ function Hero() {
           <ChromeSignature text={t.hero.tag} />
         </div>
 
+        <p className="mb-6 max-w-md text-balance text-[13px] leading-relaxed text-bone/70 md:text-sm">
+          {t.hero.intro}
+        </p>
+
         <div className="flex flex-wrap gap-2 md:gap-3">
           <Cta href="#live" label={t.nav.live} primary />
           <Cta href="#contact" label={t.nav.booking} />
         </div>
-
-        <p className="mt-10 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:text-xs">
-          {t.hero.intro}
-        </p>
       </motion.div>
 
       <SignatureScan />
