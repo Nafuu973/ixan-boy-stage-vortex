@@ -147,14 +147,7 @@ function SignatureScan() {
       timeouts.push(id);
     };
     schedule(1200);
-    const onTouch = () => setKey((k) => k + 1);
-window.addEventListener("touchstart", onTouch, { passive: true });
-window.addEventListener("scroll", onTouch, { passive: true });
-    return () => {
-      timeouts.forEach((id) => clearTimeout(id));
-      window.removeEventListener("touchstart", onTouch);
-      window.removeEventListener("scroll", onTouch);
-    };
+    return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
     <div key={key} className="sig-scan z-[1]">
