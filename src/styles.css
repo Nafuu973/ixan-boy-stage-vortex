@@ -637,6 +637,23 @@
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
+
+    .sig-scan__line {
+      animation: sig-scan-sweep 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards !important;
+    }
+
+    .sig-scan__bloom {
+      animation: sig-scan-bloom 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards !important;
+    }
+
+    .sig-scan__flash,
+    .sig-scan__lines,
+    .sig-scan__noise,
+    .sig-scan__glitch,
+    .sig-scan__bracket,
+    .sig-scan__label {
+      animation-duration: 1.4s !important;
+    }
   }
 }
 
