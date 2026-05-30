@@ -146,11 +146,11 @@ function SignatureScan() {
       }, delay);
       timeouts.push(id);
     };
-    schedule(1200);
+    schedule(300);
     return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
-    <div key={key} className="sig-scan z-[1]">
+    <div key={key} className="sig-scan z-[30]">
       <span className="sig-scan__bracket sig-scan__bracket--tl" />
       <span className="sig-scan__bracket sig-scan__bracket--tr" />
       <span className="sig-scan__bracket sig-scan__bracket--bl" />
