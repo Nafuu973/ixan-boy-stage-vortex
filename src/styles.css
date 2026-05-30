@@ -53,7 +53,6 @@
   --breakpoint-lg: 1024px;
 }
 
-
 :root {
   --radius: 0.25rem;
 
@@ -106,7 +105,8 @@
     border-color: var(--color-border);
   }
 
-  html, body {
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -134,39 +134,39 @@
   h2.font-display,
   h3.font-display {
     /* Cinematic chrome → violet → deep aubergine. Soft silver highlights, premium festival feel. */
-    background:
-      linear-gradient(
-        158deg,
-        #ffffff 0%,
-        #f5ecff 9%,
-        #e2cdf7 20%,
-        #b88be8 34%,
-        oklch(0.62 0.27 295) 50%,
-        oklch(0.46 0.29 295) 72%,
-        oklch(0.26 0.18 290) 100%
-      );
+    background: linear-gradient(
+      158deg,
+      #ffffff 0%,
+      #f5ecff 9%,
+      #e2cdf7 20%,
+      #b88be8 34%,
+      oklch(0.62 0.27 295) 50%,
+      oklch(0.46 0.29 295) 72%,
+      oklch(0.26 0.18 290) 100%
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
-    filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.18))
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45))
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.18)) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45))
       drop-shadow(0 0 0.55em color-mix(in oklab, var(--violet) 40%, transparent))
       drop-shadow(0 0 1.6em color-mix(in oklab, var(--violet) 18%, transparent));
     text-shadow: none;
   }
   /* Subtle silver sheen overlay on big titles */
-  h1.font-display, h2.font-display { position: relative; }
+  h1.font-display,
+  h2.font-display {
+    position: relative;
+  }
   h1.font-display::selection,
-  h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
+  h2.font-display::selection {
+    -webkit-text-fill-color: var(--bone);
+  }
   /* Lower-glow variant for editorial sections */
   h2.font-display.glow-soft,
   .font-display.glow-soft {
-    filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.10))
-      drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5))
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.1)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5))
       drop-shadow(0 0 0.35em color-mix(in oklab, var(--violet) 18%, transparent));
   }
   /* Editorial-dense variant: dense white type, micro violet halo, subtle grain */
@@ -199,10 +199,17 @@
     line-height: 1.75;
     padding-bottom: 0.4em;
   }
-  .font-serif-i { font-family: var(--font-serif); font-style: italic; }
-  .font-mono { font-family: var(--font-mono); }
+  .font-serif-i {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  .font-mono {
+    font-family: var(--font-mono);
+  }
 
-  .text-balance { text-wrap: balance; }
+  .text-balance {
+    text-wrap: balance;
+  }
 
   .grain::after {
     content: "";
@@ -223,7 +230,8 @@
   }
 
   .pulse-glow {
-    box-shadow: 0 0 calc(20px + var(--pulse) * 40px) color-mix(in oklab, var(--violet) calc(40% + var(--pulse) * 40%), transparent);
+    box-shadow: 0 0 calc(20px + var(--pulse) * 40px)
+      color-mix(in oklab, var(--violet) calc(40% + var(--pulse) * 40%), transparent);
   }
 
   .pulse-scale {
@@ -235,46 +243,114 @@
      FLASH → SCAN → REVEAL → DISAPPEAR (~1.4s)
      ============================================================ */
   @keyframes sig-scan-sweep {
-    0%   { top: -4%; opacity: 0; }
-    14%  { opacity: 0.85; }
-    86%  { opacity: 0.85; }
-    100% { top: 104%; opacity: 0; }
+    0% {
+      top: -4%;
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    86% {
+      opacity: 0.85;
+    }
+    100% {
+      top: 104%;
+      opacity: 0;
+    }
   }
   @keyframes sig-scan-bloom {
-    0%   { opacity: 0; top: -10%; }
-    15%  { opacity: 1; }
-    85%  { opacity: 1; }
-    100% { opacity: 0; top: 100%; }
+    0% {
+      opacity: 0;
+      top: -10%;
+    }
+    15% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      top: 100%;
+    }
   }
   @keyframes sig-scan-flash {
-    0%   { opacity: 0; }
-    8%   { opacity: 1; }
-    25%  { opacity: 0.15; }
-    100% { opacity: 0; }
+    0% {
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.15;
+    }
+    100% {
+      opacity: 0;
+    }
   }
   @keyframes sig-scan-bracket {
-    0%   { opacity: 0; transform: scale(0.85); }
-    15%  { opacity: 1; transform: scale(1.04); }
-    25%  { transform: scale(1); }
-    85%  { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    15% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+    25% {
+      transform: scale(1);
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
   @keyframes sig-scan-glitch {
-    0%, 100% { transform: translate(0, 0); opacity: 0; }
-    10%      { transform: translate(-2px, 1px); opacity: 0.5; }
-    14%      { transform: translate(2px, -1px); opacity: 0.6; }
-    18%      { transform: translate(-1px, 0); opacity: 0; }
+    0%,
+    100% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    10% {
+      transform: translate(-2px, 1px);
+      opacity: 0.5;
+    }
+    14% {
+      transform: translate(2px, -1px);
+      opacity: 0.6;
+    }
+    18% {
+      transform: translate(-1px, 0);
+      opacity: 0;
+    }
   }
   @keyframes sig-scan-lines {
-    0%, 100% { opacity: 0; }
-    20%, 80% { opacity: 0.22; }
+    0%,
+    100% {
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 0.22;
+    }
   }
   @keyframes sig-scan-noise {
-    0%, 100% { opacity: 0; }
-    20%, 80% { opacity: 0.12; }
+    0%,
+    100% {
+      opacity: 0;
+    }
+    20%,
+    80% {
+      opacity: 0.12;
+    }
   }
 
   .sig-scan {
+    display: block !important;
+    visibility: visible !important;
+
     position: absolute;
     inset: 0;
     overflow: hidden;
@@ -298,7 +374,7 @@
       transparent 100%
     );
     box-shadow:
-      0 0 6px 1px rgba(255,255,255,0.6),
+      0 0 6px 1px rgba(255, 255, 255, 0.6),
       0 0 18px 2px color-mix(in oklab, var(--violet) 70%, transparent),
       0 0 48px 6px color-mix(in oklab, var(--violet) 40%, transparent),
       0 0 100px 16px color-mix(in oklab, var(--violet) 22%, transparent);
@@ -401,14 +477,33 @@
     border: 0 solid color-mix(in oklab, var(--violet) 80%, white);
     opacity: 0;
     animation: sig-scan-bracket 1.4s cubic-bezier(0.5, 0, 0.2, 1) forwards;
-    filter:
-      drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 75%, white))
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 75%, white))
       drop-shadow(0 0 14px color-mix(in oklab, var(--violet) 55%, transparent));
   }
-  .sig-scan__bracket--tl { top: 18px; left: 18px; border-top-width: 1.5px; border-left-width: 1.5px; }
-  .sig-scan__bracket--tr { top: 18px; right: 18px; border-top-width: 1.5px; border-right-width: 1.5px; }
-  .sig-scan__bracket--bl { bottom: 18px; left: 18px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
-  .sig-scan__bracket--br { bottom: 18px; right: 18px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+  .sig-scan__bracket--tl {
+    top: 18px;
+    left: 18px;
+    border-top-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .sig-scan__bracket--tr {
+    top: 18px;
+    right: 18px;
+    border-top-width: 1.5px;
+    border-right-width: 1.5px;
+  }
+  .sig-scan__bracket--bl {
+    bottom: 18px;
+    left: 18px;
+    border-bottom-width: 1.5px;
+    border-left-width: 1.5px;
+  }
+  .sig-scan__bracket--br {
+    bottom: 18px;
+    right: 18px;
+    border-bottom-width: 1.5px;
+    border-right-width: 1.5px;
+  }
 
   .sig-scan__label {
     position: absolute;
@@ -429,9 +524,19 @@
 
   /* Tagline reveal — sharp wipe synced with the scan */
   @keyframes sig-reveal {
-    0%   { clip-path: inset(0 100% 0 0); opacity: 0; filter: brightness(2); }
-    20%  { opacity: 1; }
-    100% { clip-path: inset(0 0 0 0); opacity: 1; filter: brightness(1); }
+    0% {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      filter: brightness(2);
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+      filter: brightness(1);
+    }
   }
   .sig-reveal {
     animation: sig-reveal 1.4s cubic-bezier(0.55, 0, 0.2, 1) 0.25s both;
@@ -476,7 +581,7 @@
     right: 10%;
     width: 14px;
     height: 14px;
-    background: radial-gradient(circle, rgba(255,255,255,0.95), transparent 65%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.95), transparent 65%);
     filter: blur(1px);
     opacity: 0.6;
     z-index: 2;
@@ -486,24 +591,14 @@
   .hand-signature__ink {
     position: relative;
     display: inline-block;
-    background: linear-gradient(
-      178deg,
-      #ffffff 0%,
-      #f6f4fb 22%,
-      #d9d6e3 48%,
-      #aaa6b8 78%,
-      #c4bfd2 100%
-    );
+    background: linear-gradient(178deg, #ffffff 0%, #f6f4fb 22%, #d9d6e3 48%, #aaa6b8 78%, #c4bfd2 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.28);
-    filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7))
-      drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5))
-      drop-shadow(0 0 22px rgba(190, 160, 255, 0.18));
+    filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.7)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55))
+      drop-shadow(0 10px 28px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 22px rgba(190, 160, 255, 0.18));
   }
   .hand-signature__halo {
     position: absolute;
@@ -519,26 +614,52 @@
     animation: sig-breath 7s ease-in-out infinite;
   }
   @keyframes hand-float {
-    0%, 100% { transform: rotate(-3deg) translateY(0); }
-    50%      { transform: rotate(-2.6deg) translateY(-3px); }
+    0%,
+    100% {
+      transform: rotate(-3deg) translateY(0);
+    }
+    50% {
+      transform: rotate(-2.6deg) translateY(-3px);
+    }
   }
   @keyframes sig-aura {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50%      { opacity: 1; transform: scale(1.04); }
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
   }
   @keyframes sig-breath {
-    0%, 100% { opacity: 0.45; }
-    50%      { opacity: 0.7; }
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 0.7;
+    }
   }
   @keyframes sig-flare {
-    0%, 100% { opacity: 0.4; transform: scale(0.9); }
-    50%      { opacity: 0.8; transform: scale(1.2); }
+    0%,
+    100% {
+      opacity: 0.4;
+      transform: scale(0.9);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
   }
   @media (prefers-reduced-motion: reduce) {
     .hand-signature,
     .hand-signature::before,
     .hand-signature::after,
-    .hand-signature__halo { animation: none; }
+    .hand-signature__halo {
+      animation: none;
+    }
   }
 
   /* Hero title — cinematic premium branding */
@@ -547,20 +668,12 @@
   }
   .hero-title__word {
     display: inline-block;
-    background: linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #ececf2 35%,
-      #b8b9c4 75%,
-      #8a8b96 100%
-    );
+    background: linear-gradient(180deg, #ffffff 0%, #ececf2 35%, #b8b9c4 75%, #8a8b96 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    filter:
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 0 24px rgba(255, 255, 255, 0.06));
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 24px rgba(255, 255, 255, 0.06));
     text-shadow: 0 0 40px rgba(255, 255, 255, 0.04);
   }
   .hero-title__word--accent {
@@ -574,14 +687,14 @@
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    filter:
-      drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6))
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6))
       drop-shadow(0 0 30px color-mix(in oklab, var(--violet) 40%, transparent));
   }
 
   /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
   @keyframes track-breathe {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1);
       box-shadow: 0 0 0 0 color-mix(in oklab, var(--violet) 0%, transparent);
     }
@@ -595,21 +708,36 @@
     will-change: transform, box-shadow;
   }
 
-
   @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+    }
   }
 
   @keyframes drift {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(2%, -1%); }
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(2%, -1%);
+    }
   }
-  .drift { animation: drift 18s ease-in-out infinite; }
+  .drift {
+    animation: drift 18s ease-in-out infinite;
+  }
 
   @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
   }
 
   .text-stroke {
@@ -621,15 +749,27 @@
     animation: glitch 0.3s steps(2) infinite;
   }
   @keyframes glitch {
-    0% { transform: translate(0); }
-    25% { transform: translate(-1px, 1px); }
-    50% { transform: translate(1px, -1px); }
-    75% { transform: translate(-1px, 0); }
-    100% { transform: translate(0); }
+    0% {
+      transform: translate(0);
+    }
+    25% {
+      transform: translate(-1px, 1px);
+    }
+    50% {
+      transform: translate(1px, -1px);
+    }
+    75% {
+      transform: translate(-1px, 0);
+    }
+    100% {
+      transform: translate(0);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
@@ -685,23 +825,45 @@
     }
   }
 
-
   /* Slow breathing lives on a WRAPPER element so the inline kick transform
      on the <img> never collides with this keyframe. */
   @keyframes track-breathe-active {
-    from { transform: scale(1);    filter: brightness(1)    contrast(1); }
-    to   { transform: scale(1.03); filter: brightness(1.10) contrast(1.04); }
+    from {
+      transform: scale(1);
+      filter: brightness(1) contrast(1);
+    }
+    to {
+      transform: scale(1.03);
+      filter: brightness(1.1) contrast(1.04);
+    }
   }
   @keyframes track-light-drift {
-    0%   { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
-    50%  { transform: translate3d(4%, 3%, 0);  opacity: 0.55; }
-    100% { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
+    0% {
+      transform: translate3d(-4%, -2%, 0);
+      opacity: 0.35;
+    }
+    50% {
+      transform: translate3d(4%, 3%, 0);
+      opacity: 0.55;
+    }
+    100% {
+      transform: translate3d(-4%, -2%, 0);
+      opacity: 0.35;
+    }
   }
   @keyframes track-button-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 transparent; }
-    50%      { box-shadow: 0 0 calc(10px * var(--fx-glow)) 0 color-mix(in oklab, var(--violet) calc(26% * var(--fx-glow)), transparent); }
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+    50% {
+      box-shadow: 0 0 calc(10px * var(--fx-glow)) 0
+        color-mix(in oklab, var(--violet) calc(26% * var(--fx-glow)), transparent);
+    }
   }
-  .track-cover-breathe { transform: scale(1); }
+  .track-cover-breathe {
+    transform: scale(1);
+  }
   .track-cover-breathe-active {
     animation: track-breathe-active 3.8s ease-in-out infinite alternate;
     will-change: transform, filter;
@@ -710,12 +872,22 @@
 
   @media (max-width: 767px) {
     @keyframes track-breathe-active {
-      from { transform: scale(1);      filter: brightness(1)    contrast(1); }
-      to   { transform: scale(1.085);  filter: brightness(1.16) contrast(1.08); }
+      from {
+        transform: scale(1);
+        filter: brightness(1) contrast(1);
+      }
+      to {
+        transform: scale(1.085);
+        filter: brightness(1.16) contrast(1.08);
+      }
     }
     @keyframes track-cover-shell-active {
-      from { transform: scale(1); }
-      to   { transform: scale(1.055); }
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.055);
+      }
     }
     .track-cover-shell-active {
       animation: track-cover-shell-active var(--fx-breathe-dur) ease-in-out infinite alternate;
@@ -727,46 +899,85 @@
     }
   }
 
-
-  .track-light-drift { animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite; }
-  .track-button-pulse { animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite; }
+  .track-light-drift {
+    animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite;
+  }
+  .track-button-pulse {
+    animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite;
+  }
 
   /* ── One-shot activation sequence — fires only when playback starts ── */
   @keyframes track-activate-cover {
-    0%   { filter: brightness(1); }
-    100% { filter: brightness(1.04); }
+    0% {
+      filter: brightness(1);
+    }
+    100% {
+      filter: brightness(1.04);
+    }
   }
   @keyframes track-activate-aura {
-    0%   { opacity: 0; }
-    100% { opacity: 0.14; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.14;
+    }
   }
   @keyframes track-activate-button {
-    0%   { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
-    50%  { transform: scale(1.06); box-shadow: 0 0 18px 2px color-mix(in oklab, var(--violet) 38%, transparent); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 transparent;
+    }
+    50% {
+      transform: scale(1.06);
+      box-shadow: 0 0 18px 2px color-mix(in oklab, var(--violet) 38%, transparent);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 transparent;
+    }
   }
   @keyframes track-activate-eq {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
   @keyframes track-activate-now-playing {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
-  .track-activate-cover { animation: track-activate-cover 700ms ease-out forwards; }
+  .track-activate-cover {
+    animation: track-activate-cover 700ms ease-out forwards;
+  }
   .track-activate-aura {
     pointer-events: none;
     position: absolute;
     inset: -10%;
     border-radius: 9999px;
-    background: radial-gradient(circle at center, color-mix(in oklab, var(--violet) 55%, transparent) 0%, transparent 65%);
+    background: radial-gradient(
+      circle at center,
+      color-mix(in oklab, var(--violet) 55%, transparent) 0%,
+      transparent 65%
+    );
     filter: blur(28px);
     opacity: 0;
     animation: track-activate-aura 800ms ease-out forwards;
     z-index: 0;
   }
-  .track-activate-button { animation: track-activate-button 420ms ease-out 1; }
-  .track-activate-eq { animation: track-activate-eq 1000ms ease-out forwards; }
-  .track-activate-now-playing { animation: track-activate-now-playing 600ms ease-out forwards; }
+  .track-activate-button {
+    animation: track-activate-button 420ms ease-out 1;
+  }
+  .track-activate-eq {
+    animation: track-activate-eq 1000ms ease-out forwards;
+  }
+  .track-activate-now-playing {
+    animation: track-activate-now-playing 600ms ease-out forwards;
+  }
 }
-
