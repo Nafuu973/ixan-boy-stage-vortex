@@ -56,17 +56,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      // Police du titre (Anton) isolée en display=block : le navigateur attend
-      // qu'elle soit prête au lieu d'afficher un fallback large puis de sauter.
-      // Préchargée en priorité haute pour qu'elle arrive vite.
+      // Anton — preload direct sur le fichier woff2 (pas sur la CSS intermédiaire)
+      // pour que le navigateur télécharge la fonte en parallèle du HTML, sans
+      // attendre le parse de la CSS Google Fonts.
+      // display=swap : pas de période de blocage invisible sur connexion lente ;
+      // la min-height réservée sur .hero-title absorbe le saut résiduel.
       {
         rel: "preload",
-        as: "style",
-        href: "https://fonts.googleapis.com/css2?family=Anton&display=block",
+        as: "font",
+        type: "font/woff2",
+        href: "https://fonts.gstatic.com/s/anton/v25/1Ptgg87LROyAm0K08i4gS7lu.woff2",
+        crossOrigin: "anonymous",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Anton&display=block",
+        href: "https://fonts.googleapis.com/css2?family=Anton&display=swap",
       },
       // Le reste des polices reste en swap : pas de blocage du texte courant.
       {

@@ -277,7 +277,9 @@
   .sig-scan {
     position: absolute;
     inset: 0;
-    overflow: hidden;
+    /* overflow: hidden retiré — il créait un stacking context sur Safari iOS
+       qui cassait mix-blend-mode:screen sur les enfants. Le clipping global
+       est assuré par overflow:hidden de la section hero parente. */
     pointer-events: none;
   }
 
@@ -444,9 +446,9 @@
     font-weight: 400;
     font-style: italic;
     line-height: 1;
-    font-size: clamp(3.2rem, 8.4vw, 6.2rem);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
     letter-spacing: 0.012em;
-    padding: 0.45em 0.75em 0.55em 0.5em;
+    padding: 0.25em 0.75em 0.35em 0.5em;
     margin-left: -0.2em;
     animation: hand-float 10s ease-in-out infinite;
     will-change: transform, filter;
@@ -547,12 +549,12 @@
     /* Anti-FOUT : on réserve la hauteur du titre pour qu'il ne fasse pas
        sauter le bloc (ancré justify-end) quand Anton remplace le fallback.
        Calée sur font-size clamp × line-height 0.85 × 2 lignes mobile. */
-    min-height: calc(clamp(4rem, 16vw, 15rem) * 0.85);
+    min-height: calc(clamp(4rem, 11vw, 8rem) * 0.85);
   }
   @media (max-width: 767px) {
     /* En mobile le titre passe sur 2 lignes (IXAN / BOY) → on réserve 2×. */
     .hero-title {
-      min-height: calc(clamp(4rem, 16vw, 15rem) * 0.85 * 2);
+      min-height: calc(clamp(4rem, 11vw, 8rem) * 0.85 * 2);
     }
   }
   .hero-title__word {

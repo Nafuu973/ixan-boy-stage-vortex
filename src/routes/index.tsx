@@ -185,7 +185,7 @@ function Hero() {
         <img
           src={heroImg}
           alt="IXAN BOY"
-          className="h-full w-full object-cover object-[center_20%] md:object-[center_30%]"
+          className="h-full w-full object-contain object-center md:object-contain md:object-center"
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void" />
@@ -195,18 +195,18 @@ function Hero() {
 
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex h-full flex-col justify-end px-5 pb-16 md:px-12 md:pb-24"
+        className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 md:px-12 md:pb-24"
       >
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
           {t.hero.sub}
         </div>
-        <h1 className="hero-title font-display mt-3 text-[clamp(4rem,16vw,15rem)] leading-[0.85] tracking-tight">
+        <h1 className="hero-title font-display mt-3 text-[clamp(4rem,11vw,8rem)] leading-[0.85] tracking-tight">
           <span className="hero-title__word">IXAN</span>
           <br className="md:hidden" />
           <span className="hero-title__word hero-title__word--accent md:ml-6">BOY</span>
         </h1>
 
-        <div className="mt-12 mb-14 sig-reveal flex justify-start -ml-1 md:-ml-4 md:mt-16 md:mb-20">
+        <div className="mt-5 mb-6 sig-reveal flex justify-start -ml-1 md:-ml-4 md:mt-8 md:mb-8">
           <ChromeSignature text={t.hero.tag} />
         </div>
 
@@ -215,7 +215,7 @@ function Hero() {
           <Cta href="#contact" label={t.nav.booking} />
         </div>
 
-        <p className="mt-10 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:text-xs">
+        <p className="mt-4 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:mt-10 md:text-xs">
           {t.hero.intro}
         </p>
       </motion.div>
@@ -321,7 +321,7 @@ function Presentation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="font-display mt-5 uppercase text-[clamp(2.25rem,7vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+          className="font-display mt-5 uppercase text-[clamp(2.25rem,5vw,3.75rem)] leading-[0.95] tracking-[-0.01em] text-balance"
         >
           {t.presentation.title}
         </motion.h2>
@@ -420,7 +420,7 @@ function ExperienceLive() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           02 · {t.live.kicker}
         </div>
-        <h2 className="font-display mt-4 text-[clamp(3rem,11vw,9rem)] leading-[0.9]">
+        <h2 className="font-display mt-4 text-[clamp(3rem,7vw,5.5rem)] leading-[0.9]">
           {t.live.headline[0]}
           <br />
           <span className="text-violet">{t.live.headline[1]}</span>
@@ -518,7 +518,7 @@ function WhyBook() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.4rem,6.2vw,6rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.4rem,4vw,3.5rem)] leading-[0.95] tracking-[-0.01em] text-balance"
         >
           {t.why.title}
         </motion.h2>
@@ -699,7 +699,7 @@ function SignatureTracks() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
         </div>
-        <h2 className="font-display mt-6 max-w-[18ch] text-balance text-[clamp(2.25rem,7.4vw,7rem)] leading-[0.95] tracking-[-0.01em] md:mt-8">
+        <h2 className="font-display mt-6 max-w-[18ch] text-balance text-[clamp(2.25rem,5vw,4rem)] leading-[0.95] tracking-[-0.01em] md:mt-8">
           {t.tracks.title}
         </h2>
 
@@ -918,7 +918,7 @@ function MusicalDNA() {
           05 · {t.dna.kicker}
         </div>
 
-        <h2 className="font-display mt-4 text-[clamp(2.5rem,9vw,7.5rem)] leading-[0.9] text-balance uppercase">
+        <h2 className="font-display mt-4 text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.9] text-balance uppercase">
           {t.dna.title}
         </h2>
 
@@ -1118,7 +1118,7 @@ function ContactFinal() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           08 · {t.contact.kicker}
         </div>
-        <h2 className="font-display mt-6 text-balance text-[clamp(3rem,14vw,12rem)] leading-[0.85]">
+        <h2 className="font-display mt-6 text-balance text-[clamp(3rem,7vw,5.5rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
           <span className="text-violet">{t.contact.headline[1]}</span>
