@@ -309,7 +309,7 @@ function Presentation() {
   const t = useT();
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative bg-void py-28 md:py-44">
+    <section className="relative bg-void py-16 md:py-24 et my-12 md:my-16 par my-6 md:my-8
       <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}

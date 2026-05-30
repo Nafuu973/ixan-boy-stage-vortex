@@ -19,7 +19,7 @@ export const dict = {
         "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
         "Musicien multi-instrumentiste et ingénieur son de formation, IXAN BOY construit ses tracks comme une partition — chaque détail sonore orchestré avec une précision chirurgicale."
         "Chaque montée est calculée. Chaque impact est amplifié.",
-        "Depuis 2020, IXAN BOY façonne une identité construite autour de la tension, du contrôle et de la précision sonore.",
+
       ],
     },
     live: {
