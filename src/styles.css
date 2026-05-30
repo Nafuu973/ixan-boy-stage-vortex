@@ -474,7 +474,7 @@
     width: 26px;
     height: 26px;
     background: transparent;
-    border: 0 solid color-mix(in oklab, var(--violet) 80%, white);
+    border: 2px solid color-mix(in oklab, var(--violet) 80%, white);0 solid color-mix(in oklab, var(--violet) 80%, white);
     opacity: 0;
     animation: sig-scan-bracket 1.4s cubic-bezier(0.5, 0, 0.2, 1) forwards;
     filter: drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 75%, white))
