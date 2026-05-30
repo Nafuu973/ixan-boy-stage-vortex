@@ -544,6 +544,16 @@
   /* Hero title — cinematic premium branding */
   .hero-title {
     position: relative;
+    /* Anti-FOUT : on réserve la hauteur du titre pour qu'il ne fasse pas
+       sauter le bloc (ancré justify-end) quand Anton remplace le fallback.
+       Calée sur font-size clamp × line-height 0.85 × 2 lignes mobile. */
+    min-height: calc(clamp(4rem, 16vw, 15rem) * 0.85);
+  }
+  @media (max-width: 767px) {
+    /* En mobile le titre passe sur 2 lignes (IXAN / BOY) → on réserve 2×. */
+    .hero-title {
+      min-height: calc(clamp(4rem, 16vw, 15rem) * 0.85 * 2);
+    }
   }
   .hero-title__word {
     display: inline-block;
@@ -629,9 +639,24 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
+    /* Intention accessibilité : calmer le mouvement gênant (boucles longues,
+       parallaxe, dérive de fumée) SANS tuer les effets signature courts et
+       ponctuels qui font l'identité du site (sig-scan, reveals, titre).
+       On cible explicitement plutôt qu'avec un * brutal. */
+    .smoke,
+    .drift,
+    .pulse-glow,
+    .pulse-scale,
+    .grain,
+    .grain::after {
+      animation: none !important;
+    }
+    /* Le scan signature garde sa version lumineuse mais on coupe le
+       bruit/glitch les plus agités pour rester confortable. */
+    .sig-scan__noise,
+    .sig-scan__glitch {
+      animation: none !important;
+      opacity: 0 !important;
     }
   }
 }

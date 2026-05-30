@@ -56,9 +56,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      // Police du titre (Anton) isolée en display=block : le navigateur attend
+      // qu'elle soit prête au lieu d'afficher un fallback large puis de sauter.
+      // Préchargée en priorité haute pour qu'elle arrive vite.
+      {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Anton&display=block",
+      },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Allura&family=Anton&family=Dancing+Script:wght@600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Anton&display=block",
+      },
+      // Le reste des polices reste en swap : pas de blocage du texte courant.
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Allura&family=Dancing+Script:wght@600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
     ],
   }),
