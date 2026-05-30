@@ -474,11 +474,10 @@
     width: 26px;
     height: 26px;
     background: transparent;
-    border: 2px solid color-mix(in oklab, var(--violet) 80%, white);0 solid color-mix(in oklab, var(--violet) 80%, white);
-    opacity: 0;
+    border: 3px solid #a855f7;
+    opacity: 1;
+    filter: drop-shadow(0 0 8px #a855f7) drop-shadow(0 0 20px #7c3aed);
     animation: sig-scan-bracket 1.4s cubic-bezier(0.5, 0, 0.2, 1) forwards;
-    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--violet) 75%, white))
-      drop-shadow(0 0 14px color-mix(in oklab, var(--violet) 55%, transparent));
   }
   .sig-scan__bracket--tl {
     top: 18px;
