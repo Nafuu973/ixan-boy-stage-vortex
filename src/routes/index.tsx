@@ -147,12 +147,7 @@ function SignatureScan() {
       timeouts.push(id);
     };
     schedule(1200);
-    const onTouch = () => setKey((k) => k + 1);
-    window.addEventListener("touchstart", onTouch, { passive: true });
-    return () => {
-      timeouts.forEach((id) => clearTimeout(id));
-      window.removeEventListener("touchstart", onTouch);
-    };
+    return () => timeouts.forEach((id) => clearTimeout(id));
   }, []);
   return (
     <div key={key} className="sig-scan z-[1]">
@@ -184,13 +179,13 @@ function Hero() {
   return (
     <section
       ref={ref}
-      className="relative h-[120svh] min-h-[700px] w-full overflow-hidden lg:h-[100svh]"
+      className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <img
           src={heroImg}
           alt="IXAN BOY"
-          className="h-full w-full object-cover object-[top_center] md:object-contain md:object-top md:bg-void"
+          className="h-full w-full object-cover object-[center_20%] md:object-[center_30%]"
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void" />
@@ -215,14 +210,14 @@ function Hero() {
           <ChromeSignature text={t.hero.tag} />
         </div>
 
-        <p className="mb-6 max-w-md text-balance text-[13px] leading-relaxed text-bone/70 md:text-sm">
-          {t.hero.intro}
-        </p>
-
         <div className="flex flex-wrap gap-2 md:gap-3">
           <Cta href="#live" label={t.nav.live} primary />
           <Cta href="#contact" label={t.nav.booking} />
         </div>
+
+        <p className="mt-10 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:text-xs">
+          {t.hero.intro}
+        </p>
       </motion.div>
 
       <SignatureScan />
@@ -309,7 +304,7 @@ function Presentation() {
   const t = useT();
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative bg-void py-16 md:py-24">
+    <section className="relative bg-void py-28 md:py-44">
       <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}

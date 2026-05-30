@@ -235,16 +235,16 @@
      FLASH → SCAN → REVEAL → DISAPPEAR (~1.4s)
      ============================================================ */
   @keyframes sig-scan-sweep {
-    0%   { transform: translateY(-4svh); opacity: 0; }
+    0%   { top: -4%; opacity: 0; }
     14%  { opacity: 0.85; }
     86%  { opacity: 0.85; }
-    100% { transform: translateY(104svh); opacity: 0; }
+    100% { top: 104%; opacity: 0; }
   }
   @keyframes sig-scan-bloom {
-    0%   { opacity: 0; transform: translateY(-10svh); }
+    0%   { opacity: 0; top: -10%; }
     15%  { opacity: 1; }
     85%  { opacity: 1; }
-    100% { opacity: 0; transform: translateY(100svh); }
+    100% { opacity: 0; top: 100%; }
   }
   @keyframes sig-scan-flash {
     0%   { opacity: 0; }
@@ -276,11 +276,7 @@
 
   .sig-scan {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100svh;
-    max-height: 100%;
+    inset: 0;
     overflow: hidden;
     pointer-events: none;
   }
@@ -636,23 +632,6 @@
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
-    }
-
-    .sig-scan__line {
-      animation: sig-scan-sweep 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards !important;
-    }
-
-    .sig-scan__bloom {
-      animation: sig-scan-bloom 1.8s cubic-bezier(0.45, 0, 0.25, 1) forwards !important;
-    }
-
-    .sig-scan__flash,
-    .sig-scan__lines,
-    .sig-scan__noise,
-    .sig-scan__glitch,
-    .sig-scan__bracket,
-    .sig-scan__label {
-      animation-duration: 1.4s !important;
     }
   }
 }
