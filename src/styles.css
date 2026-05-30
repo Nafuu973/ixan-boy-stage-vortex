@@ -276,7 +276,11 @@
 
   .sig-scan {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100svh;
+    max-height: 100%;
     overflow: hidden;
     pointer-events: none;
   }
