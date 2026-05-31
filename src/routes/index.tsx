@@ -304,7 +304,7 @@ function Presentation() {
   const t = useT();
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative bg-void py-28 md:py-44">
+    <section className="relative bg-void py-16 md:py-20">
       <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -326,7 +326,7 @@ function Presentation() {
           {t.presentation.title}
         </motion.h2>
 
-        <div className="mt-16 grid gap-x-12 md:mt-24 md:grid-cols-12">
+        <div className="mt-8 grid gap-x-12 md:mt-10 md:grid-cols-12">
           <div className="md:col-span-7 md:col-start-2">
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -343,7 +343,7 @@ function Presentation() {
               whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9, delay: 0.1 }}
-              className="my-12 h-px w-16 origin-left bg-gradient-to-r from-violet/70 to-transparent md:my-16"
+              className="my-6 h-px w-16 origin-left bg-gradient-to-r from-violet/70 to-transparent md:my-8"
             />
 
             <motion.p
@@ -361,7 +361,7 @@ function Presentation() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 1.2, delay: 0.1 }}
-              className="my-16 flex items-center gap-4 md:my-24"
+              className="my-6 flex items-center gap-4 md:my-8"
             >
               <span className="h-px w-10 bg-violet/60" />
               <span className="font-mono text-[10px] uppercase tracking-[0.35em] text-violet/80">
@@ -385,7 +385,7 @@ function Presentation() {
               whileInView={{ scaleX: 1, opacity: 1 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9, delay: 0.1 }}
-              className="my-16 h-px w-24 origin-left bg-gradient-to-r from-violet/60 via-violet/30 to-transparent md:my-24"
+              className="my-6 h-px w-24 origin-left bg-gradient-to-r from-violet/60 via-violet/30 to-transparent md:my-8"
             />
 
             <motion.p
@@ -409,7 +409,7 @@ function ExperienceLive() {
   return (
     <section
       id="live"
-      className="relative isolate overflow-hidden bg-void py-24 md:py-40"
+      className="relative isolate overflow-hidden bg-void py-14 md:py-20"
     >
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 smoke drift" />
@@ -427,7 +427,7 @@ function ExperienceLive() {
         </h2>
         <div className="mt-12 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-8">
-            <div className="relative aspect-video w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
+            <div className="relative aspect-video w-full max-h-[50vh] overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
               <img
                 src={liveBooth}
                 alt="IXAN BOY live"
@@ -490,7 +490,7 @@ function ExperienceLive() {
 function WhyBook() {
   const t = useT();
   return (
-    <section className="relative overflow-hidden bg-void py-28 md:py-44">
+    <section className="relative overflow-hidden bg-void py-14 md:py-20">
       {/* ambient background — texture scan, micro grid, soft volumetric light */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.10]">
         <div
@@ -535,7 +535,7 @@ function WhyBook() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                 className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-7 backdrop-blur md:p-10 md:col-span-4 ${
+                 className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-5 backdrop-blur md:p-6 md:col-span-4 ${
                    i === 0
                      ? "md:mt-0"
                      : i === 1
@@ -614,7 +614,7 @@ function WhyBook() {
 function Silence() {
   const t = useT();
   return (
-    <section className="relative flex min-h-[60vh] items-center justify-center bg-void px-5 py-24">
+    <section className="relative flex min-h-[40vh] items-center justify-center bg-void px-5 py-14">
       <RevealText
         text={t.silence}
         className="font-serif-i text-balance text-center text-3xl text-bone/90 md:text-6xl"
@@ -694,7 +694,7 @@ function SignatureTracks() {
   };
 
   return (
-    <section id="tracks" className="relative bg-void py-24 md:py-40">
+    <section id="tracks" className="relative bg-void py-14 md:py-16">
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
@@ -703,7 +703,7 @@ function SignatureTracks() {
           {t.tracks.title}
         </h2>
 
-        <div className="mt-20 space-y-24 md:mt-28 md:space-y-36">
+        <div className="mt-10 md:mt-14 md:grid md:grid-cols-2 md:gap-10 space-y-14 md:space-y-0">
           {tracks.map((tr, i) => {
             const isActive = activeIndex === i;
             return (
@@ -713,14 +713,12 @@ function SignatureTracks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.7 }}
-                className={`grid gap-8 md:grid-cols-12 md:gap-12 ${
-                  i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""
-                }`}
+                className="grid gap-6 grid-cols-1"
               >
-                <div className="relative md:col-span-5">
+                <div className="relative">
                   {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
                   <div
-                    className={`group/cover relative aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
+                    className={`group/cover relative aspect-square max-h-[55vh] overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "track-cover-shell-active border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
@@ -752,7 +750,7 @@ function SignatureTracks() {
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col justify-center md:col-span-7">
+                <div className="flex flex-col justify-center">
                   <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-bone/40">
                     IXAN BOY — Track 0{i + 1}
                   </p>
@@ -911,7 +909,7 @@ function SignatureTracks() {
 function MusicalDNA() {
   const t = useT();
   return (
-    <section className="relative overflow-hidden bg-obsidian/40 py-32 md:py-48">
+    <section className="relative overflow-hidden bg-obsidian/40 py-14 md:py-20">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)]" />
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
@@ -950,7 +948,7 @@ function MusicalDNA() {
             transition={{ duration: 0.8 }}
             className="relative md:col-span-5"
           >
-            <div className="track-breathe relative aspect-[3/4] overflow-hidden rounded-sm border border-bone/10">
+            <div className="track-breathe relative aspect-[3/4] max-h-[50vh] overflow-hidden rounded-sm border border-bone/10">
               <img
                 src={tunnelImg}
                 alt="IXAN BOY"
@@ -986,7 +984,7 @@ function Proof() {
   ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
-    <section className="relative bg-void py-24 md:py-32">
+    <section className="relative bg-void py-12 md:py-16">
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           06 · {t.proof.kicker}
@@ -1057,7 +1055,7 @@ function Proof() {
 function BookingReady() {
   const t = useT();
   return (
-    <section className="relative bg-obsidian/40 py-24 md:py-32">
+    <section className="relative bg-obsidian/40 py-12 md:py-16">
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           07 · {t.booking.kicker}
@@ -1109,7 +1107,7 @@ function ContactFinal() {
   return (
     <section
       id="contact"
-      className="relative isolate overflow-hidden bg-void py-32 md:py-48"
+      className="relative isolate overflow-hidden bg-void py-14 md:py-20"
     >
       <div className="absolute inset-0 -z-10 smoke drift opacity-70" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)]" />
