@@ -203,3 +203,7 @@ export function setPulseIdle() {
   mode = "idle";
   liveStartTime = 0;
 }
+
+export function getAnalyser(): AnalyserNode | null {
+  return analyser;
+}

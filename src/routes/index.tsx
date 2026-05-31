@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse } from "@/lib/pulse";
+import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, getAnalyser } from "@/lib/pulse";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -49,9 +49,9 @@ function Index() {
         <Hero />
         <PulseBar />
         <Presentation />
+        <Silence />
         <ExperienceLive />
         <WhyBook />
-        <Silence />
         <SignatureTracks />
         <MusicalDNA />
         <Proof />
@@ -161,6 +161,7 @@ function SignatureScan() {
       <div className="sig-scan__glitch" />
       <div className="sig-scan__flash" />
       <div className="sig-scan__bloom" />
+      <div className="sig-scan__trail" />
       <div className="sig-scan__line" />
     </div>
   );
@@ -311,7 +312,7 @@ function Presentation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
-          className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet"
+          className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet text-left"
         >
           01 · {t.presentation.kicker}
         </motion.div>
@@ -321,13 +322,13 @@ function Presentation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="font-display mt-5 uppercase text-[clamp(2.25rem,5vw,3.75rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+          className="font-display mt-5 uppercase text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] tracking-[-0.01em] text-balance text-right"
         >
           {t.presentation.title}
         </motion.h2>
 
-        <div className="mt-8 grid gap-x-12 md:mt-10 md:grid-cols-12">
-          <div className="md:col-span-7 md:col-start-2">
+        <div className="mt-8 md:mt-10 md:grid md:grid-cols-12">
+          <div className="md:col-span-7 md:col-start-6">
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -375,7 +376,7 @@ function Presentation() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.9 }}
-              className="font-display text-balance text-3xl leading-[1.05] text-bone md:text-5xl"
+              className="font-display text-balance text-2xl leading-[1.05] text-bone md:text-3xl"
             >
               {signature}
             </motion.p>
@@ -420,7 +421,7 @@ function ExperienceLive() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           02 · {t.live.kicker}
         </div>
-        <h2 className="font-display mt-4 text-[clamp(3rem,7vw,5.5rem)] leading-[0.9]">
+        <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.2rem)] leading-[0.9]">
           {t.live.headline[0]}
           <br />
           <span className="text-violet">{t.live.headline[1]}</span>
@@ -518,7 +519,7 @@ function WhyBook() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(1.4rem,4vw,3.5rem)] leading-[0.95] tracking-[-0.01em] text-balance"
+          className="font-display mt-5 whitespace-nowrap uppercase text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] tracking-[-0.01em] text-balance"
         >
           {t.why.title}
         </motion.h2>
@@ -535,34 +536,50 @@ function WhyBook() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                 className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-5 backdrop-blur md:p-6 md:col-span-4 ${
-                   i === 0
-                     ? "md:mt-0"
-                     : i === 1
-                       ? "md:mt-16"
-                       : "md:mt-6"
-                 }`}
+                className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-5 backdrop-blur transition-all duration-500 hover:border-violet/30 hover:bg-obsidian/70 md:p-6 md:col-span-4 ${
+                  i === 0 ? "md:mt-0" : i === 1 ? "md:mt-16" : "md:mt-6"
+                }`}
               >
-                {/* corner brackets */}
-                <span className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-violet/35" />
-                <span className="pointer-events-none absolute right-3 top-3 h-3 w-3 border-r border-t border-violet/35" />
-                <span className="pointer-events-none absolute bottom-3 left-3 h-3 w-3 border-b border-l border-violet/35" />
-                <span className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-violet/35" />
+                {/* bordure gauche accent */}
+                <span className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-violet to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-                {/* card index — HUD metadata, whispered */}
-                <div className="flex items-center gap-2.5">
-                  <span className="h-px w-3 bg-violet/25" />
-                  <span className="font-mono text-[9px] font-light uppercase tracking-[0.45em] text-violet/45">
+                {/* bloom violet coin haut-gauche */}
+                <span className="pointer-events-none absolute -left-8 -top-8 h-32 w-32 rounded-full bg-violet/10 blur-2xl opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+
+                {/* sweep lumineux gauche → droite */}
+                <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                {/* grand numéro fantôme — scale + rotation au hover */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-6 -right-3 font-display text-[8rem] leading-none text-bone/[0.04] select-none transition-all duration-700 group-hover:scale-110 group-hover:-rotate-6 group-hover:text-violet/[0.10]"
+                >
+                  0{i + 1}
+                </span>
+
+                {/* dégradé de fond au hover */}
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet/[0.08] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                {/* corner brackets */}
+                <span className="pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t border-violet/30 transition-colors duration-300 group-hover:border-violet/70" />
+                <span className="pointer-events-none absolute right-3 top-3 h-3 w-3 border-r border-t border-violet/30 transition-colors duration-300 group-hover:border-violet/70" />
+                <span className="pointer-events-none absolute bottom-3 left-3 h-3 w-3 border-b border-l border-violet/30 transition-colors duration-300 group-hover:border-violet/70" />
+                <span className="pointer-events-none absolute bottom-3 right-3 h-3 w-3 border-b border-r border-violet/30 transition-colors duration-300 group-hover:border-violet/70" />
+
+                {/* card index — HUD metadata */}
+                <div className="flex items-center gap-2">
+                  <span className="h-px w-3 bg-bone/20" />
+                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-bone/30">
                     {c.k}
                   </span>
                 </div>
 
                 {isArtists ? (
                   <>
-                    <h3 className="font-display mt-6 text-sm font-light uppercase tracking-[0.06em] text-bone/25 md:text-base">
+                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/65 md:text-lg">
                       {(c as any).h}
                     </h3>
-                    <div className="mt-3 h-px w-10 bg-violet/10" />
+                    <div className="mt-3 h-px w-10 bg-violet/20" />
                     <ul className="mt-7 space-y-2.5 md:space-y-3">
                       {(c as any).artists.map((a: string, k: number) => (
                         <motion.li
@@ -583,10 +600,10 @@ function WhyBook() {
                   </>
                 ) : (
                   <>
-                    <h3 className="font-display mt-6 text-base font-light leading-[1.3] text-bone/25 md:text-lg">
+                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/65 md:text-lg">
                       {(c as any).h}
                     </h3>
-                    <div className="mt-4 h-px w-10 bg-violet/10" />
+                    <div className="mt-4 h-px w-10 bg-violet/20" />
                     {isList ? (
                       <ul className="mt-7 space-y-2 text-[13px] leading-relaxed text-bone/55">
                         {((c as any).p as readonly string[]).map((line, k) => (
@@ -620,6 +637,114 @@ function Silence() {
         className="font-serif-i text-balance text-center text-3xl text-bone/90 md:text-6xl"
       />
     </section>
+  );
+}
+
+/* Waveform dot-matrix — symétrie horizontale, mask CSS pour les points */
+const WAVEFORM_H = 38;
+const DOT_SIZE = 2.5;   // hauteur d'un point en px
+const DOT_GAP = 1.5;    // gap entre points en px
+const DOT_STRIDE = DOT_SIZE + DOT_GAP;
+function WaveformBars({ isActive, numBars = 90 }: { isActive: boolean; numBars?: number }) {
+  const barsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const smoothRef = useRef<number[]>(new Array(numBars).fill(0));
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    cancelAnimationFrame(rafRef.current);
+
+    if (!isActive) {
+      smoothRef.current = smoothRef.current.map(() => 0);
+      barsRef.current.forEach((bar, idx) => {
+        if (!bar) return;
+        const idle = 0.08 + Math.abs(Math.sin(idx * 0.45)) * 0.05;
+        bar.style.transform = `scaleY(${idle.toFixed(3)})`;
+      });
+      return;
+    }
+
+    const tick = () => {
+      const an = getAnalyser();
+      if (!an) { rafRef.current = requestAnimationFrame(tick); return; }
+      const data = new Uint8Array(an.frequencyBinCount);
+      an.getByteFrequencyData(data);
+
+      const smooth = smoothRef.current;
+      for (let idx = 0; idx < numBars; idx++) {
+        const bar = barsRef.current[idx];
+        if (!bar) continue;
+        const t0 = idx / numBars;
+        const t1 = (idx + 1) / numBars;
+        const lo = Math.floor(Math.pow(t0, 1.6) * data.length * 0.75);
+        const hi = Math.floor(Math.pow(t1, 1.6) * data.length * 0.75);
+        let sum = 0;
+        for (let b = lo; b < Math.max(lo + 1, hi); b++) sum += data[b];
+        let raw = (sum / Math.max(1, hi - lo)) / 255;
+        // boost vers les aigus pour casser l'effet cone
+        raw *= 1 + (idx / numBars) * 0.9;
+        raw = Math.min(1, raw);
+
+        const prev = smooth[idx];
+        const k = raw > prev ? 0.5 : 0.14;
+        smooth[idx] = prev + (raw - prev) * k;
+        const v = Math.max(0.08, smooth[idx]);
+
+        bar.style.transform = `scaleY(${v.toFixed(3)})`;
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isActive, numBars]);
+
+  // mask : points centrés sur l'axe horyzontal, espacés régulièrement
+  // on construit le pattern à partir du centre et on le répète des deux côtés
+  const dotMask = `repeating-linear-gradient(
+    to bottom,
+    black 0 ${DOT_SIZE}px,
+    transparent ${DOT_SIZE}px ${DOT_STRIDE}px
+  )`;
+
+  return (
+    <div
+      className="flex items-center gap-[1px] mx-auto"
+      style={{
+        height: `${WAVEFORM_H}px`,
+        width: "100%",
+        maxWidth: "100%",
+        contain: "layout paint",
+      }}
+    >
+      {Array.from({ length: numBars }).map((_, idx) => {
+        const idle = 0.08 + Math.abs(Math.sin(idx * 0.45)) * 0.05;
+        return (
+          <span
+            key={idx}
+            ref={(el) => { barsRef.current[idx] = el; }}
+            style={{
+              flex: "1 1 0",
+              minWidth: 0,
+              height: "100%",
+              transformOrigin: "center",
+              transform: `scaleY(${idle.toFixed(3)})`,
+              background: isActive
+                ? "linear-gradient(to bottom, #3300aa 0%, #8000FF 30%, #cc88ff 50%, #8000FF 70%, #3300aa 100%)"
+                : "rgba(255,255,255,0.30)",
+              WebkitMaskImage: dotMask,
+              maskImage: dotMask,
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              filter: isActive
+                ? "drop-shadow(0 0 3px #8000FF) drop-shadow(0 0 6px rgba(128,0,255,0.4))"
+                : "none",
+              willChange: "transform",
+              display: "block",
+            }}
+          />
+        );
+      })}
+    </div>
   );
 }
 
@@ -694,16 +819,16 @@ function SignatureTracks() {
   };
 
   return (
-    <section id="tracks" className="relative bg-void py-14 md:py-16">
-      <div className="px-5 md:px-12">
+    <section id="tracks" className="relative bg-void py-10 md:py-12">
+      <div className="px-5 md:px-20">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
         </div>
-        <h2 className="font-display mt-6 max-w-[18ch] text-balance text-[clamp(2.25rem,5vw,4rem)] leading-[0.95] tracking-[-0.01em] md:mt-8">
+        <h2 className="font-display mt-4 max-w-[18ch] text-balance text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] tracking-[-0.01em] md:mt-5">
           {t.tracks.title}
         </h2>
 
-        <div className="mt-10 md:mt-14 md:grid md:grid-cols-2 md:gap-10 space-y-14 md:space-y-0">
+        <div className="mt-6 md:mt-8 md:grid md:grid-cols-2 md:gap-4 space-y-8 md:space-y-0 md:items-start">
           {tracks.map((tr, i) => {
             const isActive = activeIndex === i;
             return (
@@ -712,13 +837,13 @@ function SignatureTracks() {
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7 }}
-                className="grid gap-6 grid-cols-1"
+                transition={{ duration: 0.7, delay: i * 0.15 }}
+                className={`flex flex-col items-center gap-3 ${i === 1 ? "md:mt-20" : ""}`}
               >
                 <div className="relative">
                   {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
                   <div
-                    className={`group/cover relative aspect-square max-h-[55vh] overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
+                    className={`group/cover relative h-[26vh] aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "track-cover-shell-active border-violet/30" : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
@@ -750,125 +875,53 @@ function SignatureTracks() {
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col justify-center">
+                <div className="flex flex-col gap-2 items-center text-center">
                   <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-bone/40">
                     IXAN BOY — Track 0{i + 1}
                   </p>
-                  <h3 className="mt-2 font-mono text-xl uppercase tracking-[0.08em] text-bone md:text-2xl">
+                  <h3 className="font-mono text-lg uppercase tracking-[0.08em] text-bone md:text-xl">
                     {tr.title}
                   </h3>
-                  <div className="mt-8 flex items-center gap-4 md:gap-5">
+                  {/* ── Player ── */}
+                  <div className="mt-4 flex items-center gap-3 w-full">
+                    {/* Bouton — stable, halo statique, scale uniquement au clic */}
                     <button
                       onClick={() => toggle(i)}
                       aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className={`group relative flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full border backdrop-blur-md transition-[background,border-color,transform] duration-500 ease-out hover:brightness-[1.08] active:scale-[0.97] ${
+                      className={`group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
                         isActive
-                          ? "border-violet/45 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--violet)_18%,transparent),color-mix(in_oklab,var(--violet)_3%,transparent))] track-button-pulse track-activate-button"
-                          : "border-bone/15 bg-[linear-gradient(140deg,color-mix(in_oklab,var(--bone)_7%,transparent),color-mix(in_oklab,var(--bone)_2%,transparent))] hover:border-violet/35"
+                          ? "bg-violet"
+                          : "bg-bone/10 hover:bg-violet/20"
                       }`}
                       style={{
                         boxShadow: isActive
-                          ? "inset 0 1px 0 color-mix(in oklab, var(--bone) 14%, transparent), inset 0 -6px 12px -6px color-mix(in oklab, var(--violet) calc(30% * var(--fx-glow)), transparent)"
-                          : "inset 0 1px 0 color-mix(in oklab, var(--bone) 10%, transparent), inset 0 -6px 12px -8px rgba(0,0,0,0.5)",
+                          ? "0 0 0 1px var(--violet), 0 0 18px rgba(128,0,255,0.5)"
+                          : "0 0 0 1px rgba(255,255,255,0.1)",
                       }}
                     >
-                      {/* glass reflection */}
-                      <span
-                        aria-hidden
-                        className="pointer-events-none absolute inset-0 rounded-full"
-                        style={{
-                          background:
-                            "radial-gradient(ellipse at 32% 22%, color-mix(in oklab, var(--bone) 16%, transparent), transparent 55%)",
-                        }}
-                      />
-                      {/* kick-only pressure ring — short impulse, not continuous */}
-                      {isActive && (
-                        <span
-                          aria-hidden
-                          className="pointer-events-none absolute -inset-[2px] rounded-full border border-violet/40"
-                          style={{
-                            transform:
-                              "scale(calc(1 + var(--pulse-kick, 0) * 0.08 * var(--fx-amp) * var(--fx-kick)))",
-                            opacity:
-                              "calc(var(--pulse-kick, 0) * 0.55 * var(--pulse-activation, 1) * var(--fx-glow) * var(--fx-kick))",
-                            transition: "transform 0.12s ease-out, opacity 0.18s ease-out",
-                          }}
-                        />
-                      )}
                       {isActive ? (
-                        <span className="relative flex gap-[3px]">
-                          <span className="h-[9px] w-[2px] rounded-[1px] bg-bone" />
-                          <span className="h-[9px] w-[2px] rounded-[1px] bg-bone" />
+                        <span className="flex gap-[3px]">
+                          <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
+                          <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
                         </span>
                       ) : (
-                        <svg
-                          viewBox="0 0 12 12"
-                          className="relative ml-[1px] h-[10px] w-[10px] text-bone"
-                          fill="currentColor"
-                        >
+                        <svg viewBox="0 0 12 12" className="ml-[2px] h-[11px] w-[11px] text-bone/80" fill="currentColor">
                           <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
                         </svg>
                       )}
                     </button>
-                    {/* premium thin equalizer — identical logic, height adapts per breakpoint */}
-                    <div
-                      className={`flex flex-1 items-center gap-[3px] md:max-w-[300px] ${isActive ? "track-activate-eq" : ""}`}
-                      style={{ height: "var(--fx-eq-max)" }}
-                    >
-                      {Array.from({ length: 32 }).map((_, b) => {
-                        const base = 0.14 + Math.abs(Math.sin(b * 0.55 + i * 1.3)) * 0.42;
-                        const secondary = Math.abs(Math.cos(b * 0.31 + i * 0.7)) * 0.22;
-                        return (
-                          <span
-                            key={b}
-                            className={`h-full w-[2px] origin-center rounded-full transition-colors duration-500 ${
-                              isActive ? "bg-violet/80" : "bg-bone/15"
-                            }`}
-                            style={{
-                              transform: isActive
-                                ? `scaleY(calc((${base.toFixed(3)} + var(--pulse) * ${(0.3 + secondary).toFixed(3)} * var(--fx-amp) + var(--pulse-kick, 0) * ${(0.2 + secondary * 0.3).toFixed(3)} * var(--fx-amp) * var(--fx-kick)) * (0.45 + var(--pulse-activation, 1) * 0.55)))`
-                                : "scaleY(0.16)",
-                              transition: "transform 0.28s cubic-bezier(0.22,0.61,0.36,1)",
-                            }}
-                          />
-                        );
-                      })}
+
+                    {/* Waveform réactive FFT */}
+                    <div className="flex-1 min-w-0">
+                      <WaveformBars isActive={isActive} numBars={36} />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`relative inline-block h-[6px] w-[6px] rounded-full transition-colors duration-500 ${
-                          isActive ? "bg-violet" : "bg-bone/25"
-                        }`}
-                        style={
-                          isActive
-                            ? {
-                                boxShadow:
-                                  "0 0 calc(6px + 6px * var(--pulse) * var(--fx-amp)) color-mix(in oklab, var(--violet) calc(70% * var(--pulse-activation, 0) * var(--fx-glow)), transparent)",
-                              }
-                            : undefined
-                        }
-                      >
-                        {isActive && (
-                          <span
-                            className="absolute inset-0 rounded-full bg-violet/60"
-                            style={{
-                              transform:
-                                "scale(calc(1 + var(--pulse-kick, 0) * 1.4 * var(--fx-kick) + var(--pulse) * 0.25 * var(--fx-amp)))",
-                              opacity:
-                                "calc((0.12 + var(--pulse-kick, 0) * 0.45 * var(--fx-kick)) * var(--pulse-activation, 1) * var(--fx-glow))",
-                              transition: "transform 0.22s ease-out, opacity 0.26s ease-out",
-                            }}
-                          />
-                        )}
-                      </span>
-                      <span
-                        className={`font-mono text-[9px] font-light uppercase tracking-[0.45em] transition-colors duration-500 ${
-                          isActive ? "text-violet/90 track-activate-now-playing" : "text-bone/30"
-                        }`}
-                      >
-                        {isActive ? "Now Playing" : "Stand By"}
-                      </span>
-                    </div>
+
+                    {/* Status */}
+                    <span className={`font-mono text-[9px] uppercase tracking-[0.35em] shrink-0 transition-colors duration-500 ${
+                      isActive ? "text-violet track-activate-now-playing" : "text-bone/25"
+                    }`}>
+                      {isActive ? "Live" : "Stand by"}
+                    </span>
                   </div>
                   <audio
                     ref={(el) => {
@@ -916,7 +969,7 @@ function MusicalDNA() {
           05 · {t.dna.kicker}
         </div>
 
-        <h2 className="font-display mt-4 text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.9] text-balance uppercase">
+        <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.2rem)] leading-[0.9] text-balance uppercase">
           {t.dna.title}
         </h2>
 
@@ -1116,7 +1169,7 @@ function ContactFinal() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           08 · {t.contact.kicker}
         </div>
-        <h2 className="font-display mt-6 text-balance text-[clamp(3rem,7vw,5.5rem)] leading-[0.85]">
+        <h2 className="font-display mt-6 text-balance text-[clamp(3.5rem,9vw,7rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
           <span className="text-violet">{t.contact.headline[1]}</span>

@@ -14,7 +14,7 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIF", feed: "TRANSMISSION ACTIVE" },
     presentation: {
       kicker: "Présentation",
-      title: "La précision avant le chaos.",
+      title: "La précision avant le chaos",
       paragraphs: [
         "IXAN BOY ne copie pas ses influences — il les dissèque pour construire son propre langage.",
         "Musicien, producteur et ingénieur son de formation, IXAN BOY façonne un hardstyle/raw où les mélodies embarquent, la tension monte et chaque détail sonore s’orchestre avec une précision chirurgicale pour former une véritable symphonie raw.",
@@ -24,7 +24,7 @@ export const dict = {
     },
     live: {
       kicker: "Expérience Live",
-      headline: ["Construit", "pour l’impact."],
+      headline: ["Construit", "pour l’impact"],
       side: [],
     },
     why: {
@@ -52,7 +52,7 @@ export const dict = {
     silence: "Le silence prépare l’impact.",
     tracks: {
       kicker: "Matière Sonore",
-      title: "Deux morceaux. Deux visions.",
+      title: "Deux morceaux — Deux visions",
       list: [
         { title: "Take Me Body", mood: "Émotion · Montée · Rupture" },
         { title: "Sex Bomb", mood: "Tension · Précision · Impact" },
@@ -60,7 +60,7 @@ export const dict = {
     },
     dna: {
       kicker: "ADN Musical",
-      title: "Le silence avant la frappe.",
+      title: "Le silence avant la frappe",
       intro: [
         "Des mélodies construites pour installer la tension.",
         "Des impacts pensés pour la détruire.",
@@ -85,7 +85,7 @@ export const dict = {
     },
     contact: {
       kicker: "Contact Booking",
-      headline: ["Booker", "IXAN BOY."],
+      headline: ["Booker", "IXAN BOY"],
       cta: "Réserver IXAN BOY",
       mail: "booking@ixanboy.com",
       end: "Emotion before destruction.",
@@ -103,7 +103,7 @@ export const dict = {
     pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
     presentation: {
       kicker: "Presentation",
-      title: "Precision before chaos.",
+      title: "Precision before chaos",
       paragraphs: [
         "IXAN BOY doesn’t copy his influences — he dissects them to build his own language.",
         "Musician, producer and trained sound engineer, IXAN BOY shapes a hardstyle/raw where melodies carry you, tension keeps rising and every sonic detail is orchestrated with surgical precision to form a true raw symphony.",
@@ -113,7 +113,7 @@ export const dict = {
     },
     live: {
       kicker: "Live Experience",
-      headline: ["Built", "for impact."],
+      headline: ["Built", "for impact"],
       side: [],
     },
     why: {
@@ -141,7 +141,7 @@ export const dict = {
     silence: "Silence prepares the impact.",
     tracks: {
       kicker: "Sonic Matter",
-      title: "Two tracks. Two visions.",
+      title: "Two tracks — Two visions",
       list: [
         { title: "Take Me Body", mood: "Emotion · Rise · Break" },
         { title: "Sex Bomb", mood: "Tension · Precision · Impact" },
@@ -149,7 +149,7 @@ export const dict = {
     },
     dna: {
       kicker: "Musical DNA",
-      title: "The silence before the strike.",
+      title: "The silence before the strike",
       intro: [
         "Melodies built to install the tension.",
         "Impacts designed to destroy it.",
@@ -174,7 +174,7 @@ export const dict = {
     },
     contact: {
       kicker: "Booking Contact",
-      headline: ["Book", "IXAN BOY."],
+      headline: ["Book", "IXAN BOY"],
       cta: "Book IXAN BOY",
       mail: "booking@ixanboy.com",
       end: "Emotion before destruction.",
