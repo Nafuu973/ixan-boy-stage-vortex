@@ -931,45 +931,46 @@ function SignatureTracks() {
                     {tr.title}
                   </h3>
                   {/* ── Player ── */}
-                  <div className="mt-4 flex items-center gap-3 w-full">
-                    {/* Bouton — stable, halo statique, scale uniquement au clic */}
-                    <button
-                      onClick={() => toggle(i)}
-                      aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                      className={`group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
-                        isActive
-                          ? "bg-violet"
-                          : "bg-bone/10 hover:bg-violet/20"
-                      }`}
-                      style={{
-                        boxShadow: isActive
-                          ? "0 0 0 1px var(--violet), 0 0 18px rgba(128,0,255,0.5)"
-                          : "0 0 0 1px rgba(255,255,255,0.1)",
-                      }}
-                    >
-                      {isActive ? (
-                        <span className="flex gap-[3px]">
-                          <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                          <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                        </span>
-                      ) : (
-                        <svg viewBox="0 0 12 12" className="ml-[2px] h-[11px] w-[11px] text-bone/80" fill="currentColor">
-                          <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
-                        </svg>
-                      )}
-                    </button>
+                  <div className="mt-4 flex flex-col items-stretch gap-3 w-full">
+                    {/* Ligne 1 : bouton + status, alignés aux bords */}
+                    <div className="flex items-center justify-between w-full">
+                      <button
+                        onClick={() => toggle(i)}
+                        aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
+                        className={`group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
+                          isActive
+                            ? "bg-violet"
+                            : "bg-bone/10 hover:bg-violet/20"
+                        }`}
+                        style={{
+                          boxShadow: isActive
+                            ? "0 0 0 1px var(--violet), 0 0 18px rgba(128,0,255,0.5)"
+                            : "0 0 0 1px rgba(255,255,255,0.1)",
+                        }}
+                      >
+                        {isActive ? (
+                          <span className="flex gap-[3px]">
+                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
+                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
+                          </span>
+                        ) : (
+                          <svg viewBox="0 0 12 12" className="ml-[2px] h-[11px] w-[11px] text-bone/80" fill="currentColor">
+                            <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
+                          </svg>
+                        )}
+                      </button>
 
-                    {/* Waveform réactive FFT */}
-                    <div className="flex-1 min-w-0">
-                      <WaveformBars isActive={isActive} numBars={36} />
+                      <span className={`font-mono text-[9px] uppercase tracking-[0.35em] shrink-0 transition-colors duration-500 ${
+                        isActive ? "text-violet track-activate-now-playing" : "text-bone/25"
+                      }`}>
+                        {isActive ? "Live" : "Stand by"}
+                      </span>
                     </div>
 
-                    {/* Status */}
-                    <span className={`font-mono text-[9px] uppercase tracking-[0.35em] shrink-0 transition-colors duration-500 ${
-                      isActive ? "text-violet track-activate-now-playing" : "text-bone/25"
-                    }`}>
-                      {isActive ? "Live" : "Stand by"}
-                    </span>
+                    {/* Ligne 2 : Waveform pleine largeur de la cover */}
+                    <div className="w-full">
+                      <WaveformBars isActive={isActive} numBars={96} />
+                    </div>
                   </div>
                   <audio
                     ref={(el) => {
