@@ -640,26 +640,36 @@ function Silence() {
   );
 }
 
-/* Waveform dot-matrix — symétrie horizontale, mask CSS pour les points */
-const WAVEFORM_H = 38;
-const DOT_SIZE = 2.5;   // hauteur d'un point en px
-const DOT_GAP = 1.5;    // gap entre points en px
-const DOT_STRIDE = DOT_SIZE + DOT_GAP;
-function WaveformBars({ isActive, numBars = 90 }: { isActive: boolean; numBars?: number }) {
-  const barsRef = useRef<(HTMLSpanElement | null)[]>([]);
+/* Waveform LED — barres verticales segmentées montant depuis une ligne centrale
+   glow + reflet miroir en dessous, façon equalizer cinématique. */
+const WAVEFORM_TOP_H = 40;          // hauteur de la zone "barres"
+const WAVEFORM_REFLECT_H = 22;      // hauteur du reflet miroir
+const SEG_H = 3;                    // hauteur d'un segment LED en px
+const SEG_GAP = 2;                  // gap entre segments en px
+const SEG_STRIDE = SEG_H + SEG_GAP;
+
+function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?: number }) {
+  const topRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const reflectRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const smoothRef = useRef<number[]>(new Array(numBars).fill(0));
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
     cancelAnimationFrame(rafRef.current);
 
-    if (!isActive) {
+    const applyIdle = () => {
       smoothRef.current = smoothRef.current.map(() => 0);
-      barsRef.current.forEach((bar, idx) => {
-        if (!bar) return;
-        const idle = 0.08 + Math.abs(Math.sin(idx * 0.45)) * 0.05;
-        bar.style.transform = `scaleY(${idle.toFixed(3)})`;
-      });
+      for (let idx = 0; idx < numBars; idx++) {
+        const v = 0.06 + Math.abs(Math.sin(idx * 0.45)) * 0.04;
+        const top = topRefs.current[idx];
+        const ref = reflectRefs.current[idx];
+        if (top) top.style.transform = `scaleY(${v.toFixed(3)})`;
+        if (ref) ref.style.transform = `scaleY(${v.toFixed(3)})`;
+      }
+    };
+
+    if (!isActive) {
+      applyIdle();
       return;
     }
 
@@ -671,25 +681,26 @@ function WaveformBars({ isActive, numBars = 90 }: { isActive: boolean; numBars?:
 
       const smooth = smoothRef.current;
       for (let idx = 0; idx < numBars; idx++) {
-        const bar = barsRef.current[idx];
-        if (!bar) continue;
+        const top = topRefs.current[idx];
+        const ref = reflectRefs.current[idx];
+        if (!top) continue;
         const t0 = idx / numBars;
         const t1 = (idx + 1) / numBars;
-        const lo = Math.floor(Math.pow(t0, 1.6) * data.length * 0.75);
-        const hi = Math.floor(Math.pow(t1, 1.6) * data.length * 0.75);
+        const lo = Math.floor(Math.pow(t0, 1.5) * data.length * 0.78);
+        const hi = Math.floor(Math.pow(t1, 1.5) * data.length * 0.78);
         let sum = 0;
         for (let b = lo; b < Math.max(lo + 1, hi); b++) sum += data[b];
         let raw = (sum / Math.max(1, hi - lo)) / 255;
-        // boost vers les aigus pour casser l'effet cone
-        raw *= 1 + (idx / numBars) * 0.9;
+        raw *= 1 + (idx / numBars) * 0.7;
         raw = Math.min(1, raw);
 
         const prev = smooth[idx];
-        const k = raw > prev ? 0.5 : 0.14;
+        const k = raw > prev ? 0.55 : 0.12;
         smooth[idx] = prev + (raw - prev) * k;
-        const v = Math.max(0.08, smooth[idx]);
-
-        bar.style.transform = `scaleY(${v.toFixed(3)})`;
+        const v = Math.max(0.06, smooth[idx]);
+        const s = v.toFixed(3);
+        top.style.transform = `scaleY(${s})`;
+        if (ref) ref.style.transform = `scaleY(${s})`;
       }
 
       rafRef.current = requestAnimationFrame(tick);
@@ -698,52 +709,89 @@ function WaveformBars({ isActive, numBars = 90 }: { isActive: boolean; numBars?:
     return () => cancelAnimationFrame(rafRef.current);
   }, [isActive, numBars]);
 
-  // mask : points centrés sur l'axe horyzontal, espacés régulièrement
-  // on construit le pattern à partir du centre et on le répète des deux côtés
-  const dotMask = `repeating-linear-gradient(
+  // mask LED : segments horizontaux empilés, créés par un dégradé répété
+  const segMask = `repeating-linear-gradient(
     to bottom,
-    black 0 ${DOT_SIZE}px,
-    transparent ${DOT_SIZE}px ${DOT_STRIDE}px
+    black 0 ${SEG_H}px,
+    transparent ${SEG_H}px ${SEG_STRIDE}px
   )`;
+
+  const activeBg =
+    "linear-gradient(to top, #2a0066 0%, #6a00d8 30%, #b06bff 65%, #ffffff 100%)";
+  const idleBg = "rgba(255,255,255,0.22)";
+
+  const renderBar = (origin: "bottom" | "top", refsArr: React.MutableRefObject<(HTMLSpanElement | null)[]>) =>
+    Array.from({ length: numBars }).map((_, idx) => {
+      const idle = 0.06 + Math.abs(Math.sin(idx * 0.45)) * 0.04;
+      return (
+        <span
+          key={`${origin}-${idx}`}
+          ref={(el) => { refsArr.current[idx] = el; }}
+          style={{
+            flex: "1 1 0",
+            minWidth: 0,
+            height: "100%",
+            transformOrigin: origin === "bottom" ? "center bottom" : "center top",
+            transform: `scaleY(${idle.toFixed(3)})`,
+            background: isActive ? activeBg : idleBg,
+            WebkitMaskImage: segMask,
+            maskImage: segMask,
+            WebkitMaskPosition: origin === "bottom" ? "center bottom" : "center top",
+            maskPosition: origin === "bottom" ? "center bottom" : "center top",
+            filter: isActive
+              ? "drop-shadow(0 0 3px rgba(160,90,255,0.65)) drop-shadow(0 0 8px rgba(128,0,255,0.35))"
+              : "none",
+            willChange: "transform",
+            display: "block",
+          }}
+        />
+      );
+    });
 
   return (
     <div
-      className="flex items-center gap-[1px] mx-auto"
+      className="mx-auto relative"
       style={{
-        height: `${WAVEFORM_H}px`,
         width: "100%",
         maxWidth: "100%",
         contain: "layout paint",
       }}
     >
-      {Array.from({ length: numBars }).map((_, idx) => {
-        const idle = 0.08 + Math.abs(Math.sin(idx * 0.45)) * 0.05;
-        return (
-          <span
-            key={idx}
-            ref={(el) => { barsRef.current[idx] = el; }}
-            style={{
-              flex: "1 1 0",
-              minWidth: 0,
-              height: "100%",
-              transformOrigin: "center",
-              transform: `scaleY(${idle.toFixed(3)})`,
-              background: isActive
-                ? "linear-gradient(to bottom, #3300aa 0%, #8000FF 30%, #cc88ff 50%, #8000FF 70%, #3300aa 100%)"
-                : "rgba(255,255,255,0.30)",
-              WebkitMaskImage: dotMask,
-              maskImage: dotMask,
-              WebkitMaskPosition: "center",
-              maskPosition: "center",
-              filter: isActive
-                ? "drop-shadow(0 0 3px #8000FF) drop-shadow(0 0 6px rgba(128,0,255,0.4))"
-                : "none",
-              willChange: "transform",
-              display: "block",
-            }}
-          />
-        );
-      })}
+      {/* Barres principales (montent depuis la ligne centrale) */}
+      <div
+        className="flex items-end gap-[2px]"
+        style={{ height: `${WAVEFORM_TOP_H}px` }}
+      >
+        {renderBar("bottom", topRefs)}
+      </div>
+
+      {/* Ligne horizontale lumineuse au centre */}
+      <div
+        aria-hidden
+        style={{
+          height: "2px",
+          width: "100%",
+          background: isActive
+            ? "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.95) 50%, transparent 100%)"
+            : "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%)",
+          filter: isActive
+            ? "drop-shadow(0 0 6px rgba(180,120,255,0.9)) drop-shadow(0 0 14px rgba(128,0,255,0.55))"
+            : "none",
+        }}
+      />
+
+      {/* Reflet miroir (en dessous, opacité décroissante) */}
+      <div
+        className="flex items-start gap-[2px]"
+        style={{
+          height: `${WAVEFORM_REFLECT_H}px`,
+          opacity: 0.45,
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)",
+        }}
+      >
+        {renderBar("top", reflectRefs)}
+      </div>
     </div>
   );
 }
