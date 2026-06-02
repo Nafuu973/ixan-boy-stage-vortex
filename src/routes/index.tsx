@@ -680,18 +680,21 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
       an.getByteFrequencyData(data);
 
       const smooth = smoothRef.current;
+      const half = numBars / 2;
       for (let idx = 0; idx < numBars; idx++) {
         const top = topRefs.current[idx];
         const ref = reflectRefs.current[idx];
         if (!top) continue;
-        const t0 = idx / numBars;
-        const t1 = (idx + 1) / numBars;
+        // Symétrie verticale : graves au centre, aigus vers l'extérieur.
+        const dist = Math.abs(idx - (numBars - 1) / 2) / half; // 0 au centre → 1 aux bords
+        const t0 = dist;
+        const t1 = Math.min(1, dist + 1 / half);
         const lo = Math.floor(Math.pow(t0, 1.05) * data.length);
         const hi = Math.floor(Math.pow(t1, 1.05) * data.length);
         let sum = 0;
         for (let b = lo; b < Math.max(lo + 1, hi); b++) sum += data[b];
         let raw = (sum / Math.max(1, hi - lo)) / 255;
-        raw *= 1 + Math.pow(idx / numBars, 1.2) * 2.4;
+        raw *= 1 + Math.pow(dist, 1.2) * 2.4;
         raw = Math.min(1, raw);
 
         const prev = smooth[idx];
