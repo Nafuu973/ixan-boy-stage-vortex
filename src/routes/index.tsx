@@ -960,12 +960,12 @@ function SignatureTracks() {
                     </div>
 
                     {/* Ligne 2 : bouton à gauche + waveform à droite */}
-                    <div className="flex items-center gap-3 w-full">
+                    <div className="flex items-center gap-5 w-full">
                       <div className="relative shrink-0">
                         {/* Halo néon */}
                         <span
                           aria-hidden
-                          className={`absolute -inset-4 rounded-full blur-2xl transition-opacity duration-500 ${
+                          className={`absolute -inset-3 rounded-full blur-2xl transition-opacity duration-500 ${
                             isActive ? "opacity-100" : "opacity-60 group-hover:opacity-90"
                           }`}
                           style={{ background: "radial-gradient(circle, rgba(168,85,247,0.75), transparent 70%)" }}
@@ -973,21 +973,21 @@ function SignatureTracks() {
                         <button
                           onClick={() => toggle(i)}
                           aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                          className="group relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-transparent transition-transform duration-200 active:scale-90 hover:scale-105"
+                          className="group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-transparent transition-transform duration-200 active:scale-90 hover:scale-105"
                           style={{
-                            border: "3px solid #c084fc",
+                            border: "2px solid #c084fc",
                             boxShadow:
-                              "0 0 10px #a855f7, 0 0 22px rgba(168,85,247,0.8), inset 0 0 12px rgba(168,85,247,0.5)",
+                              "0 0 8px #a855f7, 0 0 16px rgba(168,85,247,0.7), inset 0 0 8px rgba(168,85,247,0.45)",
                           }}
                         >
                           {isActive ? (
-                            <span className="flex items-end gap-[4px] h-[20px]">
-                              <span className="w-[5px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 8px #a855f7, 0 0 14px #a855f7", animation: "eqBar 0.6s ease-in-out infinite", height: "60%" }} />
-                              <span className="w-[5px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 8px #a855f7, 0 0 14px #a855f7", animation: "eqBar 0.8s ease-in-out 0.15s infinite", height: "100%" }} />
-                              <span className="w-[5px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 8px #a855f7, 0 0 14px #a855f7", animation: "eqBar 0.7s ease-in-out 0.3s infinite", height: "75%" }} />
+                            <span className="flex items-end gap-[3px] h-[14px]">
+                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.6s ease-in-out infinite", height: "60%" }} />
+                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.8s ease-in-out 0.15s infinite", height: "100%" }} />
+                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.7s ease-in-out 0.3s infinite", height: "75%" }} />
                             </span>
                           ) : (
-                            <svg viewBox="0 0 14 14" className="ml-[3px] h-[20px] w-[20px]" fill="#f0abfc" style={{ filter: "drop-shadow(0 0 5px #a855f7) drop-shadow(0 0 10px #a855f7)" }}>
+                            <svg viewBox="0 0 14 14" className="ml-[2px] h-[14px] w-[14px]" fill="#f0abfc" style={{ filter: "drop-shadow(0 0 4px #a855f7) drop-shadow(0 0 8px #a855f7)" }}>
                               <path d="M3 1.5 L12 7 L3 12.5 Z" />
                             </svg>
                           )}
@@ -998,6 +998,7 @@ function SignatureTracks() {
                         <WaveformBars isActive={isActive} numBars={56} />
                       </div>
                     </div>
+
 
                   </div>
 
