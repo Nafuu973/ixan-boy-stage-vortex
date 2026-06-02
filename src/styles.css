@@ -700,6 +700,13 @@
     100% { transform: translate(0); }
   }
 
+  @keyframes eqBar {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+  }
+
+
+
   @media (prefers-reduced-motion: reduce) {
     /* Intention accessibilité : calmer le mouvement gênant (boucles longues,
        parallaxe, dérive de fumée) SANS tuer les effets signature courts et

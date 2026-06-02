@@ -937,53 +937,68 @@ function SignatureTracks() {
                     {/* Ligne 1 : bouton + status, alignés aux bords */}
                     <div className="flex items-center justify-between w-full">
                       <div className="relative">
-                        {/* Halo flou derrière le bouton */}
+                        {/* Halo radial pulsant */}
                         <span
                           aria-hidden
-                          className={`absolute -inset-2 rounded-full blur-xl transition-opacity duration-500 ${
-                            isActive ? "opacity-100" : "opacity-0"
+                          className={`absolute -inset-3 blur-2xl transition-opacity duration-500 ${
+                            isActive ? "opacity-100 animate-pulse" : "opacity-0 group-hover:opacity-60"
                           }`}
-                          style={{ background: "rgba(168,85,247,0.35)" }}
+                          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.6), transparent 70%)" }}
+                        />
+                        {/* Anneau conique rotatif (cadre octogonal) */}
+                        <span
+                          aria-hidden
+                          className="absolute -inset-[2px]"
+                          style={{
+                            clipPath: "polygon(20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%, 0 20%)",
+                            background: isActive
+                              ? "conic-gradient(from 0deg, #a855f7, #ec4899, #a855f7, #6b21a8, #a855f7)"
+                              : "conic-gradient(from 0deg, rgba(168,85,247,0.7), rgba(168,85,247,0.1), rgba(168,85,247,0.7))",
+                            animation: isActive ? "spin 2.5s linear infinite" : "spin 8s linear infinite",
+                          }}
                         />
                         <button
                           onClick={() => toggle(i)}
                           aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                          className="group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black transition-transform duration-300 active:scale-95"
+                          className="group relative flex h-12 w-12 shrink-0 items-center justify-center transition-transform duration-200 active:scale-90 hover:scale-105"
                           style={{
-                            border: "1px solid rgba(168,85,247,0.5)",
-                            boxShadow: isActive
-                              ? "inset 0 0 12px rgba(168,85,247,0.55), 0 0 0 1px rgba(168,85,247,0.2)"
-                              : "inset 0 0 8px rgba(168,85,247,0.2)",
+                            clipPath: "polygon(20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%, 0 20%)",
+                            background: isActive
+                              ? "radial-gradient(circle at 30% 30%, #2a0a3e 0%, #050010 70%)"
+                              : "radial-gradient(circle at 30% 30%, #1a0a2e 0%, #000 70%)",
                           }}
                         >
+                          {/* Crochets de coin (HUD) */}
+                          <span aria-hidden className="absolute left-[7px] top-[7px] h-[4px] w-[4px] border-l border-t" style={{ borderColor: "#a855f7" }} />
+                          <span aria-hidden className="absolute right-[7px] top-[7px] h-[4px] w-[4px] border-r border-t" style={{ borderColor: "#a855f7" }} />
+                          <span aria-hidden className="absolute left-[7px] bottom-[7px] h-[4px] w-[4px] border-l border-b" style={{ borderColor: "#a855f7" }} />
+                          <span aria-hidden className="absolute right-[7px] bottom-[7px] h-[4px] w-[4px] border-r border-b" style={{ borderColor: "#a855f7" }} />
+
                           {isActive ? (
-                            <span className="flex gap-[5px]">
-                              <span
-                                className="h-[18px] w-[3px] rounded-full"
-                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
-                              />
-                              <span
-                                className="h-[18px] w-[3px] rounded-full"
-                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
-                              />
+                            <span className="flex items-end gap-[3px] h-[16px]">
+                              <span className="w-[3px] rounded-sm" style={{ background: "linear-gradient(to top, #a855f7, #f0abfc)", boxShadow: "0 0 6px #a855f7", animation: "eqBar 0.6s ease-in-out infinite", height: "60%" }} />
+                              <span className="w-[3px] rounded-sm" style={{ background: "linear-gradient(to top, #a855f7, #f0abfc)", boxShadow: "0 0 6px #a855f7", animation: "eqBar 0.8s ease-in-out 0.15s infinite", height: "100%" }} />
+                              <span className="w-[3px] rounded-sm" style={{ background: "linear-gradient(to top, #a855f7, #f0abfc)", boxShadow: "0 0 6px #a855f7", animation: "eqBar 0.7s ease-in-out 0.3s infinite", height: "75%" }} />
                             </span>
                           ) : (
-                            <svg viewBox="0 0 12 12" className="ml-[2px] h-[12px] w-[12px]" fill="#c084fc" style={{ filter: "drop-shadow(0 0 4px #a855f7)" }}>
-                              <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
+                            <svg viewBox="0 0 14 14" className="ml-[2px] h-[14px] w-[14px]" style={{ filter: "drop-shadow(0 0 5px #a855f7)" }}>
+                              <defs>
+                                <linearGradient id={`playGrad-${i}`} x1="0" y1="0" x2="1" y2="1">
+                                  <stop offset="0%" stopColor="#f0abfc" />
+                                  <stop offset="100%" stopColor="#a855f7" />
+                                </linearGradient>
+                              </defs>
+                              <path d="M3 1.5 L12 7 L3 12.5 Z" fill={`url(#playGrad-${i})`} />
                             </svg>
                           )}
-                          {/* Anneau orbital décoratif quand actif */}
-                          {isActive && (
-                            <span
-                              aria-hidden
-                              className="absolute inset-0 rounded-full"
-                              style={{
-                                border: "1.5px solid transparent",
-                                borderTopColor: "#a855f7",
-                                animation: "spin 3s linear infinite",
-                              }}
-                            />
-                          )}
+                          {/* Balayage lumineux au survol */}
+                          <span
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            style={{
+                              background: "linear-gradient(115deg, transparent 40%, rgba(240,171,252,0.25) 50%, transparent 60%)",
+                            }}
+                          />
                         </button>
                       </div>
 
