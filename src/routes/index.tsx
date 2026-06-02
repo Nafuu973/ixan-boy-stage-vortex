@@ -972,7 +972,7 @@ function SignatureTracks() {
 
                     {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
                     <div className="w-full">
-                      <WaveformBars isActive={isActive} numBars={32} />
+                      <WaveformBars isActive={isActive} numBars={56} />
                     </div>
                   </div>
 
