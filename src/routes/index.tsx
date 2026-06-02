@@ -642,9 +642,9 @@ function Silence() {
 
 /* Waveform LED — barres verticales segmentées montant depuis une ligne centrale
    glow + reflet miroir en dessous, façon equalizer cinématique. */
-const WAVEFORM_TOP_H = 40;          // hauteur de la zone "barres"
-const WAVEFORM_REFLECT_H = 22;      // hauteur du reflet miroir
-const SEG_H = 3;                    // hauteur d'un segment LED en px
+const WAVEFORM_TOP_H = 110;         // hauteur de la zone "barres"
+const WAVEFORM_REFLECT_H = 52;      // hauteur du reflet miroir
+const SEG_H = 4;                    // hauteur d'un segment LED en px
 const SEG_GAP = 2;                  // gap entre segments en px
 const SEG_STRIDE = SEG_H + SEG_GAP;
 
@@ -759,7 +759,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     >
       {/* Barres principales (montent depuis la ligne centrale) */}
       <div
-        className="flex items-end gap-[2px]"
+        className="flex items-end gap-[3px]"
         style={{ height: `${WAVEFORM_TOP_H}px` }}
       >
         {renderBar("bottom", topRefs)}
@@ -782,7 +782,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
       {/* Reflet miroir (en dessous, opacité décroissante) */}
       <div
-        className="flex items-start gap-[2px]"
+        className="flex items-start gap-[3px]"
         style={{
           height: `${WAVEFORM_REFLECT_H}px`,
           opacity: 0.45,
@@ -931,7 +931,10 @@ function SignatureTracks() {
                     {tr.title}
                   </h3>
                   {/* ── Player ── */}
-                  <div className="mt-4 flex flex-col items-stretch gap-3 w-full">
+                  <div
+                    className="mt-4 flex flex-col items-stretch gap-3"
+                    style={{ width: "26vh", maxWidth: "100%" }}
+                  >
                     {/* Ligne 1 : bouton + status, alignés aux bords */}
                     <div className="flex items-center justify-between w-full">
                       <button
@@ -967,11 +970,12 @@ function SignatureTracks() {
                       </span>
                     </div>
 
-                    {/* Ligne 2 : Waveform pleine largeur de la cover */}
+                    {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
                     <div className="w-full">
-                      <WaveformBars isActive={isActive} numBars={96} />
+                      <WaveformBars isActive={isActive} numBars={32} />
                     </div>
                   </div>
+
                   <audio
                     ref={(el) => {
                       audioRefs.current[i] = el;
