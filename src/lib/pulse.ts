@@ -1,7 +1,7 @@
-// Global pulse driver — calm by default, switches to balanced FFT analysis while audio plays.
+// Global pulse driver — calm by default, switches to beat/onset analysis while audio plays.
 // Drives multiple CSS variables on document root each rAF:
 //   --pulse           : smoothed total energy envelope (0..1) — drives general motion
-//   --pulse-kick      : short impulse from low-band transients (0..1, fast decay)
+//   --pulse-kick      : short impulse from detected bass/kick onsets (0..1, fast decay)
 //   --pulse-activation: 0→1 ramp on play start, back to 0 on idle
 //   --pulse-low / --pulse-mid / --pulse-high : optional band envelopes (0..1)
 
@@ -26,6 +26,10 @@ let kick = 0;
 let activation = 0;
 let lastKickTime = 0;
 let liveStartTime = 0;
+let bassFast = 0;
+let bassSlow = 0;
+let fluxAvg = 0;
+let fluxDev = 0;
 
 function now() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -49,8 +53,8 @@ function tick() {
 
   if (mode === "live" && analyser && dataArray) {
     analyser.getByteFrequencyData(dataArray as unknown as Uint8Array<ArrayBuffer>);
-    // Balanced band analysis — no longer bass-dominated.
-    instantLow = Math.min(1, bandAverage(dataArray, 2, 10) * 1.35);
+    // Balanced band analysis for global motion.
+    instantLow = Math.min(1, bandAverage(dataArray, 2, 12) * 1.2);
     instantMid = Math.min(1, bandAverage(dataArray, 12, 48) * 1.25);
     instantHigh = Math.min(1, bandAverage(dataArray, 50, 96) * 1.2);
     // Weighted total — mids carry musical motion, lows add weight, highs add sparkle.
@@ -71,37 +75,49 @@ function tick() {
   midEnv = smooth(midEnv, instantMid);
   highEnv = smooth(highEnv, instantHigh);
 
-  // Adaptive baseline for kick detection (slow follow on low band only).
-  lowBaseline += (instantLow - lowBaseline) * 0.012;
+  // Beat detection for the cover: follow real bass onsets, not average loudness.
+  // The first few frames seed the baselines so playback start never creates a fake hit.
+  const lowerMid = mode === "live" && dataArray ? bandAverage(dataArray, 10, 24) : 0;
+  const bassEnergy = Math.min(1, instantLow * 0.82 + lowerMid * 0.38);
+  const sinceLiveStart = mode === "live" && liveStartTime > 0 ? t - liveStartTime : 0;
+  if (mode !== "live" || sinceLiveStart < 420) {
+    bassFast = bassEnergy;
+    bassSlow = bassEnergy;
+    lowBaseline = instantLow;
+    fluxAvg = 0;
+    fluxDev = 0;
+  } else {
+    bassFast += (bassEnergy - bassFast) * 0.5;
+    bassSlow += (bassEnergy - bassSlow) * 0.035;
+    lowBaseline += (instantLow - lowBaseline) * 0.025;
 
-  // Controlled kick detection — low band only, adaptive threshold, 320ms cooldown.
-  const minLevel = 0.42;
-  const ratioGate = 1.5;
-  const cooldownMs = 320;
-  if (
-    mode === "live" &&
-    instantLow >= minLevel &&
-    instantLow > lowBaseline * ratioGate &&
-    t - lastKickTime > cooldownMs
-  ) {
-    kick = Math.min(1, kick + 0.8);
-    lastKickTime = t;
+    const flux = Math.max(0, bassFast - bassSlow);
+    fluxAvg += (flux - fluxAvg) * 0.035;
+    fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.035;
+
+    const threshold = Math.max(0.032, fluxAvg + fluxDev * 2.05);
+    const cooldownMs = 285;
+    const hasBody = bassEnergy > 0.24 && bassEnergy > lowBaseline * 0.92;
+    if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
+      kick = Math.max(kick, Math.min(1, 0.72 + flux * 2.4));
+      lastKickTime = t;
+    }
   }
-  // Fast release (~0.2s)
-  kick *= 0.84;
+  // Very fast release: a hit, then clean return to neutral — no breathing.
+  kick *= 0.76;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
   const targetActivation = mode === "live" ? 1 : 0;
-  const activationStep = mode === "live" ? 0.02 : 0.06;
+  const activationStep = mode === "live" ? 0.1 : 0.08;
   activation += (targetActivation - activation) * activationStep;
   if (mode === "idle" && activation < 0.001) activation = 0;
 
-  // Warm-up window: dampen during the first ~1200ms after play.
+  // Warm-up window: dampen during the first ~700ms after play.
   let warmup = 1;
   if (mode === "live" && liveStartTime > 0) {
     const dt = t - liveStartTime;
-    if (dt < 1200) warmup = Math.max(0, Math.min(1, dt / 1200));
+    if (dt < 700) warmup = Math.max(0, Math.min(1, dt / 700));
   }
 
   const gate = mode === "live" ? activation * warmup : 0;
