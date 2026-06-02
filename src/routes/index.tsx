@@ -698,7 +698,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         raw = Math.min(1, raw);
 
         const prev = smooth[idx];
-        const k = raw > prev ? 0.55 : 0.12;
+        const k = raw > prev ? 0.85 : 0.28;
         smooth[idx] = prev + (raw - prev) * k;
         const v = Math.max(0.06, smooth[idx]);
         const s = v.toFixed(3);
