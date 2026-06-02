@@ -780,14 +780,11 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         }}
       />
 
-      {/* Reflet miroir (en dessous, opacité décroissante) */}
+      {/* Reflet miroir (en dessous, même hauteur que le haut) */}
       <div
         className="flex items-start gap-[3px]"
         style={{
           height: `${WAVEFORM_REFLECT_H}px`,
-          opacity: 0.45,
-          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%)",
         }}
       >
         {renderBar("top", reflectRefs)}
