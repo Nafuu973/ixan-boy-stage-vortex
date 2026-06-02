@@ -700,9 +700,9 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         let raw = peak / 255;
         // Compression douce + boost progressif vers les aigus.
         // Mise à l'échelle douce : on garde de la dynamique sans saturer.
-        raw = Math.pow(raw, 1.15) * 0.85;
-        raw *= 1 + Math.pow(dist, 1.2) * 0.6;
-        raw = Math.min(0.95, raw);
+        raw = Math.pow(raw, 1.05) * 1.05;
+        raw *= 1 + Math.pow(dist, 1.2) * 0.8;
+        raw = Math.min(0.98, raw);
 
         const prev = smooth[idx];
         const k = raw > prev ? 0.9 : 0.32;
