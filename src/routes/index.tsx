@@ -686,16 +686,22 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         const ref = reflectRefs.current[idx];
         if (!top) continue;
         // Symétrie verticale : graves au centre, aigus vers l'extérieur.
+        // Mapping logarithmique pour éviter le "bloc uniforme" au centre.
         const dist = Math.abs(idx - (numBars - 1) / 2) / half; // 0 au centre → 1 aux bords
-        const t0 = dist;
-        const t1 = Math.min(1, dist + 1 / half);
-        const lo = Math.floor(Math.pow(t0, 1.05) * data.length);
-        const hi = Math.floor(Math.pow(t1, 1.05) * data.length);
+        const minT = 0.004; // ~ première bin utile (évite le DC)
+        const maxT = 0.85;  // on coupe les très hautes fréquences (souvent vides)
+        const step = 1 / half;
+        const t0 = minT * Math.pow(maxT / minT, dist);
+        const t1 = minT * Math.pow(maxT / minT, Math.min(1, dist + step));
+        const lo = Math.floor(t0 * data.length);
+        const hi = Math.max(lo + 1, Math.floor(t1 * data.length));
         let sum = 0;
-        for (let b = lo; b < Math.max(lo + 1, hi); b++) sum += data[b];
-        let raw = (sum / Math.max(1, hi - lo)) / 255;
-        raw *= 1 + Math.pow(dist, 1.2) * 2.4;
+        for (let b = lo; b < hi; b++) sum += data[b];
+        let raw = (sum / (hi - lo)) / 255;
+        // Boost progressif vers les aigus pour équilibrer l'énergie.
+        raw *= 1 + Math.pow(dist, 1.1) * 1.8;
         raw = Math.min(1, raw);
+
 
         const prev = smooth[idx];
         const k = raw > prev ? 0.85 : 0.28;
