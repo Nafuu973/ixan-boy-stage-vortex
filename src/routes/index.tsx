@@ -931,7 +931,10 @@ function SignatureTracks() {
                     {tr.title}
                   </h3>
                   {/* ── Player ── */}
-                  <div className="mt-4 flex flex-col items-stretch gap-3 w-full">
+                  <div
+                    className="mt-4 flex flex-col items-stretch gap-3"
+                    style={{ width: "26vh", maxWidth: "100%" }}
+                  >
                     {/* Ligne 1 : bouton + status, alignés aux bords */}
                     <div className="flex items-center justify-between w-full">
                       <button
@@ -967,11 +970,12 @@ function SignatureTracks() {
                       </span>
                     </div>
 
-                    {/* Ligne 2 : Waveform pleine largeur de la cover */}
+                    {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
                     <div className="w-full">
-                      <WaveformBars isActive={isActive} numBars={96} />
+                      <WaveformBars isActive={isActive} numBars={32} />
                     </div>
                   </div>
+
                   <audio
                     ref={(el) => {
                       audioRefs.current[i] = el;
