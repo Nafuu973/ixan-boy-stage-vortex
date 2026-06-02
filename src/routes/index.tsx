@@ -643,7 +643,7 @@ function Silence() {
 /* Waveform LED — barres verticales segmentées montant depuis une ligne centrale
    glow + reflet miroir en dessous, façon equalizer cinématique. */
 const WAVEFORM_TOP_H = 20;          // hauteur de la zone "barres"
-const WAVEFORM_REFLECT_H = 10;      // hauteur du reflet miroir
+const WAVEFORM_REFLECT_H = 20;      // hauteur du reflet miroir (identique au top)
 const SEG_H = 4;                    // hauteur d'un segment LED en px
 const SEG_GAP = 2;                  // gap entre segments en px
 const SEG_STRIDE = SEG_H + SEG_GAP;
