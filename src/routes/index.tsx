@@ -686,30 +686,31 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         const ref = reflectRefs.current[idx];
         if (!top) continue;
         // Symétrie verticale : graves au centre, aigus vers l'extérieur.
-        // Mapping logarithmique pour éviter le "bloc uniforme" au centre.
+        // Mapping log + MAX dans la bande pour préserver les pics (évite le bloc uniforme).
         const dist = Math.abs(idx - (numBars - 1) / 2) / half; // 0 au centre → 1 aux bords
-        const minT = 0.004; // ~ première bin utile (évite le DC)
-        const maxT = 0.85;  // on coupe les très hautes fréquences (souvent vides)
+        const minT = 0.003;
+        const maxT = 0.65; // coupe les très hautes fréquences (souvent vides)
         const step = 1 / half;
         const t0 = minT * Math.pow(maxT / minT, dist);
         const t1 = minT * Math.pow(maxT / minT, Math.min(1, dist + step));
         const lo = Math.floor(t0 * data.length);
         const hi = Math.max(lo + 1, Math.floor(t1 * data.length));
-        let sum = 0;
-        for (let b = lo; b < hi; b++) sum += data[b];
-        let raw = (sum / (hi - lo)) / 255;
-        // Boost progressif vers les aigus pour équilibrer l'énergie.
-        raw *= 1 + Math.pow(dist, 1.1) * 1.8;
+        let peak = 0;
+        for (let b = lo; b < hi; b++) if (data[b] > peak) peak = data[b];
+        let raw = peak / 255;
+        // Compression douce + boost progressif vers les aigus.
+        raw = Math.pow(raw, 0.7);
+        raw *= 1 + Math.pow(dist, 1.1) * 1.4;
         raw = Math.min(1, raw);
 
-
         const prev = smooth[idx];
-        const k = raw > prev ? 0.85 : 0.28;
+        const k = raw > prev ? 0.9 : 0.32;
         smooth[idx] = prev + (raw - prev) * k;
-        const v = Math.max(0.06, smooth[idx]);
+        const v = Math.max(0.05, smooth[idx]);
         const s = v.toFixed(3);
         top.style.transform = `scaleY(${s})`;
         if (ref) ref.style.transform = `scaleY(${s})`;
+
       }
 
       rafRef.current = requestAnimationFrame(tick);
