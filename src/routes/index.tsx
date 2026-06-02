@@ -782,7 +782,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
       {/* Reflet miroir (en dessous, opacité décroissante) */}
       <div
-        className="flex items-start gap-[2px]"
+        className="flex items-start gap-[3px]"
         style={{
           height: `${WAVEFORM_REFLECT_H}px`,
           opacity: 0.45,
