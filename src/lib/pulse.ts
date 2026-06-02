@@ -144,8 +144,8 @@ export function attachLiveAudio(audio: HTMLAudioElement) {
 
     if (!analyser) {
       analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 256;
-      analyser.smoothingTimeConstant = 0.72;
+      analyser.fftSize = 1024;
+      analyser.smoothingTimeConstant = 0.55;
       analyser.connect(audioCtx.destination);
       dataArray = new Uint8Array(analyser.frequencyBinCount);
     }
