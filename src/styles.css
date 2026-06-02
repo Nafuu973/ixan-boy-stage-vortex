@@ -812,9 +812,7 @@
       to   { transform: scale(1.055); }
     }
     .track-cover-shell-active {
-      animation: track-cover-shell-active var(--fx-breathe-dur) ease-in-out infinite alternate;
       transform-origin: center;
-      will-change: transform;
     }
     .track-cover-breathe-active {
       animation-duration: var(--fx-breathe-dur);
