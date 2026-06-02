@@ -936,38 +936,80 @@ function SignatureTracks() {
                   >
                     {/* Ligne 1 : bouton + status, alignés aux bords */}
                     <div className="flex items-center justify-between w-full">
-                      <button
-                        onClick={() => toggle(i)}
-                        aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                        className={`group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
-                          isActive
-                            ? "bg-violet"
-                            : "bg-bone/10 hover:bg-violet/20"
-                        }`}
+                      <div className="relative">
+                        {/* Halo flou derrière le bouton */}
+                        <span
+                          aria-hidden
+                          className={`absolute -inset-2 rounded-full blur-xl transition-opacity duration-500 ${
+                            isActive ? "opacity-100" : "opacity-0"
+                          }`}
+                          style={{ background: "rgba(168,85,247,0.35)" }}
+                        />
+                        <button
+                          onClick={() => toggle(i)}
+                          aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
+                          className="group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black transition-transform duration-300 active:scale-95"
+                          style={{
+                            border: "1px solid rgba(168,85,247,0.5)",
+                            boxShadow: isActive
+                              ? "inset 0 0 12px rgba(168,85,247,0.55), 0 0 0 1px rgba(168,85,247,0.2)"
+                              : "inset 0 0 8px rgba(168,85,247,0.2)",
+                          }}
+                        >
+                          {isActive ? (
+                            <span className="flex gap-[5px]">
+                              <span
+                                className="h-[18px] w-[3px] rounded-full"
+                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
+                              />
+                              <span
+                                className="h-[18px] w-[3px] rounded-full"
+                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
+                              />
+                            </span>
+                          ) : (
+                            <svg viewBox="0 0 12 12" className="ml-[2px] h-[12px] w-[12px]" fill="#c084fc" style={{ filter: "drop-shadow(0 0 4px #a855f7)" }}>
+                              <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
+                            </svg>
+                          )}
+                          {/* Anneau orbital décoratif quand actif */}
+                          {isActive && (
+                            <span
+                              aria-hidden
+                              className="absolute inset-0 rounded-full"
+                              style={{
+                                border: "1.5px solid transparent",
+                                borderTopColor: "#a855f7",
+                                animation: "spin 3s linear infinite",
+                              }}
+                            />
+                          )}
+                        </button>
+                      </div>
+
+                      <div
+                        className="flex items-center gap-2 px-2.5 py-1 rounded-sm transition-colors duration-500"
                         style={{
-                          boxShadow: isActive
-                            ? "0 0 0 1px var(--violet), 0 0 18px rgba(128,0,255,0.5)"
-                            : "0 0 0 1px rgba(255,255,255,0.1)",
+                          background: isActive ? "rgba(88,28,135,0.25)" : "transparent",
+                          border: `1px solid ${isActive ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.08)"}`,
                         }}
                       >
-                        {isActive ? (
-                          <span className="flex gap-[3px]">
-                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                          </span>
-                        ) : (
-                          <svg viewBox="0 0 12 12" className="ml-[2px] h-[11px] w-[11px] text-bone/80" fill="currentColor">
-                            <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
-                          </svg>
-                        )}
-                      </button>
-
-                      <span className={`font-mono text-[9px] uppercase tracking-[0.35em] shrink-0 transition-colors duration-500 ${
-                        isActive ? "text-violet track-activate-now-playing" : "text-bone/25"
-                      }`}>
-                        {isActive ? "Live" : "Stand by"}
-                      </span>
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
+                          style={{
+                            background: isActive ? "#ef4444" : "rgba(255,255,255,0.2)",
+                            boxShadow: isActive ? "0 0 8px #ef4444" : "none",
+                          }}
+                        />
+                        <span
+                          className="font-mono text-[9px] uppercase tracking-[0.25em] font-bold"
+                          style={{ color: isActive ? "#c084fc" : "rgba(255,255,255,0.25)" }}
+                        >
+                          {isActive ? "Live" : "Stand by"}
+                        </span>
+                      </div>
                     </div>
+
 
                     {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
                     <div className="w-full">
