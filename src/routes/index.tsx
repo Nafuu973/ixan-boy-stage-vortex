@@ -686,8 +686,8 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         if (!top) continue;
         const t0 = idx / numBars;
         const t1 = (idx + 1) / numBars;
-        const lo = Math.floor(Math.pow(t0, 1.5) * data.length * 0.78);
-        const hi = Math.floor(Math.pow(t1, 1.5) * data.length * 0.78);
+        const lo = Math.floor(Math.pow(t0, 1.05) * data.length);
+        const hi = Math.floor(Math.pow(t1, 1.05) * data.length);
         let sum = 0;
         for (let b = lo; b < Math.max(lo + 1, hi); b++) sum += data[b];
         let raw = (sum / Math.max(1, hi - lo)) / 255;
