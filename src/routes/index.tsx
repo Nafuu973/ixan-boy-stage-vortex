@@ -759,7 +759,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     >
       {/* Barres principales (montent depuis la ligne centrale) */}
       <div
-        className="flex items-end gap-[2px]"
+        className="flex items-end gap-[3px]"
         style={{ height: `${WAVEFORM_TOP_H}px` }}
       >
         {renderBar("bottom", topRefs)}
