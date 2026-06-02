@@ -900,10 +900,10 @@ function SignatureTracks() {
                         isActive
                           ? {
                               transform:
-                                "scale(calc(1 + var(--pulse-kick, 0) * 0.14 * var(--fx-cover-kick, 1) + var(--pulse) * 0.012 * var(--fx-cover-active, 1)))",
+                                "scale(calc(1 + var(--pulse-kick, 0) * 0.105 * var(--fx-cover-kick, 1)))",
                               filter:
-                                "brightness(calc(1 + var(--pulse-kick, 0) * 0.28 + var(--pulse) * 0.04)) contrast(calc(1 + var(--pulse-kick, 0) * 0.10)) saturate(calc(1 + var(--pulse-kick, 0) * 0.20))",
-                              transition: "transform 40ms cubic-bezier(0.2,0.8,0.2,1), filter 60ms ease-out",
+                                "brightness(calc(1 + var(--pulse-kick, 0) * 0.18)) contrast(calc(1 + var(--pulse-kick, 0) * 0.055)) saturate(calc(1 + var(--pulse-kick, 0) * 0.10))",
+                              transition: "transform 32ms cubic-bezier(0.2,0.9,0.2,1), filter 45ms ease-out",
                               willChange: "transform, filter",
                             }
                           : undefined
@@ -913,7 +913,7 @@ function SignatureTracks() {
                         src={tr.cover}
                         alt={tr.title}
                         loading="lazy"
-                        className={`h-full w-full object-cover ${isActive ? "track-cover-breathe-active" : ""}`}
+                        className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
