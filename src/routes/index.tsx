@@ -934,9 +934,34 @@ function SignatureTracks() {
                     className="mt-4 flex flex-col items-stretch gap-3"
                     style={{ width: "26vh", maxWidth: "100%" }}
                   >
-                    {/* Ligne 1 : bouton + status, alignés aux bords */}
-                    <div className="flex items-center justify-between w-full">
-                      <div className="relative">
+                    {/* Ligne 1 : status LIVE aligné à droite */}
+                    <div className="flex items-center justify-end w-full">
+                      <div
+                        className="flex items-center gap-2 px-2.5 py-1 rounded-sm transition-colors duration-500"
+                        style={{
+                          background: isActive ? "rgba(88,28,135,0.25)" : "transparent",
+                          border: `1px solid ${isActive ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.08)"}`,
+                        }}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
+                          style={{
+                            background: isActive ? "#ef4444" : "rgba(255,255,255,0.2)",
+                            boxShadow: isActive ? "0 0 8px #ef4444" : "none",
+                          }}
+                        />
+                        <span
+                          className="font-mono text-[9px] uppercase tracking-[0.25em] font-bold"
+                          style={{ color: isActive ? "#c084fc" : "rgba(255,255,255,0.25)" }}
+                        >
+                          {isActive ? "Live" : "Stand by"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Ligne 2 : bouton à gauche + waveform à droite */}
+                    <div className="flex items-center gap-3 w-full">
+                      <div className="relative shrink-0">
                         {/* Halo néon */}
                         <span
                           aria-hidden
@@ -969,34 +994,11 @@ function SignatureTracks() {
                         </button>
                       </div>
 
-                      <div
-                        className="flex items-center gap-2 px-2.5 py-1 rounded-sm transition-colors duration-500"
-                        style={{
-                          background: isActive ? "rgba(88,28,135,0.25)" : "transparent",
-                          border: `1px solid ${isActive ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.08)"}`,
-                        }}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
-                          style={{
-                            background: isActive ? "#ef4444" : "rgba(255,255,255,0.2)",
-                            boxShadow: isActive ? "0 0 8px #ef4444" : "none",
-                          }}
-                        />
-                        <span
-                          className="font-mono text-[9px] uppercase tracking-[0.25em] font-bold"
-                          style={{ color: isActive ? "#c084fc" : "rgba(255,255,255,0.25)" }}
-                        >
-                          {isActive ? "Live" : "Stand by"}
-                        </span>
+                      <div className="flex-1 min-w-0">
+                        <WaveformBars isActive={isActive} numBars={56} />
                       </div>
                     </div>
 
-
-                    {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
-                    <div className="w-full">
-                      <WaveformBars isActive={isActive} numBars={56} />
-                    </div>
                   </div>
 
                   <audio
