@@ -720,20 +720,14 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     return () => cancelAnimationFrame(rafRef.current);
   }, [isActive, numBars]);
 
-  // mask LED : segments horizontaux empilés, créés par un dégradé répété
-  const segMask = `repeating-linear-gradient(
-    to bottom,
-    black 0 ${SEG_H}px,
-    transparent ${SEG_H}px ${SEG_STRIDE}px
-  )`;
-
   const activeBg =
-    "linear-gradient(to top, #2a0066 0%, #6a00d8 30%, #b06bff 65%, #ffffff 100%)";
-  const idleBg = "rgba(255,255,255,0.22)";
+    "linear-gradient(to top, rgba(88,28,135,0.6) 0%, #a855f7 55%, #d8b4fe 85%, #ffffff 100%)";
+  const idleBg = "rgba(168,85,247,0.18)";
 
   const renderBar = (origin: "bottom" | "top", refsArr: React.MutableRefObject<(HTMLSpanElement | null)[]>) =>
     Array.from({ length: numBars }).map((_, idx) => {
       const idle = 0.06 + Math.abs(Math.sin(idx * 0.45)) * 0.04;
+      const roundedTop = origin === "bottom" ? "2px 2px 0 0" : "0 0 2px 2px";
       return (
         <span
           key={`${origin}-${idx}`}
@@ -745,13 +739,8 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
             transformOrigin: origin === "bottom" ? "center bottom" : "center top",
             transform: `scaleY(${idle.toFixed(3)})`,
             background: isActive ? activeBg : idleBg,
-            WebkitMaskImage: segMask,
-            maskImage: segMask,
-            WebkitMaskPosition: origin === "bottom" ? "center bottom" : "center top",
-            maskPosition: origin === "bottom" ? "center bottom" : "center top",
-            filter: isActive
-              ? "drop-shadow(0 0 3px rgba(160,90,255,0.65)) drop-shadow(0 0 8px rgba(128,0,255,0.35))"
-              : "none",
+            borderRadius: roundedTop,
+            boxShadow: isActive ? "0 0 6px rgba(168,85,247,0.45)" : "none",
             willChange: "transform",
             display: "block",
           }}
@@ -770,7 +759,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     >
       {/* Barres principales (montent depuis la ligne centrale) */}
       <div
-        className="flex items-end gap-[3px]"
+        className="flex items-end gap-[2px]"
         style={{ height: `${WAVEFORM_TOP_H}px` }}
       >
         {renderBar("bottom", topRefs)}
@@ -780,22 +769,22 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
       <div
         aria-hidden
         style={{
-          height: "2px",
+          height: "1px",
           width: "100%",
           background: isActive
-            ? "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.95) 50%, transparent 100%)"
-            : "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%)",
-          filter: isActive
-            ? "drop-shadow(0 0 6px rgba(180,120,255,0.9)) drop-shadow(0 0 14px rgba(128,0,255,0.55))"
-            : "none",
+            ? "linear-gradient(to right, transparent 0%, #c084fc 50%, transparent 100%)"
+            : "linear-gradient(to right, transparent 0%, rgba(168,85,247,0.3) 50%, transparent 100%)",
+          boxShadow: isActive ? "0 0 10px #a855f7, 0 0 18px rgba(168,85,247,0.5)" : "none",
         }}
       />
 
-      {/* Reflet miroir (en dessous, même hauteur que le haut) */}
+      {/* Reflet miroir (réduit, flouté, atténué) */}
       <div
-        className="flex items-start gap-[3px]"
+        className="flex items-start gap-[2px]"
         style={{
           height: `${WAVEFORM_REFLECT_H}px`,
+          opacity: isActive ? 0.35 : 0.2,
+          filter: "blur(0.5px)",
         }}
       >
         {renderBar("top", reflectRefs)}
@@ -803,6 +792,8 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     </div>
   );
 }
+
+
 
 function SignatureTracks() {
   const t = useT();
@@ -945,38 +936,80 @@ function SignatureTracks() {
                   >
                     {/* Ligne 1 : bouton + status, alignés aux bords */}
                     <div className="flex items-center justify-between w-full">
-                      <button
-                        onClick={() => toggle(i)}
-                        aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
-                        className={`group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 active:scale-95 ${
-                          isActive
-                            ? "bg-violet"
-                            : "bg-bone/10 hover:bg-violet/20"
-                        }`}
+                      <div className="relative">
+                        {/* Halo flou derrière le bouton */}
+                        <span
+                          aria-hidden
+                          className={`absolute -inset-2 rounded-full blur-xl transition-opacity duration-500 ${
+                            isActive ? "opacity-100" : "opacity-0"
+                          }`}
+                          style={{ background: "rgba(168,85,247,0.35)" }}
+                        />
+                        <button
+                          onClick={() => toggle(i)}
+                          aria-label={isActive ? `Pause ${tr.title}` : `Play ${tr.title}`}
+                          className="group relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black transition-transform duration-300 active:scale-95"
+                          style={{
+                            border: "1px solid rgba(168,85,247,0.5)",
+                            boxShadow: isActive
+                              ? "inset 0 0 12px rgba(168,85,247,0.55), 0 0 0 1px rgba(168,85,247,0.2)"
+                              : "inset 0 0 8px rgba(168,85,247,0.2)",
+                          }}
+                        >
+                          {isActive ? (
+                            <span className="flex gap-[5px]">
+                              <span
+                                className="h-[18px] w-[3px] rounded-full"
+                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
+                              />
+                              <span
+                                className="h-[18px] w-[3px] rounded-full"
+                                style={{ background: "#c084fc", boxShadow: "0 0 8px #a855f7" }}
+                              />
+                            </span>
+                          ) : (
+                            <svg viewBox="0 0 12 12" className="ml-[2px] h-[12px] w-[12px]" fill="#c084fc" style={{ filter: "drop-shadow(0 0 4px #a855f7)" }}>
+                              <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
+                            </svg>
+                          )}
+                          {/* Anneau orbital décoratif quand actif */}
+                          {isActive && (
+                            <span
+                              aria-hidden
+                              className="absolute inset-0 rounded-full"
+                              style={{
+                                border: "1.5px solid transparent",
+                                borderTopColor: "#a855f7",
+                                animation: "spin 3s linear infinite",
+                              }}
+                            />
+                          )}
+                        </button>
+                      </div>
+
+                      <div
+                        className="flex items-center gap-2 px-2.5 py-1 rounded-sm transition-colors duration-500"
                         style={{
-                          boxShadow: isActive
-                            ? "0 0 0 1px var(--violet), 0 0 18px rgba(128,0,255,0.5)"
-                            : "0 0 0 1px rgba(255,255,255,0.1)",
+                          background: isActive ? "rgba(88,28,135,0.25)" : "transparent",
+                          border: `1px solid ${isActive ? "rgba(168,85,247,0.4)" : "rgba(255,255,255,0.08)"}`,
                         }}
                       >
-                        {isActive ? (
-                          <span className="flex gap-[3px]">
-                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                            <span className="h-[10px] w-[2.5px] rounded-sm bg-white" />
-                          </span>
-                        ) : (
-                          <svg viewBox="0 0 12 12" className="ml-[2px] h-[11px] w-[11px] text-bone/80" fill="currentColor">
-                            <path d="M2.5 1.5 L10 6 L2.5 10.5 Z" />
-                          </svg>
-                        )}
-                      </button>
-
-                      <span className={`font-mono text-[9px] uppercase tracking-[0.35em] shrink-0 transition-colors duration-500 ${
-                        isActive ? "text-violet track-activate-now-playing" : "text-bone/25"
-                      }`}>
-                        {isActive ? "Live" : "Stand by"}
-                      </span>
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${isActive ? "animate-pulse" : ""}`}
+                          style={{
+                            background: isActive ? "#ef4444" : "rgba(255,255,255,0.2)",
+                            boxShadow: isActive ? "0 0 8px #ef4444" : "none",
+                          }}
+                        />
+                        <span
+                          className="font-mono text-[9px] uppercase tracking-[0.25em] font-bold"
+                          style={{ color: isActive ? "#c084fc" : "rgba(255,255,255,0.25)" }}
+                        >
+                          {isActive ? "Live" : "Stand by"}
+                        </span>
+                      </div>
                     </div>
+
 
                     {/* Ligne 2 : Waveform LED pleine largeur de la cover */}
                     <div className="w-full">
