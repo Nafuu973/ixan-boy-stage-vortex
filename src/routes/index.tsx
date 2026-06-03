@@ -900,10 +900,10 @@ function SignatureTracks() {
                         isActive
                           ? {
                               transform:
-                                "scale(calc(1 + var(--pulse-kick, 0) * 0.07 * var(--fx-cover-kick, 1)))",
+                                "scale(calc(1 + var(--pulse-kick, 0) * 0.052 * var(--fx-cover-kick, 1)))",
                               filter:
-                                "brightness(calc(1 + var(--pulse-kick, 0) * 0.10)) contrast(calc(1 + var(--pulse-kick, 0) * 0.03)) saturate(calc(1 + var(--pulse-kick, 0) * 0.06))",
-                              transition: "transform 90ms cubic-bezier(0.3,0.7,0.3,1), filter 120ms ease-out",
+                                "brightness(calc(1 + var(--pulse-kick, 0) * 0.065)) contrast(calc(1 + var(--pulse-kick, 0) * 0.018)) saturate(calc(1 + var(--pulse-kick, 0) * 0.04))",
+                              transition: "transform 150ms cubic-bezier(0.16,1,0.3,1), filter 180ms ease-out",
                               willChange: "transform, filter",
                             }
                           : undefined
