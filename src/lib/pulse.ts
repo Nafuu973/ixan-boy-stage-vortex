@@ -2,6 +2,7 @@
 // Drives multiple CSS variables on document root each rAF:
 //   --pulse           : smoothed total energy envelope (0..1) — drives general motion
 //   --pulse-kick      : short impulse from detected bass/kick onsets (0..1, fast decay)
+//   --pulse-cover     : bounded cover-only motion signal that always settles back down
 //   --pulse-activation: 0→1 ramp on play start, back to 0 on idle
 //   --pulse-low / --pulse-mid / --pulse-high : optional band envelopes (0..1)
 
@@ -105,8 +106,9 @@ function tick() {
       lastKickTime = t;
     }
 
-    const bodyMotion = Math.min(0.42, bassEnergy * 0.34 + flux * 0.85);
-    coverBeat += (bodyMotion - coverBeat) * (bodyMotion > coverBeat ? 0.34 : 0.16);
+    const bassLift = Math.max(0, bassEnergy - lowBaseline * 0.82);
+    const coverTarget = Math.min(0.34, flux * 2.15 + bassLift * 0.42);
+    coverBeat += (coverTarget - coverBeat) * (coverTarget > coverBeat ? 0.48 : 0.24);
   }
   // Smoother release for a softer beat motion.
   kick *= 0.93;
@@ -128,11 +130,13 @@ function tick() {
 
   const gate = mode === "live" ? activation * warmup : 0;
   const pulseOut = totalEnv * gate;
-  const kickOut = Math.max(kick, coverBeat) * gate;
+  const kickOut = kick * gate;
+  const coverOut = coverBeat * gate;
 
   const root = document.documentElement;
   root.style.setProperty("--pulse", pulseOut.toFixed(3));
   root.style.setProperty("--pulse-kick", kickOut.toFixed(3));
+  root.style.setProperty("--pulse-cover", coverOut.toFixed(3));
   root.style.setProperty("--pulse-activation", activation.toFixed(3));
   root.style.setProperty("--pulse-low", (lowEnv * gate).toFixed(3));
   root.style.setProperty("--pulse-mid", (midEnv * gate).toFixed(3));
@@ -153,6 +157,7 @@ export function stopPulse() {
   const root = document.documentElement;
   root.style.setProperty("--pulse", "0");
   root.style.setProperty("--pulse-kick", "0");
+  root.style.setProperty("--pulse-cover", "0");
   root.style.setProperty("--pulse-activation", "0");
   root.style.setProperty("--pulse-low", "0");
   root.style.setProperty("--pulse-mid", "0");
@@ -213,6 +218,7 @@ export function setPulseLive() {
     highEnv = 0;
     lowBaseline = 0;
     kick = 0;
+    coverBeat = 0;
   }
   mode = "live";
 }
