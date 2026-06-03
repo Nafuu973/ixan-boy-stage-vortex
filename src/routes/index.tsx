@@ -713,6 +713,9 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
       }
 
+      const bassPeak = Math.max(smooth[Math.floor(half) - 1], smooth[Math.floor(half)]);
+      document.documentElement.style.setProperty("--pulse-cover", bassPeak.toFixed(3));
+
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
