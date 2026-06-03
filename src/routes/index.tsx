@@ -893,8 +893,23 @@ function SignatureTracks() {
                 transition={{ duration: 0.7, delay: i * 0.15 }}
                 className={`flex flex-col items-center gap-3 ${i === 1 ? "md:mt-20" : ""}`}
               >
-                <div className="relative">
+                <div className="relative group/wrap">
                   {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
+                  {/* halo néon violet */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-6 rounded-full bg-violet/25 blur-3xl transition-opacity duration-700"
+                    style={{
+                      opacity: isActive
+                        ? `calc(0.35 + var(--pulse-cover, 0) * 0.55)`
+                        : undefined,
+                    }}
+                  />
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-2 rounded-sm bg-violet/15 blur-xl opacity-40 group-hover/wrap:opacity-80 transition-opacity duration-500"
+                    style={isActive ? { opacity: `calc(0.55 + var(--pulse-cover, 0) * 0.4)` } : undefined}
+                  />
                   <div
                     className={`group/cover relative h-[26vh] aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
                       isActive ? "track-cover-shell-active border-violet/30" : "border-bone/10 hover:border-bone/25"
