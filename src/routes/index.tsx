@@ -895,20 +895,41 @@ function SignatureTracks() {
               >
                 <div className="relative group/wrap">
                   {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
-                  {/* halo néon violet */}
+                  {/* halo néon violet — large bloom réactif */}
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute -inset-6 rounded-full bg-violet/25 blur-3xl transition-opacity duration-700"
+                    className="pointer-events-none absolute -inset-10 rounded-full bg-violet/40 blur-3xl transition-opacity duration-500"
                     style={{
                       opacity: isActive
-                        ? `calc(0.35 + var(--pulse-cover, 0) * 0.55)`
+                        ? `calc(0.45 + var(--pulse-cover, 0) * 1.1)`
+                        : undefined,
+                      transform: isActive
+                        ? `scale(calc(1 + var(--pulse-cover, 0) * 0.25))`
                         : undefined,
                     }}
                   />
+                  {/* halo serré — neon edge */}
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute -inset-2 rounded-sm bg-violet/15 blur-xl opacity-40 group-hover/wrap:opacity-80 transition-opacity duration-500"
-                    style={isActive ? { opacity: `calc(0.55 + var(--pulse-cover, 0) * 0.4)` } : undefined}
+                    className="pointer-events-none absolute -inset-3 rounded-sm bg-violet/30 blur-xl opacity-50 group-hover/wrap:opacity-90 transition-opacity duration-300"
+                    style={
+                      isActive
+                        ? {
+                            opacity: `calc(0.7 + var(--pulse-cover, 0) * 0.8)`,
+                            transform: `scale(calc(1 + var(--pulse-cover, 0) * 0.08))`,
+                          }
+                        : undefined
+                    }
+                  />
+                  {/* flash ember sur kick */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -inset-4 rounded-full bg-ember/40 blur-2xl opacity-0"
+                    style={
+                      isActive
+                        ? { opacity: `calc(var(--pulse-cover, 0) * 0.65)` }
+                        : undefined
+                    }
                   />
                   <div
                     className={`group/cover relative h-[26vh] aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
