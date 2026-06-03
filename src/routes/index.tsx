@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, getAnalyser } from "@/lib/pulse";
+import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -25,7 +25,6 @@ function Index() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    startPulse();
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
     let raf = 0;
     const loop = (time: number) => {
@@ -844,6 +843,7 @@ function SignatureTracks() {
     } else {
       attachLiveAudio(target);
     }
+    if (!isPulseRunning()) startPulse();
 
     // Start fresh unless this is a resume after the user's own pause.
     if (!selfPausedRef.current[i] || target.ended) {
