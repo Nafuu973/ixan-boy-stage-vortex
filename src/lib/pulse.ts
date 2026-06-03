@@ -151,6 +151,10 @@ export function startPulse() {
   rafId = requestAnimationFrame(tick);
 }
 
+export function isPulseRunning() {
+  return started;
+}
+
 export function stopPulse() {
   cancelAnimationFrame(rafId);
   started = false;
