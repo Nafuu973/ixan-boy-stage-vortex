@@ -713,7 +713,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
       }
 
-      const bassPeak = Math.max(0, Math.max(smooth[Math.floor(half) - 1], smooth[Math.floor(half)]) - 0.4) / 0.6;
+      const bassPeak = Math.max(0, Math.max(smooth[Math.floor(half) - 1], smooth[Math.floor(half)]) - 0.55) / 0.45;
       document.documentElement.style.setProperty("--pulse-cover", bassPeak.toFixed(3));
 
       rafRef.current = requestAnimationFrame(tick);
@@ -903,7 +903,7 @@ function SignatureTracks() {
                         isActive
                           ? {
                               transform:
-                                "scale(calc(1 + var(--pulse-cover, 0) * 0.15 * var(--fx-cover-kick, 1)))",
+                                "scale(calc(1 + var(--pulse-cover, 0) * 0.10 * var(--fx-cover-kick, 1)))",
                               filter:
                                 "brightness(calc(1 + var(--pulse-cover, 0) * 0.12)) contrast(calc(1 + var(--pulse-cover, 0) * 0.035)) saturate(calc(1 + var(--pulse-cover, 0) * 0.07))",
                               transition: "transform 80ms linear, filter 110ms linear",
