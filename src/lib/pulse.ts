@@ -99,12 +99,12 @@ function tick() {
     const cooldownMs = 230;
     const hasBody = bassEnergy > 0.12 && bassEnergy > lowBaseline * 0.78;
     if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
-      kick = Math.max(kick, Math.min(1, 0.72 + flux * 2.4));
+      kick = Math.max(kick, Math.min(1, 0.6 + flux * 3.2));
       lastKickTime = t;
     }
   }
-  // Very fast release: a hit, then clean return to neutral — no breathing.
-  kick *= 0.76;
+  // Fast release: a hit, then clean return to neutral.
+  kick *= 0.82;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
