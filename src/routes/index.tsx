@@ -900,7 +900,7 @@ function SignatureTracks() {
                         isActive
                           ? {
                               transform:
-                                "scale(calc(1 + var(--pulse-cover, 0) * 0.16 * var(--fx-cover-kick, 1)))",
+                                "scale(calc(1 + var(--pulse-cover, 0) * 0.6 * var(--fx-cover-kick, 1)))",
                               filter:
                                 "brightness(calc(1 + var(--pulse-cover, 0) * 0.12)) contrast(calc(1 + var(--pulse-cover, 0) * 0.035)) saturate(calc(1 + var(--pulse-cover, 0) * 0.07))",
                               transition: "transform 80ms linear, filter 110ms linear",

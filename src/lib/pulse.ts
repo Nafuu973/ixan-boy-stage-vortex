@@ -107,7 +107,7 @@ function tick() {
     }
 
     const bassLift = Math.max(0, bassEnergy - lowBaseline * 0.82);
-    const coverTarget = Math.min(0.34, flux * 2.15 + bassLift * 0.42);
+    const coverTarget = Math.min(0.8, flux * 3.5 + bassLift * 0.6);
     coverBeat += (coverTarget - coverBeat) * (coverTarget > coverBeat ? 0.48 : 0.24);
   }
   // Smoother release for a softer beat motion.
