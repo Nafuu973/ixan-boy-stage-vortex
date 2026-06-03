@@ -23,6 +23,7 @@ let midEnv = 0;
 let highEnv = 0;
 let lowBaseline = 0;   // slow long-term average of low band — adaptive kick threshold
 let kick = 0;
+let coverBeat = 0;
 let activation = 0;
 let lastKickTime = 0;
 let liveStartTime = 0;
@@ -95,17 +96,21 @@ function tick() {
     fluxAvg += (flux - fluxAvg) * 0.06;
     fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.06;
 
-    const threshold = Math.max(0.004, fluxAvg + fluxDev * 0.45);
-    const cooldownMs = 165;
-    const hasBody = bassEnergy > 0.045 && bassEnergy > lowBaseline * 0.52;
+    const threshold = Math.max(0.002, fluxAvg + fluxDev * 0.22);
+    const cooldownMs = 135;
+    const hasBody = bassEnergy > 0.025 && bassEnergy > lowBaseline * 0.38;
     if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
-      const strength = Math.min(0.62, 0.26 + flux * 1.35 + bassEnergy * 0.28);
+      const strength = Math.min(0.5, 0.18 + flux * 0.95 + bassEnergy * 0.22);
       kick = Math.max(kick, strength);
       lastKickTime = t;
     }
+
+    const bodyMotion = Math.min(0.42, bassEnergy * 0.34 + flux * 0.85);
+    coverBeat += (bodyMotion - coverBeat) * (bodyMotion > coverBeat ? 0.34 : 0.16);
   }
   // Smoother release for a softer beat motion.
   kick *= 0.93;
+  if (mode !== "live") coverBeat *= 0.86;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
@@ -123,7 +128,7 @@ function tick() {
 
   const gate = mode === "live" ? activation * warmup : 0;
   const pulseOut = totalEnv * gate;
-  const kickOut = kick * gate;
+  const kickOut = Math.max(kick, coverBeat) * gate;
 
   const root = document.documentElement;
   root.style.setProperty("--pulse", pulseOut.toFixed(3));
