@@ -87,24 +87,24 @@ function tick() {
     fluxAvg = 0;
     fluxDev = 0;
   } else {
-    bassFast += (bassEnergy - bassFast) * 0.5;
-    bassSlow += (bassEnergy - bassSlow) * 0.035;
-    lowBaseline += (instantLow - lowBaseline) * 0.025;
+    bassFast += (bassEnergy - bassFast) * 0.55;
+    bassSlow += (bassEnergy - bassSlow) * 0.04;
+    lowBaseline += (instantLow - lowBaseline) * 0.03;
 
     const flux = Math.max(0, bassFast - bassSlow);
-    fluxAvg += (flux - fluxAvg) * 0.035;
-    fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.035;
+    fluxAvg += (flux - fluxAvg) * 0.05;
+    fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.05;
 
-    const threshold = Math.max(0.032, fluxAvg + fluxDev * 2.05);
-    const cooldownMs = 285;
-    const hasBody = bassEnergy > 0.24 && bassEnergy > lowBaseline * 0.92;
+    const threshold = Math.max(0.014, fluxAvg + fluxDev * 1.25);
+    const cooldownMs = 230;
+    const hasBody = bassEnergy > 0.12 && bassEnergy > lowBaseline * 0.78;
     if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
-      kick = Math.max(kick, Math.min(1, 0.72 + flux * 2.4));
+      kick = Math.max(kick, Math.min(1, 0.6 + flux * 3.2));
       lastKickTime = t;
     }
   }
-  // Very fast release: a hit, then clean return to neutral — no breathing.
-  kick *= 0.76;
+  // Fast release: a hit, then clean return to neutral.
+  kick *= 0.82;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
