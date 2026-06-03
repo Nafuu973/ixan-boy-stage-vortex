@@ -87,25 +87,25 @@ function tick() {
     fluxAvg = 0;
     fluxDev = 0;
   } else {
-    bassFast += (bassEnergy - bassFast) * 0.45;
-    bassSlow += (bassEnergy - bassSlow) * 0.05;
-    lowBaseline += (instantLow - lowBaseline) * 0.035;
+    bassFast += (bassEnergy - bassFast) * 0.38;
+    bassSlow += (bassEnergy - bassSlow) * 0.045;
+    lowBaseline += (instantLow - lowBaseline) * 0.03;
 
     const flux = Math.max(0, bassFast - bassSlow);
     fluxAvg += (flux - fluxAvg) * 0.06;
     fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.06;
 
-    const threshold = Math.max(0.009, fluxAvg + fluxDev * 0.9);
-    const cooldownMs = 200;
-    const hasBody = bassEnergy > 0.08 && bassEnergy > lowBaseline * 0.7;
+    const threshold = Math.max(0.004, fluxAvg + fluxDev * 0.45);
+    const cooldownMs = 165;
+    const hasBody = bassEnergy > 0.045 && bassEnergy > lowBaseline * 0.52;
     if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
-      const strength = Math.min(1, 0.5 + flux * 2.4);
+      const strength = Math.min(0.62, 0.26 + flux * 1.35 + bassEnergy * 0.28);
       kick = Math.max(kick, strength);
       lastKickTime = t;
     }
   }
   // Smoother release for a softer beat motion.
-  kick *= 0.9;
+  kick *= 0.93;
   if (kick < 0.001) kick = 0;
 
   // Activation ramp
