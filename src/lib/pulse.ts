@@ -160,7 +160,7 @@ export function stopPulse() {
   const root = document.documentElement;
   root.style.setProperty("--pulse", "0");
   root.style.setProperty("--pulse-kick", "0");
-  root.style.setProperty("--pulse-cover", "0");
+  
   root.style.setProperty("--pulse-activation", "0");
   root.style.setProperty("--pulse-low", "0");
   root.style.setProperty("--pulse-mid", "0");
