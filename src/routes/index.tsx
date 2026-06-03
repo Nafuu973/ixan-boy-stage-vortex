@@ -843,6 +843,7 @@ function SignatureTracks() {
     } else {
       attachLiveAudio(target);
     }
+    if (!isPulseRunning()) startPulse();
 
     // Start fresh unless this is a resume after the user's own pause.
     if (!selfPausedRef.current[i] || target.ended) {
