@@ -25,7 +25,6 @@ function Index() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    startPulse();
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
     let raf = 0;
     const loop = (time: number) => {
