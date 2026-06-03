@@ -136,7 +136,6 @@ function tick() {
   const root = document.documentElement;
   root.style.setProperty("--pulse", pulseOut.toFixed(3));
   root.style.setProperty("--pulse-kick", kickOut.toFixed(3));
-  root.style.setProperty("--pulse-cover", coverOut.toFixed(3));
   root.style.setProperty("--pulse-activation", activation.toFixed(3));
   root.style.setProperty("--pulse-low", (lowEnv * gate).toFixed(3));
   root.style.setProperty("--pulse-mid", (midEnv * gate).toFixed(3));
@@ -161,7 +160,7 @@ export function stopPulse() {
   const root = document.documentElement;
   root.style.setProperty("--pulse", "0");
   root.style.setProperty("--pulse-kick", "0");
-  root.style.setProperty("--pulse-cover", "0");
+  
   root.style.setProperty("--pulse-activation", "0");
   root.style.setProperty("--pulse-low", "0");
   root.style.setProperty("--pulse-mid", "0");
