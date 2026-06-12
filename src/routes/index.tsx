@@ -12,6 +12,7 @@ import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
+import waveformBg from "@/assets/waveform-bg.mp4.asset.json";
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
