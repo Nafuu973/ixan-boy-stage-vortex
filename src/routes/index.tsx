@@ -12,7 +12,7 @@ import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
-import waveformBg from "@/assets/waveform-bg.mp4.asset.json";
+import waveformBg from "@/assets/waveform-round.mp4.asset.json";
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
@@ -874,8 +874,12 @@ function SignatureTracks() {
 
   return (
     <section id="tracks" className="relative overflow-hidden bg-void py-10 md:py-12">
-      {/* Waveform vidéo en arrière-plan — teinté violet, réactif au pulse */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      {/* Waveform vidéo ronde en arrière-plan — teinté violet, réactif au pulse */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 grid place-items-center bg-void"
+        style={{ containerType: "size" }}
+      >
         <video
           src={waveformBg.url}
           autoPlay
@@ -883,30 +887,17 @@ function SignatureTracks() {
           loop
           playsInline
           preload="auto"
-          className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
           style={{
-            opacity: "calc(0.32 + var(--pulse, 0) * 0.18 + var(--pulse-kick, 0) * 0.15)",
+            width: "min(100cqw, 100cqh)",
+            height: "min(100cqw, 100cqh)",
+            objectFit: "fill",
+            opacity: "calc(0.38 + var(--pulse, 0) * 0.2 + var(--pulse-kick, 0) * 0.18)",
             filter:
-              "hue-rotate(75deg) saturate(0.85) brightness(calc(0.85 + var(--pulse, 0) * 0.35)) blur(calc(2px - var(--pulse, 0) * 2px))",
-            transform: `translate(-50%, -50%) scale(calc(1.08 + var(--pulse, 0) * 0.06 + var(--pulse-kick, 0) * 0.04))`,
+              "hue-rotate(75deg) saturate(0.85) brightness(calc(0.9 + var(--pulse, 0) * 0.35)) blur(calc(1.5px - var(--pulse, 0) * 1.5px))",
+            transform:
+              "scale(calc(1 + var(--pulse, 0) * 0.04 + var(--pulse-kick, 0) * 0.03))",
             mixBlendMode: "screen",
             transition: "opacity 120ms linear",
-          }}
-        />
-        {/* Masque central pour cacher le watermark "Envato" */}
-        <div
-          className="absolute left-1/2 top-1/2 h-[40%] w-[55%] -translate-x-1/2 -translate-y-1/2"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, oklch(0.08 0.01 270 / 0.95) 0%, oklch(0.08 0.01 270 / 0.7) 40%, transparent 75%)",
-          }}
-        />
-        {/* Vignette globale pour fondre les bords dans le void */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 20%, oklch(0.08 0.01 270 / 0.55) 60%, oklch(0.08 0.01 270 / 0.95) 100%)",
           }}
         />
       </div>
