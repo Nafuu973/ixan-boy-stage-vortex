@@ -873,8 +873,45 @@ function SignatureTracks() {
   };
 
   return (
-    <section id="tracks" className="relative bg-void py-10 md:py-12">
-      <div className="px-5 md:px-20">
+    <section id="tracks" className="relative overflow-hidden bg-void py-10 md:py-12">
+      {/* Waveform vidéo en arrière-plan — teinté violet, réactif au pulse */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+        <video
+          src={waveformBg.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 object-cover"
+          style={{
+            opacity: "calc(0.32 + var(--pulse, 0) * 0.18 + var(--pulse-kick, 0) * 0.15)",
+            filter:
+              "hue-rotate(75deg) saturate(0.85) brightness(calc(0.85 + var(--pulse, 0) * 0.35)) blur(calc(2px - var(--pulse, 0) * 2px))",
+            transform: `translate(-50%, -50%) scale(calc(1.08 + var(--pulse, 0) * 0.06 + var(--pulse-kick, 0) * 0.04))`,
+            mixBlendMode: "screen",
+            transition: "opacity 120ms linear",
+          }}
+        />
+        {/* Masque central pour cacher le watermark "Envato" */}
+        <div
+          className="absolute left-1/2 top-1/2 h-[40%] w-[55%] -translate-x-1/2 -translate-y-1/2"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, oklch(0.08 0.01 270 / 0.95) 0%, oklch(0.08 0.01 270 / 0.7) 40%, transparent 75%)",
+          }}
+        />
+        {/* Vignette globale pour fondre les bords dans le void */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 20%, oklch(0.08 0.01 270 / 0.55) 60%, oklch(0.08 0.01 270 / 0.95) 100%)",
+          }}
+        />
+      </div>
+      <div className="relative z-10 px-5 md:px-20">
+
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
         </div>
