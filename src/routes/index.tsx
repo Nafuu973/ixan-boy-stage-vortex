@@ -5,6 +5,7 @@ import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
+import { startTeaser, duckTeaser, unduckTeaser } from "@/lib/teaser";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -45,6 +46,7 @@ function Index() {
     <LangCtx.Provider value={{ lang, setLang }}>
       <main className="relative bg-void text-bone">
         <Preloader done={ready} />
+        <EnterOverlay visible={ready} />
         <TopBar lang={lang} setLang={setLang} />
         <Hero />
         <PulseBar />
@@ -60,6 +62,54 @@ function Index() {
         <Footer />
       </main>
     </LangCtx.Provider>
+  );
+}
+
+function EnterOverlay({ visible }: { visible: boolean }) {
+  const [dismissed, setDismissed] = useState(false);
+  const open = visible && !dismissed;
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+          className="fixed inset-0 z-[180] flex flex-col items-center justify-center gap-10 bg-void/95 backdrop-blur-sm"
+        >
+          <div className="flex flex-col items-center gap-4 text-center">
+            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-violet">
+              Press play to enter
+            </span>
+            <span className="font-display text-3xl text-bone md:text-5xl">
+              IXAN&nbsp;BOY · EPK
+            </span>
+            <span className="max-w-xs font-mono text-[10px] uppercase tracking-[0.28em] text-bone/55">
+              Experience with sound — recommended
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              startTeaser();
+              setDismissed(true);
+            }}
+            className="group relative grid h-24 w-24 place-items-center rounded-full border border-violet/60 bg-violet/10 transition hover:border-violet hover:bg-violet/20"
+            style={{ boxShadow: "0 0 60px oklch(0.55 0.28 295 / 0.45)" }}
+            aria-label="Enter"
+          >
+            <svg viewBox="0 0 14 14" className="ml-[3px] h-7 w-7 fill-bone transition group-hover:fill-bone">
+              <path d="M3 1.5 L12 7 L3 12.5 Z" />
+            </svg>
+            <span className="absolute inset-0 -z-10 animate-ping rounded-full border border-violet/40" />
+          </button>
+          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-bone/45">
+            Enter · son activé
+          </span>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -814,11 +864,29 @@ function SignatureTracks() {
   // button (resume-from-position) vs. paused due to a switch/end/error (restart).
   const selfPausedRef = useRef<boolean[]>([false, false]);
 
+  const duckedRef = useRef(false);
+  const ensureDucked = () => {
+    if (!duckedRef.current) {
+      duckTeaser();
+      duckedRef.current = true;
+    }
+  };
+  const releaseDuckIfIdle = () => {
+    const anyAudioPlaying = audioRefs.current.some(
+      (audio) => audio && !audio.paused && !audio.ended,
+    );
+    if (!anyAudioPlaying && duckedRef.current) {
+      unduckTeaser();
+      duckedRef.current = false;
+    }
+  };
+
   const setCalmIfNoAudioPlaying = () => {
     const anyAudioPlaying = audioRefs.current.some(
       (audio) => audio && !audio.paused && !audio.ended,
     );
     if (!anyAudioPlaying) setPulseIdle();
+    releaseDuckIfIdle();
   };
 
   const toggle = (i: number) => {
@@ -862,11 +930,15 @@ function SignatureTracks() {
     }
     selfPausedRef.current[i] = false;
 
+    // Duck the background teaser before the track starts.
+    ensureDucked();
+
     // Keep play() directly inside the user gesture; visuals activate on onPlaying.
     const p = target.play();
     if (p && typeof p.catch === "function") {
       p.catch(() => {
         setPulseIdle();
+        releaseDuckIfIdle();
         setActiveIndex((cur) => (cur === i ? null : cur));
       });
     }
