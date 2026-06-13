@@ -930,11 +930,15 @@ function SignatureTracks() {
     }
     selfPausedRef.current[i] = false;
 
+    // Duck the background teaser before the track starts.
+    ensureDucked();
+
     // Keep play() directly inside the user gesture; visuals activate on onPlaying.
     const p = target.play();
     if (p && typeof p.catch === "function") {
       p.catch(() => {
         setPulseIdle();
+        releaseDuckIfIdle();
         setActiveIndex((cur) => (cur === i ? null : cur));
       });
     }
