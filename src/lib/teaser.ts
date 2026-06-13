@@ -28,7 +28,7 @@ function ensureAudio(): HTMLAudioElement | null {
   a.loop = true;
   a.preload = "auto";
   a.crossOrigin = "anonymous";
-  a.playsInline = true;
+  a.setAttribute("playsinline", "");
   // muted-friendly default; real volume controlled by GainNode below.
   a.volume = 1;
   audio = a;
