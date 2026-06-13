@@ -1,6 +1,10 @@
 // Global background teaser player — "Reclaim The Fire" loop.
-// Plays at low ambient volume during the whole visit, ducks out smoothly
-// when a Signature Track is playing, and resumes from its last position.
+// Cross-browser (Chrome, Safari iOS/macOS, Firefox, Edge, Android).
+//
+// iOS Safari ignores HTMLMediaElement.volume, so we route the audio through
+// a Web Audio GainNode for real volume control + smooth fades everywhere.
+// AudioContext is created lazily inside a user gesture (Enter button) to
+// satisfy mobile autoplay policies.
 
 import teaserAsset from "@/assets/reclaim-the-fire-teaser.mp3.asset.json";
 
@@ -8,44 +12,107 @@ const TARGET_VOLUME = 0.45;
 const FADE_MS = 400;
 
 let audio: HTMLAudioElement | null = null;
+let ctx: AudioContext | null = null;
+let gain: GainNode | null = null;
+let sourceNode: MediaElementAudioSourceNode | null = null;
 let started = false;
-let duckCount = 0; // how many things are currently requesting the teaser be quiet
-let fadeRaf = 0;
+let duckCount = 0;
+let usingGain = false;
 
-function getAudio(): HTMLAudioElement | null {
+type WebkitWindow = Window & { webkitAudioContext?: typeof AudioContext };
+
+function ensureAudio(): HTMLAudioElement | null {
   if (typeof window === "undefined") return null;
   if (audio) return audio;
-  audio = new Audio(teaserAsset.url);
-  audio.loop = true;
-  audio.preload = "auto";
-  audio.volume = 0;
-  audio.crossOrigin = "anonymous";
-  return audio;
+  const a = new Audio(teaserAsset.url);
+  a.loop = true;
+  a.preload = "auto";
+  a.crossOrigin = "anonymous";
+  a.playsInline = true;
+  // muted-friendly default; real volume controlled by GainNode below.
+  a.volume = 1;
+  audio = a;
+  return a;
+}
+
+function ensureGainGraph() {
+  if (usingGain || typeof window === "undefined") return;
+  const a = ensureAudio();
+  if (!a) return;
+  try {
+    const Ctx =
+      window.AudioContext ||
+      (window as WebkitWindow).webkitAudioContext;
+    if (!Ctx) return;
+    ctx = new Ctx();
+    sourceNode = ctx.createMediaElementSource(a);
+    gain = ctx.createGain();
+    gain.gain.value = 0;
+    sourceNode.connect(gain);
+    gain.connect(ctx.destination);
+    usingGain = true;
+  } catch {
+    // Fallback: keep using element.volume (works on desktop browsers).
+    usingGain = false;
+  }
+}
+
+function currentGainValue(): number {
+  if (usingGain && gain && ctx) return gain.gain.value;
+  return audio?.volume ?? 0;
+}
+
+function setGainValue(v: number) {
+  if (usingGain && gain) {
+    gain.gain.value = v;
+  } else if (audio) {
+    audio.volume = v;
+  }
 }
 
 function fadeTo(target: number, ms = FADE_MS, onDone?: () => void) {
-  const a = getAudio();
+  if (usingGain && gain && ctx) {
+    const now = ctx.currentTime;
+    const from = gain.gain.value;
+    gain.gain.cancelScheduledValues(now);
+    gain.gain.setValueAtTime(from, now);
+    gain.gain.linearRampToValueAtTime(target, now + ms / 1000);
+    window.setTimeout(() => {
+      // Snap exact value at end and notify.
+      if (gain) gain.gain.setValueAtTime(target, ctx!.currentTime);
+      onDone?.();
+    }, ms);
+    return;
+  }
+
+  // requestAnimationFrame fallback for non-Web-Audio paths.
+  const a = audio;
   if (!a) return;
-  cancelAnimationFrame(fadeRaf);
   const from = a.volume;
   const start = performance.now();
   const step = (t: number) => {
     const k = Math.min(1, (t - start) / ms);
     a.volume = from + (target - from) * k;
     if (k < 1) {
-      fadeRaf = requestAnimationFrame(step);
+      requestAnimationFrame(step);
     } else {
       a.volume = target;
       onDone?.();
     }
   };
-  fadeRaf = requestAnimationFrame(step);
+  requestAnimationFrame(step);
 }
 
 export function startTeaser() {
-  const a = getAudio();
+  const a = ensureAudio();
   if (!a) return;
+  // MUST be called inside a user gesture for iOS/Safari to allow audio.
+  ensureGainGraph();
+  if (ctx && ctx.state === "suspended") {
+    void ctx.resume().catch(() => undefined);
+  }
   started = true;
+  setGainValue(0);
   const p = a.play();
   if (p && typeof p.catch === "function") {
     p.catch(() => undefined);
@@ -59,19 +126,40 @@ export function isTeaserStarted() {
 
 export function duckTeaser() {
   duckCount += 1;
-  const a = getAudio();
-  if (!a || !started) return;
+  if (!started) return;
   fadeTo(0, FADE_MS, () => {
-    if (duckCount > 0) a.pause();
+    if (duckCount > 0 && audio && !audio.paused) {
+      audio.pause();
+    }
   });
 }
 
 export function unduckTeaser() {
   duckCount = Math.max(0, duckCount - 1);
-  if (duckCount > 0) return;
-  const a = getAudio();
-  if (!a || !started) return;
-  const p = a.play();
+  if (duckCount > 0 || !started || !audio) return;
+  if (ctx && ctx.state === "suspended") {
+    void ctx.resume().catch(() => undefined);
+  }
+  // Start from silence then fade back up so the resume isn't abrupt.
+  setGainValue(0);
+  const p = audio.play();
   if (p && typeof p.catch === "function") p.catch(() => undefined);
   fadeTo(TARGET_VOLUME);
 }
+
+// Pause/resume on tab visibility — saves battery on mobile, also avoids the
+// teaser blasting when the user comes back after a long time.
+if (typeof document !== "undefined") {
+  document.addEventListener("visibilitychange", () => {
+    if (!started || !audio) return;
+    if (document.hidden) {
+      audio.pause();
+    } else if (duckCount === 0) {
+      const p = audio.play();
+      if (p && typeof p.catch === "function") p.catch(() => undefined);
+    }
+  });
+}
+
+// Silence unused-import lint without changing the surface.
+export const __ping = () => currentGainValue();
