@@ -80,7 +80,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
         >
           <div className="flex flex-col items-center gap-4 text-center">
             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-violet">
-              Avant l'impact, le silence
+              Reclaim The Fire — Ixan Boy · Sortie prévue en septembre
             </span>
             <span className="font-display text-3xl text-bone md:text-5xl">
               IXAN&nbsp;BOY · EPK
@@ -91,24 +91,32 @@ function EnterOverlay({ visible }: { visible: boolean }) {
               <span className="text-bone/35">Music experience · Turn the sound up</span>
             </span>
           </div>
-          <button
+          <motion.button
             type="button"
             onClick={() => {
               startTeaser();
               setDismissed(true);
             }}
-            className="group relative grid h-24 w-24 place-items-center rounded-full border border-violet/60 bg-violet/10 transition hover:border-violet hover:bg-violet/20"
-            style={{ boxShadow: "0 0 60px oklch(0.55 0.28 295 / 0.45)" }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.94 }}
+            animate={{
+              boxShadow: [
+                "0 0 30px oklch(0.55 0.28 295 / 0.35)",
+                "0 0 70px oklch(0.55 0.28 295 / 0.65)",
+                "0 0 30px oklch(0.55 0.28 295 / 0.35)",
+              ],
+            }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            className="group relative grid h-16 w-16 place-items-center rounded-full border border-violet/70 bg-violet/15 transition hover:border-violet hover:bg-violet/25"
             aria-label="Enter"
           >
-            <svg viewBox="0 0 14 14" className="ml-[3px] h-7 w-7 fill-bone transition group-hover:fill-bone">
+            <svg viewBox="0 0 14 14" className="ml-[2px] h-5 w-5 fill-bone transition group-hover:fill-bone">
               <path d="M3 1.5 L12 7 L3 12.5 Z" />
             </svg>
             <span className="absolute inset-0 -z-10 animate-ping rounded-full border border-violet/40" />
-          </button>
-          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-bone/45">
-            Enter · son activé
-          </span>
+            <span className="absolute -inset-2 -z-10 rounded-full border border-violet/20" />
+          </motion.button>
+
         </motion.div>
       )}
     </AnimatePresence>
