@@ -864,11 +864,29 @@ function SignatureTracks() {
   // button (resume-from-position) vs. paused due to a switch/end/error (restart).
   const selfPausedRef = useRef<boolean[]>([false, false]);
 
+  const duckedRef = useRef(false);
+  const ensureDucked = () => {
+    if (!duckedRef.current) {
+      duckTeaser();
+      duckedRef.current = true;
+    }
+  };
+  const releaseDuckIfIdle = () => {
+    const anyAudioPlaying = audioRefs.current.some(
+      (audio) => audio && !audio.paused && !audio.ended,
+    );
+    if (!anyAudioPlaying && duckedRef.current) {
+      unduckTeaser();
+      duckedRef.current = false;
+    }
+  };
+
   const setCalmIfNoAudioPlaying = () => {
     const anyAudioPlaying = audioRefs.current.some(
       (audio) => audio && !audio.paused && !audio.ended,
     );
     if (!anyAudioPlaying) setPulseIdle();
+    releaseDuckIfIdle();
   };
 
   const toggle = (i: number) => {
