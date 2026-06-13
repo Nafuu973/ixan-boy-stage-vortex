@@ -80,13 +80,15 @@ function EnterOverlay({ visible }: { visible: boolean }) {
         >
           <div className="flex flex-col items-center gap-4 text-center">
             <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-violet">
-              Press play to enter
+              Avant l'impact, le silence
             </span>
             <span className="font-display text-3xl text-bone md:text-5xl">
               IXAN&nbsp;BOY · EPK
             </span>
-            <span className="max-w-xs font-mono text-[10px] uppercase tracking-[0.28em] text-bone/55">
-              Experience with sound — recommended
+            <span className="max-w-[22rem] font-mono text-[9px] uppercase tracking-[0.32em] text-bone/55">
+              Expérience musicale · Montez le son
+              <br />
+              <span className="text-bone/35">Music experience · Turn the sound up</span>
             </span>
           </div>
           <button
