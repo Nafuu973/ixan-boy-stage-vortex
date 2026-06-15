@@ -1086,81 +1086,96 @@ function WaveformCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const BARS = 128;
-    const idleData = new Uint8Array(BARS);
-
     function resize() {
-      const s = Math.min(canvas!.offsetWidth, canvas!.offsetHeight);
-      canvas!.width = s * window.devicePixelRatio;
-      canvas!.height = s * window.devicePixelRatio;
+      canvas!.width = canvas!.offsetWidth * window.devicePixelRatio;
+      canvas!.height = canvas!.offsetHeight * window.devicePixelRatio;
     }
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
+    // 6 anneaux elliptiques, couleurs EPK
+    const RINGS = 6;
+    const DOTS = 110;
+    const PALETTE: [number, number, number][] = [
+      [128, 0, 255],   // violet
+      [200, 60, 255],  // violet clair
+      [255, 255, 255], // blanc
+      [255, 80, 200],  // rose
+      [160, 30, 255],  // violet foncé
+      [220, 120, 255], // lavande
+    ];
+
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
-      const an = getAnalyser();
       const W = canvas!.width;
       const H = canvas!.height;
       const cx = W / 2;
       const cy = H / 2;
-      const R = W * 0.34;
+      const t = performance.now() / 1000;
 
       ctx!.clearRect(0, 0, W, H);
 
-      let data: Uint8Array = idleData;
+      const an = getAnalyser();
+      const freq = new Uint8Array(an ? an.frequencyBinCount : 256);
       if (an) {
-        const buf = new Uint8Array(an.frequencyBinCount);
-        an.getByteFrequencyData(buf as unknown as Uint8Array<ArrayBuffer>);
-        // Downsample to BARS
-        const step = Math.floor(buf.length / BARS);
-        for (let i = 0; i < BARS; i++) {
-          idleData[i] = buf[i * step];
-        }
-        data = idleData;
+        an.getByteFrequencyData(freq as unknown as Uint8Array<ArrayBuffer>);
       } else {
-        // Idle: gentle sine breathing
-        const t = performance.now() / 1000;
-        for (let i = 0; i < BARS; i++) {
-          idleData[i] = 18 + Math.sin(t * 0.8 + (i / BARS) * Math.PI * 4) * 14;
+        // Respiration douce au repos
+        for (let i = 0; i < freq.length; i++) {
+          freq[i] = 20 + Math.sin(t * 0.6 + i * 0.08) * 16 + Math.sin(t * 1.1 + i * 0.04) * 8;
         }
       }
 
-      // Draw circular waveform
-      for (let i = 0; i < BARS; i++) {
-        const angle = (i / BARS) * Math.PI * 2 - Math.PI / 2;
-        const v = data[i] / 255;
-        const barH = R * 0.12 + v * R * 0.55;
+      // Énergie globale pour scale
+      let totalEnergy = 0;
+      for (let i = 0; i < freq.length; i++) totalEnergy += freq[i];
+      totalEnergy = totalEnergy / (freq.length * 255);
 
-        const x1 = cx + Math.cos(angle) * R;
-        const y1 = cy + Math.sin(angle) * R;
-        const x2 = cx + Math.cos(angle) * (R + barH);
-        const y2 = cy + Math.sin(angle) * (R + barH);
+      const baseRx = W * 0.44; // rayon horizontal max
+      const tilt = 0.28;       // compression verticale (perspective 3D)
 
-        const intensity = 0.3 + v * 0.7;
-        // Violet → ember gradient based on energy
-        const r = Math.round(128 + v * 127);
-        const g = Math.round(v * 40);
-        const b = Math.round(255 - v * 200);
+      for (let ring = 0; ring < RINGS; ring++) {
+        const f = (ring + 1) / RINGS;
+        const rx = baseRx * f;
+        const ry = rx * tilt;
 
-        ctx!.beginPath();
-        ctx!.moveTo(x1, y1);
-        ctx!.lineTo(x2, y2);
-        ctx!.strokeStyle = `rgba(${r},${g},${b},${intensity})`;
-        ctx!.lineWidth = (W / BARS) * 0.6;
-        ctx!.lineCap = "round";
-        ctx!.stroke();
+        // Fréquences assignées à cet anneau (basses → centre, aigus → extérieur)
+        const fStart = Math.floor((ring / RINGS) * freq.length * 0.65);
+        const fEnd = Math.floor(((ring + 1) / RINGS) * freq.length * 0.65);
+
+        let ringEnergy = 0;
+        for (let i = fStart; i < fEnd; i++) ringEnergy += freq[i] / 255;
+        ringEnergy /= Math.max(1, fEnd - fStart);
+
+        // Rotation lente alternée par anneau
+        const rot = t * (ring % 2 === 0 ? 0.04 : -0.06) * (0.5 + ring * 0.15);
+        const [r, g, b] = PALETTE[ring % PALETTE.length];
+
+        for (let d = 0; d < DOTS; d++) {
+          const angle = (d / DOTS) * Math.PI * 2 + rot;
+          const fIdx = Math.min(freq.length - 1, fStart + Math.floor((d / DOTS) * (fEnd - fStart)));
+          const v = freq[fIdx] / 255;
+
+          const x = cx + Math.cos(angle) * rx;
+          const y = cy + Math.sin(angle) * ry;
+
+          // Déplacement vertical réactif (les points montent/descendent)
+          const lift = Math.sin(angle) * ry * v * 0.4;
+          const dotY = y - lift;
+
+          const size = Math.max(1.5, (W * 0.0035) * (0.4 + v * 1.8 + ringEnergy * 0.6));
+          const alpha = 0.25 + v * 0.75 + ringEnergy * 0.15;
+
+          ctx!.shadowBlur = size * 4;
+          ctx!.shadowColor = `rgba(${r},${g},${b},0.7)`;
+          ctx!.beginPath();
+          ctx!.arc(x, dotY, size, 0, Math.PI * 2);
+          ctx!.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha)})`;
+          ctx!.fill();
+        }
       }
-
-      // Inner glow circle
-      const grad = ctx!.createRadialGradient(cx, cy, R * 0.3, cx, cy, R);
-      grad.addColorStop(0, "rgba(128,0,255,0.08)");
-      grad.addColorStop(1, "rgba(128,0,255,0)");
-      ctx!.beginPath();
-      ctx!.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx!.fillStyle = grad;
-      ctx!.fill();
+      ctx!.shadowBlur = 0;
     }
 
     draw();
@@ -1171,18 +1186,10 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-0 grid place-items-center"
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
       <canvas
         ref={canvasRef}
-        style={{
-          width: "min(100%, 90vh)",
-          height: "min(100%, 90vh)",
-          mixBlendMode: "screen",
-          opacity: 0.75,
-        }}
+        style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.85 }}
       />
     </div>
   );
