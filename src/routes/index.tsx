@@ -1077,34 +1077,45 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
 
 function WaveformCanvas() {
+  const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    const wrap = wrapRef.current;
+    if (!canvas || !wrap) return;
+    const ctx = canvas.getContext("2d")!;
+
+    const dpr = window.devicePixelRatio || 1;
 
     function resize() {
-      canvas!.width = canvas!.offsetWidth * window.devicePixelRatio;
-      canvas!.height = canvas!.offsetHeight * window.devicePixelRatio;
+      const W = wrap!.offsetWidth;
+      const H = wrap!.offsetHeight;
+      canvas!.width = W * dpr;
+      canvas!.height = H * dpr;
     }
     resize();
     const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
+    ro.observe(wrap);
 
-    // 6 anneaux elliptiques, couleurs EPK
     const RINGS = 6;
-    const DOTS = 110;
-    const PALETTE: [number, number, number][] = [
-      [128, 0, 255],   // violet
-      [200, 60, 255],  // violet clair
-      [255, 255, 255], // blanc
-      [255, 80, 200],  // rose
-      [160, 30, 255],  // violet foncé
-      [220, 120, 255], // lavande
+    const DOTS = 100;
+    // Palette EPK : violet → rose → blanc
+    const PALETTE: [number,number,number][] = [
+      [128,  0, 255],
+      [180, 50, 255],
+      [255,255,255],
+      [220, 80, 255],
+      [150, 20, 255],
+      [255,120,255],
     ];
+
+    const freq = new Uint8Array(256);
+
+    function getCSSVar(name: string) {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
+    }
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
@@ -1114,68 +1125,69 @@ function WaveformCanvas() {
       const cy = H / 2;
       const t = performance.now() / 1000;
 
-      ctx!.clearRect(0, 0, W, H);
+      ctx.clearRect(0, 0, W, H);
+
+      // Lire les variables pulse calculées par pulse.ts — c'est ici que le rythme vit
+      const pulse = getCSSVar("--pulse");          // 0→1 énergie globale lissée
+      const kick  = getCSSVar("--pulse-kick");     // 0→1 impulsion kick, décroissance rapide
 
       const an = getAnalyser();
-      const freq = new Uint8Array(an ? an.frequencyBinCount : 256);
       if (an) {
         an.getByteFrequencyData(freq as unknown as Uint8Array<ArrayBuffer>);
       } else {
-        // Respiration douce au repos
+        // Idle : respiration sinusoïdale douce
         for (let i = 0; i < freq.length; i++) {
-          freq[i] = 20 + Math.sin(t * 0.6 + i * 0.08) * 16 + Math.sin(t * 1.1 + i * 0.04) * 8;
+          freq[i] = 22 + Math.sin(t * 0.55 + i * 0.07) * 18 + Math.sin(t * 1.3 + i * 0.03) * 10;
         }
       }
 
-      // Énergie globale pour scale
-      let totalEnergy = 0;
-      for (let i = 0; i < freq.length; i++) totalEnergy += freq[i];
-      totalEnergy = totalEnergy / (freq.length * 255);
+      // Scale global du visuel réagit au kick (impulsion nette) + pulse (énergie)
+      const globalScale = 1 + kick * 0.12 + pulse * 0.05;
 
-      const baseRx = W * 0.44; // rayon horizontal max
-      const tilt = 0.28;       // compression verticale (perspective 3D)
+      const baseRx = Math.min(W, H) * 0.46 * globalScale;
+      const tilt   = 0.30; // compression perspective 3D
 
       for (let ring = 0; ring < RINGS; ring++) {
-        const f = (ring + 1) / RINGS;
+        const f  = (ring + 1) / RINGS;
         const rx = baseRx * f;
         const ry = rx * tilt;
 
-        // Fréquences assignées à cet anneau (basses → centre, aigus → extérieur)
-        const fStart = Math.floor((ring / RINGS) * freq.length * 0.65);
-        const fEnd = Math.floor(((ring + 1) / RINGS) * freq.length * 0.65);
-
+        // Fréquences de cet anneau
+        const fStart = Math.floor((ring / RINGS) * 80);
+        const fEnd   = Math.floor(((ring + 1) / RINGS) * 80);
         let ringEnergy = 0;
         for (let i = fStart; i < fEnd; i++) ringEnergy += freq[i] / 255;
         ringEnergy /= Math.max(1, fEnd - fStart);
 
-        // Rotation lente alternée par anneau
-        const rot = t * (ring % 2 === 0 ? 0.04 : -0.06) * (0.5 + ring * 0.15);
+        // Kick amplifie les anneaux intérieurs (basses fréquences)
+        const kickBoost = ring < 2 ? kick * 0.5 : kick * 0.15;
+        const energy = Math.min(1, ringEnergy + kickBoost);
+
+        const rot = t * (ring % 2 === 0 ? 0.05 : -0.07) * (0.4 + ring * 0.12);
         const [r, g, b] = PALETTE[ring % PALETTE.length];
 
         for (let d = 0; d < DOTS; d++) {
           const angle = (d / DOTS) * Math.PI * 2 + rot;
-          const fIdx = Math.min(freq.length - 1, fStart + Math.floor((d / DOTS) * (fEnd - fStart)));
-          const v = freq[fIdx] / 255;
+          const fIdx  = Math.min(freq.length - 1, fStart + Math.floor((d / DOTS) * (fEnd - fStart)));
+          const v     = freq[fIdx] / 255;
 
           const x = cx + Math.cos(angle) * rx;
           const y = cy + Math.sin(angle) * ry;
 
-          // Déplacement vertical réactif (les points montent/descendent)
-          const lift = Math.sin(angle) * ry * v * 0.4;
-          const dotY = y - lift;
+          // Les points "rebondissent" vers le haut au kick — effet 3D tilt
+          const bounce = kick * ry * 0.35 * Math.abs(Math.sin(angle));
+          const dotSize = Math.max(1.5, (Math.min(W,H) * 0.004) * (0.5 + v * 1.6 + energy * 0.7));
+          const alpha   = 0.3 + v * 0.6 + energy * 0.25;
 
-          const size = Math.max(1.5, (W * 0.0035) * (0.4 + v * 1.8 + ringEnergy * 0.6));
-          const alpha = 0.25 + v * 0.75 + ringEnergy * 0.15;
-
-          ctx!.shadowBlur = size * 4;
-          ctx!.shadowColor = `rgba(${r},${g},${b},0.7)`;
-          ctx!.beginPath();
-          ctx!.arc(x, dotY, size, 0, Math.PI * 2);
-          ctx!.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha)})`;
-          ctx!.fill();
+          ctx.shadowBlur  = dotSize * 3.5;
+          ctx.shadowColor = `rgba(${r},${g},${b},0.65)`;
+          ctx.beginPath();
+          ctx.arc(x, y - bounce, dotSize, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha)})`;
+          ctx.fill();
         }
       }
-      ctx!.shadowBlur = 0;
+      ctx.shadowBlur = 0;
     }
 
     draw();
@@ -1186,10 +1198,10 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
       <canvas
         ref={canvasRef}
-        style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.85 }}
+        style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.9 }}
       />
     </div>
   );
