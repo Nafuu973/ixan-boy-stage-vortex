@@ -197,7 +197,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-2"
+              className="mt-2 flex flex-col items-center"
             >
               <motion.button
                 type="button"
