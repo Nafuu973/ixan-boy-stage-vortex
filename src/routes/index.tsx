@@ -131,47 +131,39 @@ function EnterOverlay({ visible }: { visible: boolean }) {
           </motion.div>
 
           {/* Main content */}
-          <div className="relative flex w-full flex-col items-center gap-6 px-4 text-center md:gap-8">
+          <div className="relative w-full px-4 text-center">
+            <div className="flex flex-col items-center gap-6 md:gap-8">
             {/* Big animated title */}
-            <div className="flex flex-col items-center gap-0 leading-none">
-              <div className="flex items-baseline gap-4 md:gap-6">
-                {words.map((word, wi) => (
-                  <motion.span
-                    key={word}
-                    initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ delay: 0.5 + wi * 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                    className="font-display text-[clamp(4.5rem,18vw,11rem)] tracking-[-0.02em] text-bone"
-                    style={{
-                      textShadow: wi === 1
-                        ? "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)"
-                        : "none",
-                      color: wi === 1 ? "oklch(0.92 0.04 295)" : undefined,
-                    }}
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </div>
+            <div className="w-full leading-none">
+              <motion.h1
+                className="font-display text-[clamp(4.5rem,18vw,11rem)] tracking-[-0.02em] leading-none"
+                initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span className="text-bone">IXAN </span>
+                <motion.span
+                  initial={{ opacity: 0, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  style={{
+                    color: "oklch(0.92 0.04 295)",
+                    textShadow: "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)",
+                  }}
+                >
+                  BOY
+                </motion.span>
+              </motion.h1>
 
               {/* Subtitle row */}
-              <motion.div
+              <motion.p
                 initial={{ opacity: 0, scaleX: 0.6 }}
                 animate={{ opacity: 1, scaleX: 1 }}
                 transition={{ delay: 0.85, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-1 flex items-center gap-3"
+                className="mt-2 font-mono text-[10px] uppercase tracking-[0.5em] text-bone/40 md:text-[11px]"
               >
-                {subtitleWords.map((w, i) => (
-                  <span
-                    key={i}
-                    className={`font-mono text-[10px] uppercase tracking-[0.5em] md:text-[11px] ${
-                      w === "·" ? "text-violet" : "text-bone/40"
-                    }`}
-                  >
-                    {w}
-                  </span>
-                ))}
-              </motion.div>
+                EPK <span className="text-violet">·</span> 2026
+              </motion.p>
             </div>
 
             {/* Horizontal divider */}
@@ -249,6 +241,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                 Appuyer pour entrer
               </motion.p>
             </motion.div>
+            </div>
           </div>
 
           {/* Bottom ticker */}
