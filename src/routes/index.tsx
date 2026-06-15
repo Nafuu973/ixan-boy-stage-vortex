@@ -1096,138 +1096,143 @@ function WaveformCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
 
-    const N = 512;
-    const freqBuf = new Uint8Array(N);
-    const timeBuf = new Uint8Array(N);
+    const FREQ_SIZE = 512;
+    const freqBuf = new Uint8Array(FREQ_SIZE);
 
-    // Enveloppes lissées
-    let energyEnv = 0;   // énergie globale lissée — suit la montée
-    let transEnv = 0;    // transitoires haute fréquence — snare/clap
-    let bassEnv  = 0;
+    // Enveloppes
+    let energyEnv = 0;
+    let bassEnv = 0;
+    let kickVal = 0;
+    let lastKick = 0;
 
-    function getAn(): AnalyserNode | null {
-      return getAnalyser() || getTeaserAnalyser();
-    }
+    // Cubes particules pré-calculés
+    const CUBES = 14;
+    const cubes = Array.from({ length: CUBES }, (_, i) => ({
+      rx: 0.08 + Math.random() * 0.84,
+      ry: 0.62 + Math.random() * 0.32,
+      size: 4 + Math.random() * 8,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.3 + Math.random() * 0.5,
+    }));
+
+    function getAn() { return getAnalyser() || getTeaserAnalyser(); }
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
       const W = canvas!.width;
       const H = canvas!.height;
       const cx = W / 2;
-      const cy = H / 2;
-      const S = Math.min(W, H);
       const t = performance.now() / 1000;
 
       const an = getAn();
-
       if (an) {
         an.getByteFrequencyData(freqBuf as unknown as Uint8Array<ArrayBuffer>);
-        an.getByteTimeDomainData(timeBuf as unknown as Uint8Array<ArrayBuffer>);
       } else {
-        // Respiration idle très douce
-        for (let i = 0; i < N; i++) {
-          freqBuf[i] = 12 + Math.sin(t * 0.4 + i * 0.05) * 10;
-          timeBuf[i] = 128 + Math.sin(t * 1.8 + (i / N) * Math.PI * 6) * 12;
+        for (let i = 0; i < FREQ_SIZE; i++)
+          freqBuf[i] = 14 + Math.sin(t * 0.5 + i * 0.06) * 12;
+      }
+
+      // Enveloppes
+      let bassNow = 0, midNow = 0;
+      for (let i = 0; i < 6; i++) bassNow += freqBuf[i] / 255;
+      for (let i = 6; i < 80; i++) midNow += freqBuf[i] / 255;
+      bassNow /= 6; midNow /= 74;
+      const rawE = bassNow * 0.45 + midNow * 0.55;
+      energyEnv += (rawE > energyEnv ? 0.15 : 0.03) * (rawE - energyEnv);
+      bassEnv   += (bassNow > bassEnv ? 0.25 : 0.06) * (bassNow - bassEnv);
+
+      // Kick detection
+      if (bassNow > bassEnv * 1.35 && t - lastKick > 0.16) {
+        kickVal = 1; lastKick = t;
+      }
+      kickVal *= 0.78;
+
+      // ── TRAIL ─────────────────────────────────────────────────────────
+      ctx.fillStyle = `rgba(0,0,0,${0.22 - energyEnv * 0.06})`;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── 1. ANNEAUX CONCENTRIQUES (sol en perspective) ─────────────────
+      const stageCY = H * 0.74;
+      const NRINGS = 5;
+      for (let r = NRINGS - 1; r >= 0; r--) {
+        const f = (r + 1) / NRINGS;
+        const rx = W * 0.50 * f * (1 + bassEnv * 0.08 + kickVal * 0.05);
+        const ry = rx * 0.13;
+
+        // Couleur : violet intérieur → rose/magenta extérieur
+        const hue = 270 + (1 - f) * 60;
+        const bright = 55 + energyEnv * 30 + kickVal * 20;
+        const alpha = 0.55 + f * 0.3 + bassEnv * 0.2;
+
+        ctx.beginPath();
+        ctx.ellipse(cx, stageCY, rx, ry, 0, 0, Math.PI * 2);
+        ctx.shadowBlur = 18 + f * 20 + bassEnv * 25 + kickVal * 30;
+        ctx.shadowColor = `hsl(${hue},100%,70%)`;
+        ctx.strokeStyle = `hsla(${hue},100%,${bright}%,${alpha})`;
+        ctx.lineWidth = 1 + f * 2 + bassEnv * 2 + kickVal * 3;
+        ctx.stroke();
+      }
+
+      // ── 2. BARRES EQ SYMÉTRIQUES ──────────────────────────────────────
+      const N = 38;            // barres par côté
+      const barW = W * 0.011;
+      const baseline = H * 0.70;
+      const maxBarH = H * 0.58;
+      const spread = W * 0.46;
+
+      for (let i = 0; i < N; i++) {
+        const fi = i / N;               // 0 = centre, 1 = bord
+        const fIdx = Math.floor(fi * 90);
+        const v = freqBuf[fIdx] / 255;
+        const barH = (v * 0.85 + energyEnv * 0.15) * maxBarH * (1 - fi * 0.35);
+
+        // Position : convergence vers le centre
+        const x = cx + (fi * spread + barW * (i + 1));
+        const xL = cx - (fi * spread + barW * (i + 1));
+
+        // Couleur : centre = violet/blanc, bords = rose/magenta
+        const hue = 270 - fi * 80;
+        const bright = 70 + v * 25 + energyEnv * 20;
+        const alpha = 0.4 + v * 0.6;
+
+        ctx.shadowBlur = 10 + v * 22 + kickVal * 15;
+        ctx.shadowColor = `hsl(${hue},100%,75%)`;
+        ctx.fillStyle = `hsla(${hue},100%,${bright}%,${alpha})`;
+
+        // Barre droite
+        ctx.fillRect(x, baseline - barH, barW, barH);
+        // Barre gauche (miroir)
+        ctx.fillRect(xL - barW, baseline - barH, barW, barH);
+
+        // Ligne de base lumineuse
+        if (i === 0) {
+          ctx.fillStyle = `hsla(270,100%,80%,${0.3 + energyEnv * 0.5})`;
+          ctx.fillRect(xL - barW, baseline - 1.5, x - xL + barW * 2, 2);
         }
       }
 
-      // Calcul des enveloppes
-      let bassNow = 0, midNow = 0, highNow = 0;
-      const bins = Math.min(N, an ? an.frequencyBinCount : N);
-      for (let i = 0; i < 6;  i++) bassNow += freqBuf[i] / 255;
-      for (let i = 6; i < 60; i++) midNow  += freqBuf[i] / 255;
-      for (let i = 60; i < 120; i++) highNow += freqBuf[i] / 255;
-      bassNow /= 6; midNow /= 54; highNow /= 60;
-      const rawEnergy = bassNow * 0.4 + midNow * 0.4 + highNow * 0.2;
-
-      // Lissage : attaque rapide, release lent → suit la montée
-      energyEnv = energyEnv + (rawEnergy > energyEnv ? 0.12 : 0.03) * (rawEnergy - energyEnv);
-      bassEnv   = bassEnv   + (bassNow  > bassEnv   ? 0.20 : 0.05) * (bassNow  - bassEnv);
-      transEnv  = transEnv  + (highNow  > transEnv  ? 0.25 : 0.06) * (highNow  - transEnv);
-
-      // ── TRAIL : fondu noir progressif au lieu de clearRect ───────────
-      // L'effet de traînée donne de la profondeur à la montée
-      ctx.fillStyle = `rgba(0,0,0,${0.18 + energyEnv * 0.08})`;
-      ctx.fillRect(0, 0, W, H);
-
-      // Couleur : violet pur → blanc électrique au fur et à mesure que la montée monte
-      const hue   = 270 - energyEnv * 200;
-      const sat   = 100 - energyEnv * 30;
-      const light = 55  + energyEnv * 35;
-
-      // ── LAYER A : Waveform circulaire (time domain) ─────────────────
-      // Directement le signal audio → synchro absolue
-      const wR = S * (0.22 + energyEnv * 0.06);
-      ctx.beginPath();
-      const binStep = Math.floor(timeBuf.length / 256);
-      for (let i = 0; i < 256; i++) {
-        const angle = (i / 256) * Math.PI * 2 - Math.PI / 2;
-        const v = (timeBuf[i * binStep] - 128) / 128;
-        const r = wR + v * S * (0.04 + energyEnv * 0.1);
-        const x = cx + Math.cos(angle) * r;
-        const y = cy + Math.sin(angle) * r;
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
-      ctx.closePath();
-      ctx.shadowBlur = 10 + energyEnv * 20 + transEnv * 15;
-      ctx.shadowColor = `hsl(${hue},${sat}%,80%)`;
-      ctx.strokeStyle = `hsla(${hue},${sat}%,${light}%,${0.5 + energyEnv * 0.5})`;
-      ctx.lineWidth = 1 + energyEnv * 2.5;
-      ctx.stroke();
-
-      // ── LAYER B : 180 barres EQ radiales ────────────────────────────
-      const barR = S * (0.26 + energyEnv * 0.07);
-      for (let i = 0; i < 180; i++) {
-        const angle = (i / 180) * Math.PI * 2 - Math.PI / 2;
-        const fIdx = Math.floor((i / 180) * 110);
-        const v = freqBuf[fIdx] / 255;
-        if (v < 0.04) continue;
-
-        const barLen = S * (v * 0.2 + energyEnv * 0.04);
-        const x1 = cx + Math.cos(angle) * barR;
-        const y1 = cy + Math.sin(angle) * barR;
-        const x2 = cx + Math.cos(angle) * (barR + barLen);
-        const y2 = cy + Math.sin(angle) * (barR + barLen);
-
-        const bHue = hue + (v * 40) - 20;
-        ctx.shadowBlur = 4 + v * 16 + energyEnv * 10;
-        ctx.shadowColor = `hsl(${bHue},100%,75%)`;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = `hsla(${bHue},${sat}%,${light + 15}%,${0.4 + v * 0.6})`;
-        ctx.lineWidth = Math.max(0.8, S * 0.0022);
-        ctx.lineCap = "round";
-        ctx.stroke();
-      }
-
-      // ── LAYER C : Anneaux concentriques qui se dilatent avec l'énergie
-      const RINGS = 4;
-      for (let r = 0; r < RINGS; r++) {
-        const rf = (r + 1) / RINGS;
-        const ringR = S * (0.10 + rf * 0.22 + energyEnv * rf * 0.12);
-        const alpha = (0.08 + energyEnv * 0.25) * (1 - rf * 0.5);
-        if (alpha < 0.02) continue;
-        ctx.beginPath();
-        ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
-        ctx.shadowBlur = 18 + energyEnv * 30;
-        ctx.shadowColor = `hsl(${hue},100%,70%)`;
-        ctx.strokeStyle = `hsla(${hue},${sat}%,${light}%,${alpha})`;
-        ctx.lineWidth = 0.8 + energyEnv * 2;
-        ctx.stroke();
-      }
-
-      // ── LAYER D : Glow central pulsant ──────────────────────────────
+      // ── 3. CUBES PARTICULES FLOTTANTS ────────────────────────────────
       ctx.shadowBlur = 0;
-      const glowR = S * (0.12 + energyEnv * 0.15 + bassEnv * 0.06);
-      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
-      grd.addColorStop(0, `hsla(${hue},${sat}%,80%,${0.12 + energyEnv * 0.2 + bassEnv * 0.15})`);
-      grd.addColorStop(0.5, `hsla(${hue},${sat}%,60%,${0.04 + energyEnv * 0.08})`);
+      for (const c of cubes) {
+        const px = c.rx * W;
+        const py = c.ry * H + Math.sin(t * c.speed + c.phase) * (6 + bassEnv * 12);
+        const s = c.size * (0.8 + bassEnv * 0.6 + kickVal * 0.4) * dpr;
+        const hue = 250 + Math.sin(c.phase) * 50;
+        const alpha = 0.5 + bassEnv * 0.4 + kickVal * 0.3;
+
+        ctx.shadowBlur = 12 + bassEnv * 20;
+        ctx.shadowColor = `hsl(${hue},100%,70%)`;
+        ctx.fillStyle = `hsla(${hue},100%,70%,${alpha})`;
+        ctx.fillRect(px - s / 2, py - s / 2, s, s);
+      }
+
+      // ── 4. GLOW CENTRAL AU SOL ────────────────────────────────────────
+      ctx.shadowBlur = 0;
+      const grd = ctx.createRadialGradient(cx, stageCY, 0, cx, stageCY, W * 0.3);
+      grd.addColorStop(0, `hsla(270,100%,70%,${0.12 + energyEnv * 0.2 + kickVal * 0.25})`);
       grd.addColorStop(1, "transparent");
       ctx.fillStyle = grd;
-      ctx.beginPath();
-      ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillRect(0, 0, W, H);
     }
 
     draw();
@@ -1236,7 +1241,7 @@ function WaveformCanvas() {
 
   return (
     <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
-      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.92 }} />
+      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.95 }} />
     </div>
   );
 }
