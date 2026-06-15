@@ -138,8 +138,8 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             <motion.h1
               style={{ color: "var(--bone)", whiteSpace: "nowrap", fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
               className="font-display"
-              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               IXAN{" "}
