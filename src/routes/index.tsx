@@ -147,7 +147,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                 initial={{ opacity: 0, filter: "blur(8px)" }}
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                style={{ textShadow: "0 0 60px rgba(128, 0, 255, 0.55), 0 0 120px rgba(128, 0, 255, 0.25)" }}
+                style={{ color: "var(--bone)", textShadow: "0 0 24px rgba(168, 85, 247, 0.45), 0 0 48px rgba(168, 85, 247, 0.2)" }}
               >
                 BOY
               </motion.span>
