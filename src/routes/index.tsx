@@ -65,6 +65,58 @@ function Index() {
   );
 }
 
+function TopLabelTypewriter() {
+  const full = "Reclaim The Fire — OUT SEPT 26";
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const delay = setTimeout(() => {
+      const id = setInterval(() => {
+        i++;
+        setDisplayed(full.slice(0, i));
+        if (i >= full.length) {
+          clearInterval(id);
+          setDone(true);
+        }
+      }, 45);
+      return () => clearInterval(id);
+    }, 600);
+    return () => clearTimeout(delay);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5, duration: 0.3 }}
+      style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
+      className="font-mono text-xs uppercase tracking-[0.45em] md:text-sm"
+    >
+      <motion.span
+        animate={{ textShadow: ["0 0 8px rgba(128,0,255,0.4)", "0 0 20px rgba(128,0,255,0.8)", "0 0 8px rgba(128,0,255,0.4)"] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        style={{ color: "var(--violet)" }}
+      >
+        {displayed}
+      </motion.span>
+      {/* Blinking cursor */}
+      {!done ? (
+        <span style={{ color: "var(--violet)", opacity: 1 }}>_</span>
+      ) : (
+        <motion.span
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 0.8, repeat: 3, ease: "steps(1)" }}
+          style={{ color: "var(--violet)" }}
+        >
+          _
+        </motion.span>
+      )}
+    </motion.div>
+  );
+}
+
 function EnterOverlay({ visible }: { visible: boolean }) {
   const [dismissed, setDismissed] = useState(false);
   const open = visible && !dismissed;
@@ -120,16 +172,8 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             />
           ))}
 
-          {/* Top label — letter-spacing compensation via padding-left */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
-          >
-            Reclaim The Fire — Sortie Septembre
-          </motion.div>
+          {/* Top label — typewriter effect */}
+          <TopLabelTypewriter />
 
           {/* Main content — single column, truly centered */}
           <div style={{ width: "100%", textAlign: "center" }}>
@@ -138,16 +182,16 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             <motion.h1
               style={{ color: "var(--bone)", whiteSpace: "nowrap", fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
               className="font-display"
-              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
               IXAN{" "}
               <motion.span
-                initial={{ opacity: 0, filter: "blur(8px)" }}
-                animate={{ opacity: 1, filter: "blur(0px)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                style={{ textShadow: "0 0 60px rgba(128, 0, 255, 0.55), 0 0 120px rgba(128, 0, 255, 0.25)" }}
+                style={{ color: "var(--bone)", textShadow: "0 0 18px rgba(168, 85, 247, 0.35)" }}
               >
                 BOY
               </motion.span>
