@@ -1313,7 +1313,7 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0" style={{ background: "#000000" }}>
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
       <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
     </div>
   );
