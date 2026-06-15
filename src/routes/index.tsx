@@ -1076,6 +1076,118 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
 
 
+function WaveformCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef = useRef(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const BARS = 128;
+    const idleData = new Uint8Array(BARS);
+
+    function resize() {
+      const s = Math.min(canvas!.offsetWidth, canvas!.offsetHeight);
+      canvas!.width = s * window.devicePixelRatio;
+      canvas!.height = s * window.devicePixelRatio;
+    }
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    function draw() {
+      rafRef.current = requestAnimationFrame(draw);
+      const an = getAnalyser();
+      const W = canvas!.width;
+      const H = canvas!.height;
+      const cx = W / 2;
+      const cy = H / 2;
+      const R = W * 0.34;
+
+      ctx!.clearRect(0, 0, W, H);
+
+      let data: Uint8Array = idleData;
+      if (an) {
+        const buf = new Uint8Array(an.frequencyBinCount);
+        an.getByteFrequencyData(buf as unknown as Uint8Array<ArrayBuffer>);
+        // Downsample to BARS
+        const step = Math.floor(buf.length / BARS);
+        for (let i = 0; i < BARS; i++) {
+          idleData[i] = buf[i * step];
+        }
+        data = idleData;
+      } else {
+        // Idle: gentle sine breathing
+        const t = performance.now() / 1000;
+        for (let i = 0; i < BARS; i++) {
+          idleData[i] = 18 + Math.sin(t * 0.8 + (i / BARS) * Math.PI * 4) * 14;
+        }
+      }
+
+      // Draw circular waveform
+      for (let i = 0; i < BARS; i++) {
+        const angle = (i / BARS) * Math.PI * 2 - Math.PI / 2;
+        const v = data[i] / 255;
+        const barH = R * 0.12 + v * R * 0.55;
+
+        const x1 = cx + Math.cos(angle) * R;
+        const y1 = cy + Math.sin(angle) * R;
+        const x2 = cx + Math.cos(angle) * (R + barH);
+        const y2 = cy + Math.sin(angle) * (R + barH);
+
+        const intensity = 0.3 + v * 0.7;
+        // Violet → ember gradient based on energy
+        const r = Math.round(128 + v * 127);
+        const g = Math.round(v * 40);
+        const b = Math.round(255 - v * 200);
+
+        ctx!.beginPath();
+        ctx!.moveTo(x1, y1);
+        ctx!.lineTo(x2, y2);
+        ctx!.strokeStyle = `rgba(${r},${g},${b},${intensity})`;
+        ctx!.lineWidth = (W / BARS) * 0.6;
+        ctx!.lineCap = "round";
+        ctx!.stroke();
+      }
+
+      // Inner glow circle
+      const grad = ctx!.createRadialGradient(cx, cy, R * 0.3, cx, cy, R);
+      grad.addColorStop(0, "rgba(128,0,255,0.08)");
+      grad.addColorStop(1, "rgba(128,0,255,0)");
+      ctx!.beginPath();
+      ctx!.arc(cx, cy, R, 0, Math.PI * 2);
+      ctx!.fillStyle = grad;
+      ctx!.fill();
+    }
+
+    draw();
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      ro.disconnect();
+    };
+  }, []);
+
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-0 grid place-items-center"
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: "min(100%, 90vh)",
+          height: "min(100%, 90vh)",
+          mixBlendMode: "screen",
+          opacity: 0.75,
+        }}
+      />
+    </div>
+  );
+}
+
 function SignatureTracks() {
   const t = useT();
   const tracks = [
@@ -1171,33 +1283,8 @@ function SignatureTracks() {
 
   return (
     <section id="tracks" className="relative overflow-hidden bg-void py-10 md:py-12">
-      {/* Waveform vidéo ronde en arrière-plan — teinté violet, réactif au pulse */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 grid place-items-center bg-void"
-        style={{ containerType: "size" }}
-      >
-        <video
-          src={waveformBg.url}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={{
-            width: "min(100cqw, 100cqh)",
-            height: "min(100cqw, 100cqh)",
-            objectFit: "fill",
-            opacity: "calc(0.38 + var(--pulse, 0) * 0.2 + var(--pulse-kick, 0) * 0.18)",
-            filter:
-              "hue-rotate(75deg) saturate(0.85) brightness(calc(0.9 + var(--pulse, 0) * 0.35)) blur(calc(1.5px - var(--pulse, 0) * 1.5px))",
-            transform:
-              "scale(calc(1 + var(--pulse, 0) * 0.04 + var(--pulse-kick, 0) * 0.03))",
-            mixBlendMode: "screen",
-            transition: "opacity 120ms linear",
-          }}
-        />
-      </div>
+      {/* Waveform canvas réactif à l'audio — remplace la vidéo statique */}
+      <WaveformCanvas />
       <div className="relative z-10 px-5 md:px-20">
 
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
