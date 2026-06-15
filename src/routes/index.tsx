@@ -120,58 +120,58 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             />
           ))}
 
-          {/* Top label */}
+          {/* Top label — letter-spacing compensation via padding-left */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="absolute top-8 inset-x-0 flex justify-center font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
+            style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
+            className="font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
           >
             Reclaim The Fire — Sortie Septembre
           </motion.div>
 
-          {/* Main content */}
-          <div className="relative w-full px-4 text-center">
-            <div className="flex flex-col items-center gap-6 md:gap-8">
-            {/* Big animated title */}
-            <div className="w-full leading-none">
-              <motion.h1
-                className="font-display text-[clamp(4.5rem,18vw,11rem)] tracking-[-0.02em] leading-none"
-                initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <span className="text-bone">IXAN </span>
-                <motion.span
-                  initial={{ opacity: 0, filter: "blur(8px)" }}
-                  animate={{ opacity: 1, filter: "blur(0px)" }}
-                  transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    color: "oklch(0.92 0.04 295)",
-                    textShadow: "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)",
-                  }}
-                >
-                  BOY
-                </motion.span>
-              </motion.h1>
+          {/* Main content — single column, truly centered */}
+          <div style={{ width: "100%", textAlign: "center" }}>
 
-              {/* Subtitle row */}
-              <motion.p
-                initial={{ opacity: 0, scaleX: 0.6 }}
-                animate={{ opacity: 1, scaleX: 1 }}
-                transition={{ delay: 0.85, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-2 font-mono text-[10px] uppercase tracking-[0.5em] text-bone/40 md:text-[11px]"
+            {/* Title */}
+            <motion.h1
+              className="font-display text-[clamp(4.5rem,18vw,11rem)] leading-none tracking-[-0.02em]"
+              initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className="text-bone">IXAN </span>
+              <motion.span
+                initial={{ opacity: 0, filter: "blur(8px)" }}
+                animate={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  color: "oklch(0.92 0.04 295)",
+                  textShadow: "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)",
+                }}
               >
-                EPK <span className="text-violet">·</span> 2026
-              </motion.p>
-            </div>
+                BOY
+              </motion.span>
+            </motion.h1>
 
-            {/* Horizontal divider */}
+            {/* EPK · 2026 — padding-left compense le tracking */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.85, duration: 0.6 }}
+              className="mt-2 font-mono text-[10px] uppercase tracking-[0.5em] text-bone/40 md:text-[11px]"
+              style={{ paddingLeft: "0.5em" }}
+            >
+              EPK <span className="text-violet">·</span> 2026
+            </motion.p>
+
+            {/* Divider */}
             <motion.div
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="h-px w-48 origin-center bg-gradient-to-r from-transparent via-violet/60 to-transparent md:w-72"
+              style={{ height: "1px", width: "12rem", margin: "1.5rem auto 0", background: "linear-gradient(to right, transparent, oklch(0.55 0.28 295 / 0.6), transparent)" }}
             />
 
             {/* Sound label */}
@@ -179,55 +179,56 @@ function EnterOverlay({ visible }: { visible: boolean }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1, duration: 0.6 }}
-              className="font-mono text-[9px] uppercase tracking-[0.38em] text-bone/40"
+              className="mt-6 font-mono text-[9px] uppercase tracking-[0.38em] text-bone/40"
+              style={{ paddingLeft: "0.38em" }}
             >
               Expérience musicale · Montez le son
             </motion.p>
 
-            {/* CTA Play button */}
+            {/* Play button */}
             <motion.div
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-2 flex flex-col items-center"
+              style={{ marginTop: "1.5rem" }}
             >
               <motion.button
                 type="button"
-                onClick={() => {
-                  startTeaser();
-                  setDismissed(true);
-                }}
+                onClick={() => { startTeaser(); setDismissed(true); }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.92 }}
-                className="group relative grid h-20 w-20 place-items-center rounded-full border border-violet/50 bg-violet/10 backdrop-blur-sm transition-colors duration-300 hover:border-violet hover:bg-violet/20 md:h-24 md:w-24"
                 aria-label="Enter"
+                style={{
+                  display: "block",
+                  margin: "0 auto",
+                  position: "relative",
+                  width: "5rem",
+                  height: "5rem",
+                  borderRadius: "9999px",
+                  border: "1px solid oklch(0.55 0.28 295 / 0.5)",
+                  background: "oklch(0.55 0.28 295 / 0.1)",
+                  backdropFilter: "blur(8px)",
+                  cursor: "pointer",
+                  display: "grid",
+                  placeItems: "center",
+                }}
               >
-                {/* Pulsing rings */}
                 <motion.span
-                  className="absolute inset-0 rounded-full border border-violet/30"
+                  style={{ position: "absolute", inset: 0, borderRadius: "9999px", border: "1px solid oklch(0.55 0.28 295 / 0.3)" }}
                   animate={{ scale: [1, 1.6, 1.6], opacity: [0.6, 0, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
                 />
                 <motion.span
-                  className="absolute inset-0 rounded-full border border-violet/20"
+                  style={{ position: "absolute", inset: 0, borderRadius: "9999px", border: "1px solid oklch(0.55 0.28 295 / 0.2)" }}
                   animate={{ scale: [1, 2, 2], opacity: [0.4, 0, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
                 />
-
-                {/* Glow */}
                 <motion.span
-                  className="absolute inset-0 -z-10 rounded-full"
-                  animate={{
-                    boxShadow: [
-                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
-                      "0 0 50px oklch(0.55 0.28 295 / 0.6)",
-                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
-                    ],
-                  }}
+                  style={{ position: "absolute", inset: 0, zIndex: -1, borderRadius: "9999px" }}
+                  animate={{ boxShadow: ["0 0 20px oklch(0.55 0.28 295 / 0.3)", "0 0 50px oklch(0.55 0.28 295 / 0.6)", "0 0 20px oklch(0.55 0.28 295 / 0.3)"] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                 />
-
-                <svg viewBox="0 0 14 14" className="relative ml-[3px] h-6 w-6 fill-bone drop-shadow-[0_0_8px_rgba(200,160,255,0.8)] md:h-7 md:w-7">
+                <svg viewBox="0 0 14 14" style={{ position: "relative", width: "1.5rem", height: "1.5rem", fill: "var(--bone)", marginLeft: "3px", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
                   <path d="M3 1.5 L12 7 L3 12.5 Z" />
                 </svg>
               </motion.button>
@@ -236,12 +237,12 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
-                className="mt-4 font-mono text-[8px] uppercase tracking-[0.4em] text-bone/30"
+                className="mt-4 font-mono text-[8px] uppercase text-bone/30"
+                style={{ letterSpacing: "0.4em", paddingLeft: "0.4em" }}
               >
                 Appuyer pour entrer
               </motion.p>
             </motion.div>
-            </div>
           </div>
 
           {/* Bottom ticker */}
