@@ -1086,36 +1086,24 @@ function WaveformCanvas() {
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
     const ctx = canvas.getContext("2d")!;
-
     const dpr = window.devicePixelRatio || 1;
 
     function resize() {
-      const W = wrap!.offsetWidth;
-      const H = wrap!.offsetHeight;
-      canvas!.width = W * dpr;
-      canvas!.height = H * dpr;
+      canvas!.width = wrap!.offsetWidth * dpr;
+      canvas!.height = wrap!.offsetHeight * dpr;
     }
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
 
-    const RINGS = 6;
-    const DOTS = 100;
-    // Palette EPK : violet → rose → blanc
-    const PALETTE: [number,number,number][] = [
-      [128,  0, 255],
-      [180, 50, 255],
-      [255,255,255],
-      [220, 80, 255],
-      [150, 20, 255],
-      [255,120,255],
-    ];
+    const BARS = 128;
+    const freqData = new Uint8Array(256);
+    const timeData = new Uint8Array(256);
 
-    const freq = new Uint8Array(256);
-
-    function getCSSVar(name: string) {
-      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
-    }
+    // Détection de kick maison — plus réactive que la CSS var
+    let bassEnv = 0;
+    let kickVal = 0;
+    let lastKick = 0;
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
@@ -1124,81 +1112,133 @@ function WaveformCanvas() {
       const cx = W / 2;
       const cy = H / 2;
       const t = performance.now() / 1000;
+      const S = Math.min(W, H);
 
       ctx.clearRect(0, 0, W, H);
 
-      // Lire les variables pulse calculées par pulse.ts — c'est ici que le rythme vit
-      const pulse = getCSSVar("--pulse");          // 0→1 énergie globale lissée
-      const kick  = getCSSVar("--pulse-kick");     // 0→1 impulsion kick, décroissance rapide
-
       const an = getAnalyser();
+      const hasAudio = !!an;
+
       if (an) {
-        an.getByteFrequencyData(freq as unknown as Uint8Array<ArrayBuffer>);
+        an.getByteFrequencyData(freqData as unknown as Uint8Array<ArrayBuffer>);
+        an.getByteTimeDomainData(timeData as unknown as Uint8Array<ArrayBuffer>);
       } else {
-        // Idle : respiration sinusoïdale douce
-        for (let i = 0; i < freq.length; i++) {
-          freq[i] = 22 + Math.sin(t * 0.55 + i * 0.07) * 18 + Math.sin(t * 1.3 + i * 0.03) * 10;
+        // Idle breathing
+        for (let i = 0; i < 256; i++) {
+          freqData[i] = Math.max(0, 18 + Math.sin(t * 0.5 + i * 0.06) * 16 + Math.sin(t * 1.2 + i * 0.03) * 8);
+          timeData[i] = 128 + Math.sin(t * 2.1 + (i / 256) * Math.PI * 4) * 20;
         }
       }
 
-      // Scale global du visuel réagit au kick (impulsion nette) + pulse (énergie)
-      const globalScale = 1 + kick * 0.12 + pulse * 0.05;
+      // Kick detection: bass burst au-dessus de la moyenne courante
+      let bassNow = 0;
+      for (let i = 0; i < 8; i++) bassNow += freqData[i] / 255;
+      bassNow /= 8;
+      bassEnv = bassEnv * 0.85 + bassNow * 0.15;
+      const isKick = bassNow > bassEnv * 1.4 && t - lastKick > 0.18;
+      if (isKick) { kickVal = 1; lastKick = t; }
+      kickVal *= 0.82; // décroissance rapide
 
-      const baseRx = Math.min(W, H) * 0.46 * globalScale;
-      const tilt   = 0.30; // compression perspective 3D
+      // Energie globale (médiums) pour la couleur
+      let energy = 0;
+      for (let i = 8; i < 80; i++) energy += freqData[i] / 255;
+      energy /= 72;
 
-      for (let ring = 0; ring < RINGS; ring++) {
-        const f  = (ring + 1) / RINGS;
-        const rx = baseRx * f;
-        const ry = rx * tilt;
+      // Couleur dynamique : violet → blanc → orange selon l'énergie
+      const hue = 270 - energy * 180; // 270 violet → 90 jaune-orange
+      const sat = 80 + energy * 20;
+      const lit = 50 + energy * 30 + kickVal * 20;
 
-        // Fréquences de cet anneau
-        const fStart = Math.floor((ring / RINGS) * 80);
-        const fEnd   = Math.floor(((ring + 1) / RINGS) * 80);
-        let ringEnergy = 0;
-        for (let i = fStart; i < fEnd; i++) ringEnergy += freq[i] / 255;
-        ringEnergy /= Math.max(1, fEnd - fStart);
+      // ── LAYER 1 : Waveform circulaire (time domain) ──────────────────
+      // C'est le waveform réel — parfaitement en rythme par définition
+      const waveR = S * 0.28;
+      ctx.beginPath();
+      for (let i = 0; i < 256; i++) {
+        const angle = (i / 256) * Math.PI * 2 - Math.PI / 2;
+        const v = (timeData[i] - 128) / 128;
+        const r = waveR + v * S * (0.06 + energy * 0.08 + kickVal * 0.06);
+        const x = cx + Math.cos(angle) * r;
+        const y = cy + Math.sin(angle) * r;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.shadowBlur = 12 + kickVal * 20;
+      ctx.shadowColor = `hsl(${hue},${sat}%,70%)`;
+      ctx.strokeStyle = `hsla(${hue},${sat}%,${lit}%,${0.6 + kickVal * 0.4})`;
+      ctx.lineWidth = 1.5 + kickVal * 2;
+      ctx.stroke();
 
-        // Kick amplifie les anneaux intérieurs (basses fréquences)
-        const kickBoost = ring < 2 ? kick * 0.5 : kick * 0.15;
-        const energy = Math.min(1, ringEnergy + kickBoost);
+      // ── LAYER 2 : Barres fréquentielles radiales ─────────────────────
+      const barBaseR = S * 0.32;
+      for (let i = 0; i < BARS; i++) {
+        const angle = (i / BARS) * Math.PI * 2 - Math.PI / 2;
+        const fIdx = Math.floor((i / BARS) * 100);
+        const v = freqData[fIdx] / 255;
+        const barLen = S * (0.03 + v * 0.22 + kickVal * 0.06 * (i < BARS / 4 || i > (BARS * 3) / 4 ? 1.5 : 1));
 
-        const rot = t * (ring % 2 === 0 ? 0.05 : -0.07) * (0.4 + ring * 0.12);
-        const [r, g, b] = PALETTE[ring % PALETTE.length];
+        const x1 = cx + Math.cos(angle) * barBaseR;
+        const y1 = cy + Math.sin(angle) * barBaseR;
+        const x2 = cx + Math.cos(angle) * (barBaseR + barLen);
+        const y2 = cy + Math.sin(angle) * (barBaseR + barLen);
 
-        for (let d = 0; d < DOTS; d++) {
-          const angle = (d / DOTS) * Math.PI * 2 + rot;
-          const fIdx  = Math.min(freq.length - 1, fStart + Math.floor((d / DOTS) * (fEnd - fStart)));
-          const v     = freq[fIdx] / 255;
+        const barHue = hue + (i / BARS) * 40 - 20;
+        ctx.shadowBlur = 6 + v * 14 + kickVal * 10;
+        ctx.shadowColor = `hsl(${barHue},100%,70%)`;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = `hsla(${barHue},${sat}%,${lit + 10}%,${0.5 + v * 0.5})`;
+        ctx.lineWidth = Math.max(1, S * 0.003);
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
 
-          const x = cx + Math.cos(angle) * rx;
-          const y = cy + Math.sin(angle) * ry;
+      // ── LAYER 3 : Ring de base + kick burst ──────────────────────────
+      const ringR = S * 0.30;
+      ctx.beginPath();
+      ctx.arc(cx, cy, ringR * (1 + kickVal * 0.08), 0, Math.PI * 2);
+      ctx.shadowBlur = 20 + kickVal * 40;
+      ctx.shadowColor = `hsl(${hue},100%,70%)`;
+      ctx.strokeStyle = `hsla(${hue},${sat}%,70%,${0.15 + kickVal * 0.5})`;
+      ctx.lineWidth = 1 + kickVal * 3;
+      ctx.stroke();
 
-          // Les points "rebondissent" vers le haut au kick — effet 3D tilt
-          const bounce = kick * ry * 0.35 * Math.abs(Math.sin(angle));
-          const dotSize = Math.max(1.5, (Math.min(W,H) * 0.004) * (0.5 + v * 1.6 + energy * 0.7));
-          const alpha   = 0.3 + v * 0.6 + energy * 0.25;
-
-          ctx.shadowBlur  = dotSize * 3.5;
-          ctx.shadowColor = `rgba(${r},${g},${b},0.65)`;
+      // Burst radial au kick : lignes qui explosent vers l'extérieur
+      if (kickVal > 0.3) {
+        const BURST = 24;
+        for (let i = 0; i < BURST; i++) {
+          const angle = (i / BURST) * Math.PI * 2;
+          const inner = ringR * 1.05;
+          const outer = ringR * (1.05 + kickVal * 0.45);
           ctx.beginPath();
-          ctx.arc(x, y - bounce, dotSize, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, alpha)})`;
-          ctx.fill();
+          ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
+          ctx.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = `hsl(${hue},100%,80%)`;
+          ctx.strokeStyle = `hsla(${hue},100%,85%,${kickVal * 0.8})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
         }
       }
+
       ctx.shadowBlur = 0;
+
+      // Glow central
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, ringR * 0.9);
+      glow.addColorStop(0, `hsla(${hue},80%,60%,${0.06 + energy * 0.08 + kickVal * 0.12})`);
+      glow.addColorStop(1, "transparent");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, ringR * 0.9, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     draw();
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      ro.disconnect();
-    };
+    return () => { cancelAnimationFrame(rafRef.current); ro.disconnect(); };
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0 grid place-items-center">
       <canvas
         ref={canvasRef}
         style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.9 }}
