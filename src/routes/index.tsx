@@ -14,6 +14,8 @@ import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
 import waveformBg from "@/assets/waveform-round.mp4.asset.json";
+import neonStage from "@/assets/neon-stage.jpeg.asset.json";
+
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
@@ -1098,46 +1100,12 @@ function WaveformCanvas() {
 
     const FREQ_SIZE = 512;
     const freqBuf = new Uint8Array(FREQ_SIZE);
-
-    // Enveloppes audio
     let energyEnv = 0;
     let bassEnv = 0;
     let kickVal = 0;
     let lastKick = 0;
 
-    // Palette inspirée de la référence
-    const MINT = "#39FFB0";
-    const MINT_SOFT = "#7CFFC8";
-    const CYAN = "#22E8FF";
-    const MAGENTA = "#FF2EA8";
-    const HOT_PINK = "#FF1493";
-    const DEEP_PURPLE = "#2A0040";
-
-    // 22 cubes mint posés au sol (perspective)
-    const CUBES = 22;
-    const cubes = Array.from({ length: CUBES }, () => {
-      const depth = Math.random();
-      return {
-        rx: Math.random(),
-        depth,
-        size: 5 + depth * 9,
-        phase: Math.random() * Math.PI * 2,
-        speed: 0.4 + Math.random() * 0.6,
-      };
-    });
-
     function getAn() { return getTeaserAnalyser() || getAnalyser(); }
-
-    // Interpolation hex linéaire
-    function lerpHex(a: string, b: string, t: number) {
-      const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
-      const ar = (pa >> 16) & 255, ag = (pa >> 8) & 255, ab2 = pa & 255;
-      const br = (pb >> 16) & 255, bg = (pb >> 8) & 255, bb = pb & 255;
-      const r = Math.round(ar + (br - ar) * t);
-      const g = Math.round(ag + (bg - ag) * t);
-      const bl = Math.round(ab2 + (bb - ab2) * t);
-      return `rgb(${r},${g},${bl})`;
-    }
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
@@ -1161,163 +1129,132 @@ function WaveformCanvas() {
       const rawE = bassNow * 0.45 + midNow * 0.55;
       energyEnv += (rawE > energyEnv ? 0.18 : 0.04) * (rawE - energyEnv);
       bassEnv   += (bassNow > bassEnv ? 0.28 : 0.07) * (bassNow - bassEnv);
+      if (bassNow > bassEnv * 1.35 && tNow - lastKick > 0.18) { kickVal = 1; lastKick = tNow; }
+      kickVal *= 0.8;
 
-      if (bassNow > bassEnv * 1.35 && tNow - lastKick > 0.16) {
-        kickVal = 1; lastKick = tNow;
-      }
-      kickVal *= 0.78;
+      // Canvas réactif : overlay transparent par-dessus l'image photoréaliste.
+      ctx.clearRect(0, 0, W, H);
 
-      const stageCY = H * 0.74;
+      const stageCY = H * 0.72;
 
-      // ── FOND : dégradé violet profond ────────────────────────────────
-      const bg = ctx.createRadialGradient(cx, H * 0.45, W * 0.05, cx, H * 0.55, W * 0.85);
-      bg.addColorStop(0, "#1a0033");
-      bg.addColorStop(0.5, "#0d0020");
-      bg.addColorStop(1, "#04000c");
-      ctx.globalCompositeOperation = "source-over";
-      ctx.fillStyle = bg;
+      // 1. Halo mint pulsant au-dessus du podium (anneaux verts)
+      const ringR = W * 0.42 * (1 + bassEnv * 0.04 + kickVal * 0.06);
+      const podGrd = ctx.createRadialGradient(cx, stageCY, 0, cx, stageCY, ringR);
+      podGrd.addColorStop(0, `rgba(80,255,180,${0.18 + energyEnv * 0.18 + kickVal * 0.28})`);
+      podGrd.addColorStop(0.45, `rgba(80,255,180,${0.05 + kickVal * 0.08})`);
+      podGrd.addColorStop(1, "transparent");
+      ctx.fillStyle = podGrd;
       ctx.fillRect(0, 0, W, H);
 
-      // Traîne rémanente légère
-      ctx.fillStyle = "rgba(8,0,20,0.14)";
+      // 2. Halo cyan/magenta au-dessus de la skyline (boost des barres)
+      const skyR = W * 0.55 * (1 + energyEnv * 0.05);
+      const skyGrd = ctx.createRadialGradient(cx, H * 0.30, 0, cx, H * 0.32, skyR);
+      skyGrd.addColorStop(0, `rgba(60,230,255,${0.12 + energyEnv * 0.22 + kickVal * 0.15})`);
+      skyGrd.addColorStop(0.55, `rgba(255,60,180,${0.06 + energyEnv * 0.10})`);
+      skyGrd.addColorStop(1, "transparent");
+      ctx.fillStyle = skyGrd;
       ctx.fillRect(0, 0, W, H);
 
-      // Halo cyan/magenta central
-      const halo = ctx.createRadialGradient(cx, stageCY - H * 0.05, 0, cx, stageCY, W * 0.55);
-      halo.addColorStop(0, `rgba(34,232,255,${0.18 + energyEnv * 0.18 + kickVal * 0.15})`);
-      halo.addColorStop(0.45, `rgba(255,46,168,${0.07 + energyEnv * 0.06})`);
-      halo.addColorStop(1, "transparent");
-      ctx.fillStyle = halo;
-      ctx.fillRect(0, 0, W, H);
-
-      // ── BARRES EQ skyline (cyan centre → magenta bord) ───────────────
-      const N = 70;
-      const barW = Math.max(1, 2 * dpr);
-      const gap = Math.max(1, 1.6 * dpr);
-      const maxBarH = H * 0.62;
-
-      ctx.shadowBlur = 0;
-      for (let i = 0; i < N; i++) {
-        const fi = i / (N - 1);
-        const fIdx = Math.floor(Math.pow(fi, 1.5) * 140) + 1;
-        const v = freqBuf[Math.min(fIdx, FREQ_SIZE - 1)] / 255;
-        const envelope = Math.pow(1 - fi, 0.55);
-        const jitter = 0.55 + 0.45 * Math.abs(Math.sin(i * 1.7 + Math.cos(i * 0.31) * 2));
-        const barH = Math.max(3 * dpr,
-          (v * 0.85 + 0.15) * envelope * jitter * maxBarH
-          + energyEnv * maxBarH * 0.08);
-
-        const xR = cx + i * (barW + gap) + gap;
-        const xL = cx - (i + 1) * (barW + gap);
-
-        const topCol = fi < 0.5
-          ? lerpHex(CYAN, MAGENTA, fi * 2 * 0.55)
-          : lerpHex(MAGENTA, HOT_PINK, (fi - 0.5) * 2);
-        const botCol = fi < 0.5
-          ? lerpHex("#1ad9f5", DEEP_PURPLE, 0.4 + fi * 0.4)
-          : lerpHex(DEEP_PURPLE, "#5a0030", (fi - 0.5) * 2);
-
-        const grd = ctx.createLinearGradient(0, stageCY - barH, 0, stageCY);
-        grd.addColorStop(0, "#ffffff");
-        grd.addColorStop(0.08, topCol);
-        grd.addColorStop(1, botCol);
-
-        ctx.shadowBlur = 6 + v * 18 + kickVal * 10;
-        ctx.shadowColor = topCol;
-        ctx.fillStyle = grd;
-        ctx.fillRect(xR, stageCY - barH, barW, barH);
-        ctx.fillRect(xL, stageCY - barH, barW, barH);
-
-        // Reflet miroir
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = 0.28;
-        const reflH = Math.min(barH * 0.5, H * 0.12);
-        const gR = ctx.createLinearGradient(0, stageCY, 0, stageCY + reflH);
-        gR.addColorStop(0, topCol);
-        gR.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = gR;
-        ctx.fillRect(xR, stageCY, barW, reflH);
-        ctx.fillRect(xL, stageCY, barW, reflH);
-        ctx.globalAlpha = 1;
-      }
-
-      // ── SOL : voile sombre sous la ligne d'horizon ───────────────────
-      const floor = ctx.createLinearGradient(0, stageCY, 0, H);
-      floor.addColorStop(0, "rgba(8,4,30,0.55)");
-      floor.addColorStop(1, "rgba(2,0,10,0.85)");
-      ctx.fillStyle = floor;
-      ctx.fillRect(0, stageCY, W, H - stageCY);
-
-      // ── ANNEAUX MINT (scène/podium) ──────────────────────────────────
-      const ringPulse = 1 + bassEnv * 0.06 + kickVal * 0.05;
+      // 3. Anneaux mint additionnels en perspective qui pulsent au kick
+      const ringPulse = 1 + bassEnv * 0.05 + kickVal * 0.08;
       const ringDefs = [
-        { f: 0.95, color: MINT_SOFT, w: 1.5, a: 0.55 },
-        { f: 0.78, color: MINT,      w: 3.5, a: 0.95 },
-        { f: 0.60, color: MINT_SOFT, w: 1.2, a: 0.45 },
-        { f: 0.42, color: MINT,      w: 2.8, a: 0.9 },
-        { f: 0.22, color: MINT_SOFT, w: 1.2, a: 0.6 },
+        { f: 0.85, a: 0.30, w: 2.0 },
+        { f: 0.66, a: 0.55, w: 2.6 },
+        { f: 0.46, a: 0.45, w: 1.8 },
+        { f: 0.28, a: 0.50, w: 2.0 },
       ];
       for (const ring of ringDefs) {
-        const rx = W * 0.46 * ring.f * ringPulse;
-        const ry = rx * 0.12;
+        const rx = W * 0.42 * ring.f * ringPulse;
+        const ry = rx * 0.14;
         ctx.beginPath();
         ctx.ellipse(cx, stageCY, rx, ry, 0, 0, Math.PI * 2);
-        ctx.shadowBlur = 22 + ring.w * 6 + bassEnv * 25 + kickVal * 30;
-        ctx.shadowColor = ring.color;
-        ctx.strokeStyle = ring.color;
-        ctx.globalAlpha = ring.a;
+        ctx.shadowBlur = 18 + bassEnv * 22 + kickVal * 28;
+        ctx.shadowColor = "#5cffb8";
+        ctx.strokeStyle = `rgba(120,255,200,${ring.a + kickVal * 0.3})`;
         ctx.lineWidth = ring.w * dpr;
         ctx.stroke();
-        ctx.globalAlpha = 1;
       }
-
-      // Lueur mint au centre du podium
-      const podGlow = ctx.createRadialGradient(cx, stageCY, 0, cx, stageCY, W * 0.18);
-      podGlow.addColorStop(0, `rgba(57,255,176,${0.22 + kickVal * 0.3})`);
-      podGlow.addColorStop(1, "transparent");
-      ctx.fillStyle = podGlow;
-      ctx.fillRect(0, 0, W, H);
-
-      // ── CUBES MINT POSÉS AU SOL ──────────────────────────────────────
-      const sorted = [...cubes].sort((a, b) => a.depth - b.depth);
-      for (const c of sorted) {
-        const yRel = stageCY + (H - stageCY) * (0.05 + c.depth * 0.92);
-        const perspX = (c.rx - 0.5);
-        const px = cx + perspX * W * (0.4 + c.depth * 0.65);
-        const bounce = Math.sin(tNow * c.speed + c.phase) * (3 + bassEnv * 10 + kickVal * 8) * dpr;
-        const py = yRel - bounce;
-        const s = c.size * (0.9 + bassEnv * 0.35 + kickVal * 0.25) * dpr * (0.5 + c.depth * 0.9);
-
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.shadowBlur = 14 * dpr;
-        ctx.shadowColor = MINT;
-        ctx.fillStyle = MINT;
-        ctx.globalAlpha = 0.85 + bassEnv * 0.15;
-        ctx.fillRect(-s / 2, -s / 2, s, s);
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = 0.55;
-        ctx.fillStyle = "#E6FFF2";
-        ctx.fillRect(-s / 2 + s * 0.12, -s / 2 + s * 0.12, s * 0.3, s * 0.18);
-        ctx.restore();
-        ctx.globalAlpha = 1;
-      }
-
       ctx.shadowBlur = 0;
+
+      // 4. Faisceaux verticaux fins par-dessus la skyline réactifs à la FFT
+      const N = 48;
+      const spanW = W * 0.78;
+      const xStart = cx - spanW / 2;
+      const stepX = spanW / N;
+      const baseline = H * 0.66;
+      for (let i = 0; i < N; i++) {
+        const sym = Math.abs(i - N / 2) / (N / 2);             // 0 centre → 1 bord
+        const fIdx = Math.floor(Math.pow(sym, 1.4) * 120) + 2;
+        const v = freqBuf[Math.min(fIdx, FREQ_SIZE - 1)] / 255;
+        const h = (v * 0.6 + 0.05) * H * 0.55 * (0.4 + Math.pow(1 - sym, 0.4) * 0.9);
+        const x = xStart + i * stepX + stepX * 0.5;
+        const color = sym < 0.45
+          ? `rgba(70,235,255,${0.35 + v * 0.5})`
+          : `rgba(255,60,170,${0.30 + v * 0.5})`;
+        const grd = ctx.createLinearGradient(0, baseline - h, 0, baseline);
+        grd.addColorStop(0, "rgba(255,255,255,0.9)");
+        grd.addColorStop(0.05, color);
+        grd.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = grd;
+        ctx.shadowBlur = 8 + v * 18 + kickVal * 10;
+        ctx.shadowColor = color;
+        ctx.fillRect(x - 0.9 * dpr, baseline - h, 1.8 * dpr, h);
+      }
+      ctx.shadowBlur = 0;
+
+      // 5. Scintillements mint au sol (cubes lumineux) – petits flashs au kick
+      if (kickVal > 0.2) {
+        for (let i = 0; i < 6; i++) {
+          const px = cx + (Math.sin(tNow * 1.7 + i * 1.3) * 0.42 + (i - 3) * 0.04) * W;
+          const py = H * (0.86 + Math.sin(tNow * 2.1 + i) * 0.04);
+          ctx.fillStyle = `rgba(120,255,200,${kickVal * 0.55})`;
+          ctx.shadowBlur = 16;
+          ctx.shadowColor = "#5cffb8";
+          const s = (4 + kickVal * 6) * dpr;
+          ctx.fillRect(px - s / 2, py - s / 2, s, s);
+        }
+        ctx.shadowBlur = 0;
+      }
     }
-
-
 
     draw();
     return () => { cancelAnimationFrame(rafRef.current); ro.disconnect(); };
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
-      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {/* Fond photoréaliste */}
+      <img
+        src={neonStage.url}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ filter: "saturate(1.1) contrast(1.05)" }}
+      />
+      {/* Vignette pour fondre les bords */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+      {/* Overlay réactif à l'audio */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          display: "block",
+          mixBlendMode: "screen",
+          opacity: 0.95,
+        }}
+      />
     </div>
   );
 }
+
 
 function SignatureTracks() {
   const t = useT();
