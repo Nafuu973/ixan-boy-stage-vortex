@@ -136,7 +136,8 @@ function EnterOverlay({ visible }: { visible: boolean }) {
 
             {/* Title */}
             <motion.h1
-              className="font-display text-[clamp(4.5rem,18vw,11rem)] leading-none tracking-[-0.02em] text-bone"
+              style={{ color: "var(--bone)", whiteSpace: "nowrap", fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
+              className="font-display"
               initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
