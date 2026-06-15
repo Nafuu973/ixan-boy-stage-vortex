@@ -126,9 +126,9 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
-            className="font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
+            className="font-mono text-xs uppercase tracking-[0.45em] text-violet md:text-sm"
           >
-            Reclaim The Fire — Sortie Septembre
+            Reclaim The Fire — OUT SEPT 26
           </motion.div>
 
           {/* Main content — single column, truly centered */}
