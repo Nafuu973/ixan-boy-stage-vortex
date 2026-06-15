@@ -80,7 +80,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04, filter: "blur(12px)" }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[180] flex flex-col items-center justify-center overflow-hidden bg-void"
+          className="fixed inset-0 z-[180] grid place-items-center overflow-hidden bg-void"
         >
           {/* Animated radial glow */}
           <motion.div
