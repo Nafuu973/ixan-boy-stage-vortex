@@ -68,55 +68,208 @@ function Index() {
 function EnterOverlay({ visible }: { visible: boolean }) {
   const [dismissed, setDismissed] = useState(false);
   const open = visible && !dismissed;
+
+  const words = ["IXAN", "BOY"];
+  const subtitleWords = ["EPK", "·", "2026"];
+
   return (
     <AnimatePresence>
       {open && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6 }}
-          className="fixed inset-0 z-[180] flex flex-col items-center justify-center gap-10 bg-void/95 backdrop-blur-sm"
+          exit={{ opacity: 0, scale: 1.04, filter: "blur(12px)" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="fixed inset-0 z-[180] flex flex-col items-center justify-center overflow-hidden bg-void"
         >
-          <div className="flex flex-col items-center gap-4 text-center">
-            <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-violet">
-              Reclaim The Fire — Ixan Boy · Sortie prévue en septembre
-            </span>
-            <span className="font-display text-3xl text-bone md:text-5xl">
-              IXAN&nbsp;BOY · EPK
-            </span>
-            <span className="max-w-[22rem] font-mono text-[9px] uppercase tracking-[0.32em] text-bone/55">
-              Expérience musicale · Montez le son
-              <br />
-              <span className="text-bone/35">Music experience · Turn the sound up</span>
-            </span>
-          </div>
-          <motion.button
-            type="button"
-            onClick={() => {
-              startTeaser();
-              setDismissed(true);
-            }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.94 }}
+          {/* Animated radial glow */}
+          <motion.div
+            className="pointer-events-none absolute inset-0"
             animate={{
-              boxShadow: [
-                "0 0 30px oklch(0.55 0.28 295 / 0.35)",
-                "0 0 70px oklch(0.55 0.28 295 / 0.65)",
-                "0 0 30px oklch(0.55 0.28 295 / 0.35)",
+              background: [
+                "radial-gradient(ellipse 60% 50% at 50% 60%, oklch(0.35 0.26 295 / 0.18) 0%, transparent 70%)",
+                "radial-gradient(ellipse 70% 60% at 50% 55%, oklch(0.45 0.28 295 / 0.28) 0%, transparent 70%)",
+                "radial-gradient(ellipse 60% 50% at 50% 60%, oklch(0.35 0.26 295 / 0.18) 0%, transparent 70%)",
               ],
             }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-            className="group relative grid h-16 w-16 place-items-center rounded-full border border-violet/70 bg-violet/15 transition hover:border-violet hover:bg-violet/25"
-            aria-label="Enter"
-          >
-            <svg viewBox="0 0 14 14" className="ml-[2px] h-5 w-5 fill-bone transition group-hover:fill-bone">
-              <path d="M3 1.5 L12 7 L3 12.5 Z" />
-            </svg>
-            <span className="absolute inset-0 -z-10 animate-ping rounded-full border border-violet/40" />
-            <span className="absolute -inset-2 -z-10 rounded-full border border-violet/20" />
-          </motion.button>
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
 
+          {/* Scan lines */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, var(--bone) 2px, var(--bone) 3px)",
+              backgroundSize: "100% 4px",
+            }}
+          />
+
+          {/* Corner brackets */}
+          {[
+            "top-6 left-6 border-t border-l",
+            "top-6 right-6 border-t border-r",
+            "bottom-6 left-6 border-b border-l",
+            "bottom-6 right-6 border-b border-r",
+          ].map((cls, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 + i * 0.07, duration: 0.5 }}
+              className={`absolute h-8 w-8 border-bone/20 md:h-12 md:w-12 ${cls}`}
+            />
+          ))}
+
+          {/* Top label */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="absolute top-8 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
+          >
+            Reclaim The Fire — Sortie Septembre
+          </motion.div>
+
+          {/* Main content */}
+          <div className="relative flex flex-col items-center gap-6 text-center md:gap-8">
+            {/* Big animated title */}
+            <div className="flex flex-col items-center gap-0 leading-none">
+              <div className="flex items-baseline gap-4 md:gap-6">
+                {words.map((word, wi) => (
+                  <motion.span
+                    key={word}
+                    initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ delay: 0.5 + wi * 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-display text-[clamp(4.5rem,18vw,11rem)] tracking-[-0.02em] text-bone"
+                    style={{
+                      textShadow: wi === 1
+                        ? "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)"
+                        : "none",
+                      color: wi === 1 ? "oklch(0.92 0.04 295)" : undefined,
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </div>
+
+              {/* Subtitle row */}
+              <motion.div
+                initial={{ opacity: 0, scaleX: 0.6 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ delay: 0.85, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-1 flex items-center gap-3"
+              >
+                {subtitleWords.map((w, i) => (
+                  <span
+                    key={i}
+                    className={`font-mono text-[10px] uppercase tracking-[0.5em] md:text-[11px] ${
+                      w === "·" ? "text-violet" : "text-bone/40"
+                    }`}
+                  >
+                    {w}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Horizontal divider */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="h-px w-48 origin-center bg-gradient-to-r from-transparent via-violet/60 to-transparent md:w-72"
+            />
+
+            {/* Sound label */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.1, duration: 0.6 }}
+              className="font-mono text-[9px] uppercase tracking-[0.38em] text-bone/40"
+            >
+              Expérience musicale · Montez le son
+            </motion.p>
+
+            {/* CTA Play button */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-2"
+            >
+              <motion.button
+                type="button"
+                onClick={() => {
+                  startTeaser();
+                  setDismissed(true);
+                }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.92 }}
+                className="group relative grid h-20 w-20 place-items-center rounded-full border border-violet/50 bg-violet/10 backdrop-blur-sm transition-colors duration-300 hover:border-violet hover:bg-violet/20 md:h-24 md:w-24"
+                aria-label="Enter"
+              >
+                {/* Pulsing rings */}
+                <motion.span
+                  className="absolute inset-0 rounded-full border border-violet/30"
+                  animate={{ scale: [1, 1.6, 1.6], opacity: [0.6, 0, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                />
+                <motion.span
+                  className="absolute inset-0 rounded-full border border-violet/20"
+                  animate={{ scale: [1, 2, 2], opacity: [0.4, 0, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
+                />
+
+                {/* Glow */}
+                <motion.span
+                  className="absolute inset-0 -z-10 rounded-full"
+                  animate={{
+                    boxShadow: [
+                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
+                      "0 0 50px oklch(0.55 0.28 295 / 0.6)",
+                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
+                    ],
+                  }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                />
+
+                <svg viewBox="0 0 14 14" className="relative ml-[3px] h-6 w-6 fill-bone drop-shadow-[0_0_8px_rgba(200,160,255,0.8)] md:h-7 md:w-7">
+                  <path d="M3 1.5 L12 7 L3 12.5 Z" />
+                </svg>
+              </motion.button>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 0.5 }}
+                className="mt-4 font-mono text-[8px] uppercase tracking-[0.4em] text-bone/30"
+              >
+                Appuyer pour entrer
+              </motion.p>
+            </motion.div>
+          </div>
+
+          {/* Bottom ticker */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.3, duration: 0.6 }}
+            className="absolute bottom-8 left-0 right-0 overflow-hidden"
+          >
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+              className="flex whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.35em] text-bone/20"
+            >
+              {Array.from({ length: 6 }).map((_, i) => (
+                <span key={i} className="mx-6">
+                  Ixan Boy · Hardstyle · Reclaim The Fire · Booking 2026 · Expérience Live ·&nbsp;
+                </span>
+              ))}
+            </motion.div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
