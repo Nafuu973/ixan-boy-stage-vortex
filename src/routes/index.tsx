@@ -14,6 +14,8 @@ import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
 import waveformBg from "@/assets/waveform-round.mp4.asset.json";
+import neonStage from "@/assets/neon-stage.jpeg.asset.json";
+
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
@@ -1300,6 +1302,7 @@ function WaveformCanvas() {
           c.fillStyle = reflGrad;
           c.fillRect(x - barW / 2, baseY, barW, h * 0.45);
         }
+        ctx.shadowBlur = 0;
       }
       c.shadowBlur = 0;
 
@@ -1362,6 +1365,7 @@ function WaveformCanvas() {
     </div>
   );
 }
+
 
 function SignatureTracks() {
   const t = useT();
