@@ -136,20 +136,17 @@ function EnterOverlay({ visible }: { visible: boolean }) {
 
             {/* Title */}
             <motion.h1
-              className="font-display text-[clamp(4.5rem,18vw,11rem)] leading-none tracking-[-0.02em]"
+              className="font-display text-[clamp(4.5rem,18vw,11rem)] leading-none tracking-[-0.02em] text-bone"
               initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ delay: 0.5, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              <span className="text-bone">IXAN </span>
+              IXAN{" "}
               <motion.span
                 initial={{ opacity: 0, filter: "blur(8px)" }}
                 animate={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  color: "oklch(0.92 0.04 295)",
-                  textShadow: "0 0 60px oklch(0.55 0.28 295 / 0.6), 0 0 120px oklch(0.45 0.28 295 / 0.3)",
-                }}
+                style={{ textShadow: "0 0 60px rgba(128, 0, 255, 0.55), 0 0 120px rgba(128, 0, 255, 0.25)" }}
               >
                 BOY
               </motion.span>
@@ -209,8 +206,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                   background: "oklch(0.55 0.28 295 / 0.1)",
                   backdropFilter: "blur(8px)",
                   cursor: "pointer",
-                  display: "grid",
-                  placeItems: "center",
+                  padding: 0,
                 }}
               >
                 <motion.span
@@ -228,7 +224,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                   animate={{ boxShadow: ["0 0 20px oklch(0.55 0.28 295 / 0.3)", "0 0 50px oklch(0.55 0.28 295 / 0.6)", "0 0 20px oklch(0.55 0.28 295 / 0.3)"] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <svg viewBox="0 0 14 14" style={{ position: "relative", width: "1.5rem", height: "1.5rem", fill: "var(--bone)", marginLeft: "3px", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
+                <svg viewBox="0 0 14 14" style={{ position: "absolute", top: "50%", left: "50%", width: "1.5rem", height: "1.5rem", transform: "translate(-46%, -50%)", fill: "var(--bone)", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
                   <path d="M3 1.5 L12 7 L3 12.5 Z" />
                 </svg>
               </motion.button>
