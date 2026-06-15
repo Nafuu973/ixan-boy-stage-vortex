@@ -1237,7 +1237,7 @@ function WaveformCanvas() {
         const phase = t * 0.15 + i * 1.7;
         const rr = maxR * (0.25 + i * 0.18) * (1 + Math.sin(phase) * 0.02);
         c.beginPath();
-        c.ellipse(cx, cy, rr, rr * 0.98, 0, 0, Math.PI * 2);
+        c.ellipse(cx, cy, Math.max(0.01, rr), Math.max(0.01, rr * 0.98), 0, 0, Math.PI * 2);
         c.lineWidth = 1;
         c.strokeStyle = rgba(GLOW, 0.025 + energyEnv * 0.02);
         c.stroke();
@@ -1264,7 +1264,7 @@ function WaveformCanvas() {
 
         // Anneau principal (fin, lumineux, comme une crête d'onde)
         c.beginPath();
-        c.ellipse(cx, cy, radius, radius * 0.985, 0, 0, Math.PI * 2);
+        c.ellipse(cx, cy, Math.max(0.01, radius), Math.max(0.01, radius * 0.985), 0, 0, Math.PI * 2);
         c.lineWidth = 1.2 + (1 - age) * 1.6;
         c.strokeStyle = rgba(mix(col, WHITE, 0.35), alpha * 0.95);
         c.shadowBlur = 18 + (1 - age) * 20;
@@ -1273,7 +1273,7 @@ function WaveformCanvas() {
 
         // Halo interne diffus (épaisseur de l'onde)
         c.beginPath();
-        c.ellipse(cx, cy, radius * 0.985, radius * 0.97, 0, 0, Math.PI * 2);
+        c.ellipse(cx, cy, Math.max(0.01, radius * 0.985), Math.max(0.01, radius * 0.97), 0, 0, Math.PI * 2);
         c.lineWidth = 6 + (1 - age) * 10;
         c.strokeStyle = rgba(col, alpha * 0.18);
         c.shadowBlur = 24;
@@ -1283,7 +1283,7 @@ function WaveformCanvas() {
         // Reflet braise sur les ondes récentes (énergie haute)
         if (r.hue > 0.15 && age < 0.45) {
           c.beginPath();
-          c.ellipse(cx, cy, radius * 1.005, radius * 0.99, 0, 0, Math.PI * 2);
+          c.ellipse(cx, cy, Math.max(0.01, radius * 1.005), Math.max(0.01, radius * 0.99), 0, 0, Math.PI * 2);
           c.lineWidth = 0.8;
           c.strokeStyle = rgba(
             mix(EMBER, WHITE, 0.4),
