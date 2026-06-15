@@ -144,10 +144,10 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             >
               IXAN{" "}
               <motion.span
-                initial={{ opacity: 0, filter: "blur(8px)" }}
-                animate={{ opacity: 1, filter: "blur(0px)" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.65, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                style={{ color: "var(--bone)", textShadow: "0 0 24px rgba(168, 85, 247, 0.45), 0 0 48px rgba(168, 85, 247, 0.2)" }}
+                style={{ color: "var(--bone)", textShadow: "0 0 18px rgba(168, 85, 247, 0.35)" }}
               >
                 BOY
               </motion.span>
