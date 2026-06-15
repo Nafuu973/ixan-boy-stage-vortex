@@ -209,8 +209,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                   background: "oklch(0.55 0.28 295 / 0.1)",
                   backdropFilter: "blur(8px)",
                   cursor: "pointer",
-                  display: "grid",
-                  placeItems: "center",
+                  padding: 0,
                 }}
               >
                 <motion.span
