@@ -134,7 +134,7 @@ function TopLabelTypewriter() {
       {done && (
         <motion.span
           animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.5, repeat: 4, ease: "steps(1)" }}
+          transition={{ duration: 0.5, repeat: 4, ease: [1, 0, 1, 0] }}
           style={{ color: "var(--violet)" }}
         >
           _
