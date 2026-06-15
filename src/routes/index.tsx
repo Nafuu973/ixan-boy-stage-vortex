@@ -1079,20 +1079,20 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
 
 /* ────────────────────────────────────────────────────────────────────────
-   WaveformCanvas — "Aurora Pulse"
-   Visualiseur cinématique, organique, premium. Pas de gros barreaux EDM.
-   Composition :
-     ▸ Fond : gradient radial profond violet → braise au pic
-     ▸ Aurores : 3 lobes de bezier translucides qui ondulent en arrière-plan
-     ▸ Onde radiale : courbe fermée façon "liquid metal" pilotée par la FFT,
-       doublée d'un halo intérieur et d'un anneau de glow
-     ▸ Anneaux : arcs concentriques fins, pointillés, rotation lente
-     ▸ Poussière : sparks néon en parallaxe, attirés vers le centre au drop
-     ▸ Bloom central + flash de drop au moment de la coupure
-   Palette stricte IXAN BOY : void / violet / glow / lavande / braise / os.
-   Rendu : true blacks, composition "lighter" pour le néon.
+   WaveformCanvas — "Water Drops"
+   Ondes concentriques émises au centre comme des gouttes sur une surface
+   d'eau plane. Chaque kick = une nouvelle goutte. Les ondes s'élargissent,
+   s'affinent, s'estompent. Surface noire profonde, reflets violet/braise,
+   léger frémissement pour donner la sensation de liquide.
    ──────────────────────────────────────────────────────────────────────── */
 type RGB = [number, number, number];
+
+type Ripple = {
+  born: number;     // t de naissance
+  life: number;     // durée totale (s)
+  strength: number; // intensité initiale (0..1)
+  hue: number;      // 0 violet → 1 braise
+};
 
 function WaveformCanvas() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -1121,7 +1121,7 @@ function WaveformCanvas() {
     ro.observe(wrap);
 
     // Palette
-    const VOID: RGB = [8, 4, 18];
+    const VOID: RGB = [6, 3, 14];
     const VIOLET: RGB = [128, 0, 255];
     const GLOW: RGB = [168, 68, 255];
     const LAV: RGB = [206, 162, 255];
@@ -1139,33 +1139,27 @@ function WaveformCanvas() {
 
     const freqBuf = new Uint8Array(1024);
 
-    // Enveloppes
+    // Enveloppes & détection de "gouttes" (kicks)
     let energyEnv = 0;
     let bassEnv = 0;
-    let highEnv = 0;
-    let buildEnv = 0;
-    let centroid = 0;
-    let flash = 0;
-    let prevEnergy = 0;
+    let bassFast = 0;
+    let bassSlow = 0;
+    let fluxAvg = 0;
+    let fluxDev = 0;
     let lastDrop = -10;
-    let rotA = 0;
-    let rotB = 0;
+    let nextIdleDrop = 0;
 
-    // Poussières
-    const NP = 60;
-    const parts = Array.from({ length: NP }, () => ({
-      a: Math.random() * Math.PI * 2,
-      r: 0.25 + Math.random() * 0.9,
-      z: 0.25 + Math.random() * 0.85,
-      vr: -0.0006 - Math.random() * 0.0016,
-      va: (Math.random() - 0.5) * 0.0025,
-      tw: Math.random() * Math.PI * 2,
-    }));
+    const ripples: Ripple[] = [];
 
-    // Onde radiale (échantillons)
-    const NS = 180;
-    const samples = new Float32Array(NS);
-    const samplesPrev = new Float32Array(NS);
+    const addRipple = (strength: number, heat: number) => {
+      ripples.push({
+        born: performance.now() / 1000,
+        life: 2.4 + Math.random() * 0.6,
+        strength: clamp(strength, 0.2, 1),
+        hue: heat,
+      });
+      if (ripples.length > 18) ripples.shift();
+    };
 
     const getAn = () => getAnalyser() || getTeaserAnalyser();
 
@@ -1175,10 +1169,10 @@ function WaveformCanvas() {
       const c = ctx!;
       const t = performance.now() / 1000;
       const cx = W / 2;
-      const cy = H * 0.54;
-      const baseR = Math.min(W, H) * 0.22;
+      const cy = H * 0.55;
+      const maxR = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
 
-      // FFT (ou idle synthétique très doux)
+      // FFT (ou idle synthétique)
       const an = getAn();
       let bins = 256;
       if (an) {
@@ -1186,8 +1180,7 @@ function WaveformCanvas() {
         an.getByteFrequencyData(freqBuf as unknown as Uint8Array<ArrayBuffer>);
       } else {
         for (let i = 0; i < bins; i++)
-          freqBuf[i] =
-            8 + (Math.sin(t * 0.5 + i * 0.04) + 1) * 7 * Math.exp(-i / 80);
+          freqBuf[i] = 6 + (Math.sin(t * 0.4 + i * 0.05) + 1) * 5 * Math.exp(-i / 80);
       }
       const usable = Math.max(32, Math.floor(bins * 0.62));
 
@@ -1195,224 +1188,146 @@ function WaveformCanvas() {
       let bass = 0;
       for (let i = 1; i < 8; i++) bass += freqBuf[i];
       bass /= 7 * 255;
-      const hiHi = Math.min(usable, 170);
-      let high = 0;
-      for (let i = 60; i < hiHi; i++) high += freqBuf[i];
-      high /= Math.max(1, hiHi - 60) * 255;
-      let sum = 0;
-      let wsum = 0;
       let eSum = 0;
-      for (let i = 1; i < usable; i++) {
-        const m = freqBuf[i];
-        sum += m;
-        wsum += m * i;
-        eSum += m;
-      }
-      const cInst = sum > 0 ? clamp(wsum / sum / usable) : 0;
+      for (let i = 1; i < usable; i++) eSum += freqBuf[i];
       const energyInst = clamp((eSum / (usable * 255)) * 2.4);
 
       const env = (e: number, x: number, a: number, r: number) =>
         e + (x - e) * (x > e ? a : r);
       energyEnv = env(energyEnv, energyInst, 0.28, 0.06);
-      bassEnv = env(bassEnv, bass, 0.42, 0.10);
-      highEnv = env(highEnv, high, 0.34, 0.10);
-      centroid = env(centroid, cInst, 0.10, 0.08);
-      buildEnv = env(buildEnv, energyEnv, 0.012, 0.018);
+      bassEnv = env(bassEnv, bass, 0.45, 0.10);
 
-      const fall = prevEnergy - energyEnv;
-      if (prevEnergy > 0.30 && fall > 0.05 && t - lastDrop > 0.8) {
-        flash = 1;
+      // Détection de kick : flux positif sur la bande basse
+      bassFast += (bass - bassFast) * 0.38;
+      bassSlow += (bass - bassSlow) * 0.05;
+      const flux = Math.max(0, bassFast - bassSlow);
+      fluxAvg += (flux - fluxAvg) * 0.06;
+      fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.06;
+      const threshold = Math.max(0.003, fluxAvg + fluxDev * 0.25);
+      if (an && flux > threshold && bass > 0.04 && t - lastDrop > 0.14) {
+        const strength = clamp(0.45 + flux * 3 + bass * 0.6);
+        addRipple(strength, clamp(energyEnv * 0.8));
         lastDrop = t;
       }
-      prevEnergy = energyEnv;
-      flash *= 0.90;
-      rotA += 0.0009 + bassEnv * 0.004;
-      rotB -= 0.0006 + highEnv * 0.003;
+      // Idle : une goutte calme de temps en temps si pas d'audio
+      if (!an && t > nextIdleDrop) {
+        addRipple(0.5, 0.0);
+        nextIdleDrop = t + 1.6 + Math.random() * 1.4;
+      }
 
-      const heat = clamp(energyEnv * 0.7 + flash * 0.6);
-      const accent = mix(VIOLET, EMBER, heat * 0.55);
-      void centroid;
+      const heat = clamp(energyEnv * 0.6);
+      const accent = mix(VIOLET, EMBER, heat * 0.5);
 
-      // ── Fond : true black + gradient radial profond ─────────────────
+      // ── Surface d'eau : true black + vignette froide ────────────────
       c.globalCompositeOperation = "source-over";
       c.shadowBlur = 0;
-      c.fillStyle = rgba(VOID, 0.85);
+      c.fillStyle = rgba(VOID, 1);
       c.fillRect(0, 0, W, H);
-      const bg = c.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.75);
-      bg.addColorStop(0, rgba(mix(VIOLET, EMBER, heat * 0.35), 0.18 + energyEnv * 0.12));
-      bg.addColorStop(0.45, rgba(VIOLET, 0.05));
-      bg.addColorStop(1, rgba(VOID, 0));
-      c.fillStyle = bg;
+      // léger gradient radial très froid (profondeur de la surface)
+      const depth = c.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+      depth.addColorStop(0, rgba(mix(VIOLET, accent, 0.4), 0.10 + energyEnv * 0.10));
+      depth.addColorStop(0.55, rgba(VIOLET, 0.03));
+      depth.addColorStop(1, rgba(VOID, 0));
+      c.fillStyle = depth;
       c.fillRect(0, 0, W, H);
 
-      // Passage additif
+      // Léger frémissement de surface (texture vivante)
       c.globalCompositeOperation = "lighter";
-
-      // ── Aurores (3 lobes en bezier, très lents) ─────────────────────
-      const auroras = [
-        { hue: mix(VIOLET, GLOW, 0.4), phase: 0.0, rad: 0.55, alpha: 0.10 },
-        { hue: mix(GLOW, LAV, 0.5), phase: 1.7, rad: 0.42, alpha: 0.08 },
-        { hue: accent, phase: 3.3, rad: 0.65, alpha: 0.07 + heat * 0.10 },
-      ];
-      for (const au of auroras) {
-        const R = Math.max(W, H) * au.rad * (1 + buildEnv * 0.1);
+      for (let i = 0; i < 4; i++) {
+        const phase = t * 0.15 + i * 1.7;
+        const rr = maxR * (0.25 + i * 0.18) * (1 + Math.sin(phase) * 0.02);
         c.beginPath();
-        const steps = 64;
-        for (let i = 0; i <= steps; i++) {
-          const ang = (i / steps) * Math.PI * 2;
-          const w =
-            0.55 +
-            0.45 *
-              Math.sin(ang * 3 + t * 0.35 + au.phase) *
-              Math.cos(ang * 2 - t * 0.22 + au.phase);
-          const rr = R * (0.85 + 0.25 * w + bassEnv * 0.12);
-          const x = cx + Math.cos(ang) * rr;
-          const y = cy + Math.sin(ang) * rr * 0.78;
-          if (i === 0) c.moveTo(x, y);
-          else c.lineTo(x, y);
-        }
-        c.closePath();
-        const g = c.createRadialGradient(cx, cy, R * 0.2, cx, cy, R * 1.05);
-        g.addColorStop(0, rgba(au.hue, au.alpha * 1.4));
-        g.addColorStop(0.6, rgba(au.hue, au.alpha * 0.45));
-        g.addColorStop(1, rgba(au.hue, 0));
-        c.fillStyle = g;
-        c.fill();
-      }
-
-      // ── Anneaux fins pointillés en rotation ─────────────────────────
-      for (let k = 0; k < 3; k++) {
-        const rr = baseR * (1.55 + k * 0.55) * (1 + bassEnv * 0.04);
-        c.save();
-        c.translate(cx, cy);
-        c.rotate(k % 2 === 0 ? rotA * (1 + k * 0.3) : rotB * (1 + k * 0.4));
-        c.beginPath();
-        c.ellipse(0, 0, rr, rr * 0.96, 0, 0, Math.PI * 2);
+        c.ellipse(cx, cy, rr, rr * 0.98, 0, 0, Math.PI * 2);
         c.lineWidth = 1;
-        c.setLineDash([2, 10 + k * 6]);
-        c.strokeStyle = rgba(
-          mix(GLOW, LAV, 0.4 + k * 0.2),
-          0.18 + highEnv * 0.25 + flash * 0.3,
-        );
-        c.shadowBlur = 8 + highEnv * 12;
-        c.shadowColor = rgba(GLOW, 0.7);
+        c.strokeStyle = rgba(GLOW, 0.025 + energyEnv * 0.02);
         c.stroke();
-        c.setLineDash([]);
-        c.restore();
-      }
-      c.shadowBlur = 0;
-
-      // ── Onde radiale principale ─────────────────────────────────────
-      for (let i = 0; i < NS; i++) {
-        const f = i / (NS - 1);
-        const bi = 1 + Math.floor(Math.pow(f, 1.7) * (usable - 2));
-        const bi2 = Math.min(usable - 1, bi + 2);
-        let peak = 0;
-        for (let b = bi; b <= bi2; b++) if (freqBuf[b] > peak) peak = freqBuf[b];
-        let v = peak / 255;
-        v = v * 0.7 + samplesPrev[i] * 0.3;
-        samplesPrev[i] = v;
-        samples[i] = v;
-      }
-      const smoothed = new Float32Array(NS);
-      for (let i = 0; i < NS; i++) {
-        const a0 = samples[(i - 1 + NS) % NS];
-        const b0 = samples[i];
-        const c0 = samples[(i + 1) % NS];
-        smoothed[i] = (a0 + b0 * 2 + c0) / 4;
       }
 
-      const drawWave = (
-        radius: number,
-        amp: number,
-        col: RGB,
-        alpha: number,
-        lineWidth: number,
-        blur: number,
-      ) => {
-        c.beginPath();
-        for (let i = 0; i <= NS; i++) {
-          const ix = i % NS;
-          const ang = (ix / NS) * Math.PI * 2 - Math.PI / 2;
-          const v = smoothed[ix];
-          const rr =
-            radius +
-            v * amp +
-            Math.sin(ang * 6 + t * 0.7) * 2 +
-            bassEnv * amp * 0.18;
-          const x = cx + Math.cos(ang) * rr;
-          const y = cy + Math.sin(ang) * rr;
-          if (i === 0) c.moveTo(x, y);
-          else c.lineTo(x, y);
+      // ── Ondes concentriques (les gouttes) ───────────────────────────
+      // Render du plus ancien au plus récent pour empilement propre.
+      for (let k = ripples.length - 1; k >= 0; k--) {
+        const r = ripples[k];
+        const age = (t - r.born) / r.life; // 0..1
+        if (age >= 1) {
+          ripples.splice(k, 1);
+          continue;
         }
-        c.closePath();
-        c.lineWidth = lineWidth;
-        c.strokeStyle = rgba(col, alpha);
-        c.shadowBlur = blur;
-        c.shadowColor = rgba(col, 0.9);
+        // easing : expansion rapide au début, lente à la fin
+        const eased = 1 - Math.pow(1 - age, 2.2);
+        const radius = eased * maxR * (0.95 + r.strength * 0.2);
+
+        // intensité : pic au début puis fade
+        const alpha = (1 - age) * (1 - age) * r.strength;
+        if (alpha < 0.005) continue;
+
+        const col = mix(mix(LAV, GLOW, 0.5), accent, r.hue * 0.6);
+
+        // Anneau principal (fin, lumineux, comme une crête d'onde)
+        c.beginPath();
+        c.ellipse(cx, cy, radius, radius * 0.985, 0, 0, Math.PI * 2);
+        c.lineWidth = 1.2 + (1 - age) * 1.6;
+        c.strokeStyle = rgba(mix(col, WHITE, 0.35), alpha * 0.95);
+        c.shadowBlur = 18 + (1 - age) * 20;
+        c.shadowColor = rgba(col, alpha * 0.9);
         c.stroke();
-      };
 
-      const amp = baseR * (0.55 + buildEnv * 0.6 + flash * 0.35);
-
-      drawWave(baseR * 1.02, amp * 0.9, GLOW, 0.22 + energyEnv * 0.15, 14, 28);
-      drawWave(baseR, amp, mix(LAV, WHITE, 0.4), 0.85, 1.6, 18);
-      if (heat > 0.05) {
-        drawWave(
-          baseR * 0.78,
-          amp * 0.7,
-          mix(EMBER, WHITE, flash * 0.6),
-          0.35 + flash * 0.5,
-          2.2,
-          22,
-        );
-      }
-
-      // Cœur central
-      const core = c.createRadialGradient(cx, cy, 0, cx, cy, baseR * 0.95);
-      core.addColorStop(0, rgba(mix(WHITE, accent, 0.4), 0.35 + flash * 0.5 + energyEnv * 0.2));
-      core.addColorStop(0.5, rgba(VIOLET, 0.18 + energyEnv * 0.18));
-      core.addColorStop(1, rgba(VIOLET, 0));
-      c.fillStyle = core;
-      c.fillRect(0, 0, W, H);
-
-      // ── Poussières (sparks) ─────────────────────────────────────────
-      c.shadowBlur = 0;
-      for (const p of parts) {
-        p.a += p.va + bassEnv * 0.004;
-        p.r += p.vr * (1 + buildEnv * 0.8);
-        if (p.r < 0.18) {
-          p.r = 1.15;
-          p.a = Math.random() * Math.PI * 2;
-        }
-        const rad = baseR * (1.1 + p.r * 2.2);
-        const x = cx + Math.cos(p.a) * rad;
-        const y = cy + Math.sin(p.a) * rad * 0.92;
-        const tw = 0.5 + 0.5 * Math.sin(t * 2 + p.tw);
-        const s = (0.8 + p.z * 2.2) * (1 + bassEnv * 0.6 + flash * 0.8);
-        const col = mix(LAV, accent, p.z * 0.6);
-        const a = clamp((0.18 + highEnv * 0.6 + flash * 0.4) * p.z * tw);
-        c.fillStyle = rgba(col, a);
-        c.shadowBlur = 6 + flash * 10;
-        c.shadowColor = rgba(col, 0.8);
+        // Halo interne diffus (épaisseur de l'onde)
         c.beginPath();
-        c.arc(x, y, s, 0, Math.PI * 2);
-        c.fill();
+        c.ellipse(cx, cy, radius * 0.985, radius * 0.97, 0, 0, Math.PI * 2);
+        c.lineWidth = 6 + (1 - age) * 10;
+        c.strokeStyle = rgba(col, alpha * 0.18);
+        c.shadowBlur = 24;
+        c.shadowColor = rgba(col, alpha * 0.6);
+        c.stroke();
+
+        // Reflet braise sur les ondes récentes (énergie haute)
+        if (r.hue > 0.15 && age < 0.45) {
+          c.beginPath();
+          c.ellipse(cx, cy, radius * 1.005, radius * 0.99, 0, 0, Math.PI * 2);
+          c.lineWidth = 0.8;
+          c.strokeStyle = rgba(
+            mix(EMBER, WHITE, 0.4),
+            alpha * r.hue * 0.6,
+          );
+          c.shadowBlur = 14;
+          c.shadowColor = rgba(EMBER, alpha * 0.6);
+          c.stroke();
+        }
       }
       c.shadowBlur = 0;
 
-      // ── Bloom global + flash de drop ────────────────────────────────
-      const bloom = c.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W, H) * 0.55);
-      const bcol = mix(VIOLET, mix(GLOW, WHITE, flash), heat * 0.5);
-      bloom.addColorStop(0, rgba(bcol, 0.08 + energyEnv * 0.12 + flash * 0.35));
-      bloom.addColorStop(1, rgba(bcol, 0));
+      // ── Impact central : la goutte qui retombe ──────────────────────
+      // Petit disque qui pulse au moment de chaque nouvelle ripple.
+      const latest = ripples[ripples.length - 1];
+      const since = latest ? t - latest.born : 99;
+      const dropPulse = Math.max(0, 1 - since / 0.35);
+      const dropR =
+        6 + bassEnv * 14 + dropPulse * 22 * (latest?.strength ?? 0.5);
+      const dropCol = mix(LAV, accent, heat * 0.6);
+      const dropG = c.createRadialGradient(cx, cy, 0, cx, cy, dropR * 3);
+      dropG.addColorStop(0, rgba(mix(WHITE, dropCol, 0.4), 0.55 * (0.4 + dropPulse)));
+      dropG.addColorStop(0.4, rgba(dropCol, 0.22 * (0.5 + dropPulse * 0.8)));
+      dropG.addColorStop(1, rgba(dropCol, 0));
+      c.fillStyle = dropG;
+      c.beginPath();
+      c.arc(cx, cy, dropR * 3, 0, Math.PI * 2);
+      c.fill();
+
+      // Cœur ponctuel
+      c.fillStyle = rgba(WHITE, 0.35 + dropPulse * 0.5);
+      c.shadowBlur = 18;
+      c.shadowColor = rgba(LAV, 0.9);
+      c.beginPath();
+      c.arc(cx, cy, 1.6 + dropPulse * 2.4, 0, Math.PI * 2);
+      c.fill();
+      c.shadowBlur = 0;
+
+      // ── Bloom global discret ────────────────────────────────────────
+      const bloom = c.createRadialGradient(cx, cy, 0, cx, cy, maxR * 0.85);
+      bloom.addColorStop(0, rgba(mix(VIOLET, accent, 0.5), 0.05 + energyEnv * 0.08));
+      bloom.addColorStop(1, rgba(VIOLET, 0));
       c.fillStyle = bloom;
       c.fillRect(0, 0, W, H);
-
-      if (flash > 0.02) {
-        c.fillStyle = rgba(WHITE, flash * 0.10);
-        c.fillRect(0, 0, W, H);
-      }
 
       c.globalCompositeOperation = "source-over";
     }
