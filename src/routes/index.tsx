@@ -5,7 +5,7 @@ import Lenis from "lenis";
 import { Instagram, Music2, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
-import { startTeaser, duckTeaser, unduckTeaser } from "@/lib/teaser";
+import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser } from "@/lib/teaser";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/portrait-hero.jpg";
@@ -1096,14 +1096,18 @@ function WaveformCanvas() {
     const ro = new ResizeObserver(resize);
     ro.observe(wrap);
 
-    const BARS = 128;
-    const freqData = new Uint8Array(256);
-    const timeData = new Uint8Array(256);
+    const N = 512;
+    const freqBuf = new Uint8Array(N);
+    const timeBuf = new Uint8Array(N);
 
-    // Détection de kick maison — plus réactive que la CSS var
-    let bassEnv = 0;
-    let kickVal = 0;
-    let lastKick = 0;
+    // Enveloppes lissées
+    let energyEnv = 0;   // énergie globale lissée — suit la montée
+    let transEnv = 0;    // transitoires haute fréquence — snare/clap
+    let bassEnv  = 0;
+
+    function getAn(): AnalyserNode | null {
+      return getAnalyser() || getTeaserAnalyser();
+    }
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
@@ -1111,125 +1115,118 @@ function WaveformCanvas() {
       const H = canvas!.height;
       const cx = W / 2;
       const cy = H / 2;
-      const t = performance.now() / 1000;
       const S = Math.min(W, H);
+      const t = performance.now() / 1000;
 
-      ctx.clearRect(0, 0, W, H);
-
-      const an = getAnalyser();
-      const hasAudio = !!an;
+      const an = getAn();
 
       if (an) {
-        an.getByteFrequencyData(freqData as unknown as Uint8Array<ArrayBuffer>);
-        an.getByteTimeDomainData(timeData as unknown as Uint8Array<ArrayBuffer>);
+        an.getByteFrequencyData(freqBuf as unknown as Uint8Array<ArrayBuffer>);
+        an.getByteTimeDomainData(timeBuf as unknown as Uint8Array<ArrayBuffer>);
       } else {
-        // Idle breathing
-        for (let i = 0; i < 256; i++) {
-          freqData[i] = Math.max(0, 18 + Math.sin(t * 0.5 + i * 0.06) * 16 + Math.sin(t * 1.2 + i * 0.03) * 8);
-          timeData[i] = 128 + Math.sin(t * 2.1 + (i / 256) * Math.PI * 4) * 20;
+        // Respiration idle très douce
+        for (let i = 0; i < N; i++) {
+          freqBuf[i] = 12 + Math.sin(t * 0.4 + i * 0.05) * 10;
+          timeBuf[i] = 128 + Math.sin(t * 1.8 + (i / N) * Math.PI * 6) * 12;
         }
       }
 
-      // Kick detection: bass burst au-dessus de la moyenne courante
-      let bassNow = 0;
-      for (let i = 0; i < 8; i++) bassNow += freqData[i] / 255;
-      bassNow /= 8;
-      bassEnv = bassEnv * 0.85 + bassNow * 0.15;
-      const isKick = bassNow > bassEnv * 1.4 && t - lastKick > 0.18;
-      if (isKick) { kickVal = 1; lastKick = t; }
-      kickVal *= 0.82; // décroissance rapide
+      // Calcul des enveloppes
+      let bassNow = 0, midNow = 0, highNow = 0;
+      const bins = Math.min(N, an ? an.frequencyBinCount : N);
+      for (let i = 0; i < 6;  i++) bassNow += freqBuf[i] / 255;
+      for (let i = 6; i < 60; i++) midNow  += freqBuf[i] / 255;
+      for (let i = 60; i < 120; i++) highNow += freqBuf[i] / 255;
+      bassNow /= 6; midNow /= 54; highNow /= 60;
+      const rawEnergy = bassNow * 0.4 + midNow * 0.4 + highNow * 0.2;
 
-      // Energie globale (médiums) pour la couleur
-      let energy = 0;
-      for (let i = 8; i < 80; i++) energy += freqData[i] / 255;
-      energy /= 72;
+      // Lissage : attaque rapide, release lent → suit la montée
+      energyEnv = energyEnv + (rawEnergy > energyEnv ? 0.12 : 0.03) * (rawEnergy - energyEnv);
+      bassEnv   = bassEnv   + (bassNow  > bassEnv   ? 0.20 : 0.05) * (bassNow  - bassEnv);
+      transEnv  = transEnv  + (highNow  > transEnv  ? 0.25 : 0.06) * (highNow  - transEnv);
 
-      // Couleur dynamique : violet → blanc → orange selon l'énergie
-      const hue = 270 - energy * 180; // 270 violet → 90 jaune-orange
-      const sat = 80 + energy * 20;
-      const lit = 50 + energy * 30 + kickVal * 20;
+      // ── TRAIL : fondu noir progressif au lieu de clearRect ───────────
+      // L'effet de traînée donne de la profondeur à la montée
+      ctx.fillStyle = `rgba(0,0,0,${0.18 + energyEnv * 0.08})`;
+      ctx.fillRect(0, 0, W, H);
 
-      // ── LAYER 1 : Waveform circulaire (time domain) ──────────────────
-      // C'est le waveform réel — parfaitement en rythme par définition
-      const waveR = S * 0.28;
+      // Couleur : violet pur → blanc électrique au fur et à mesure que la montée monte
+      const hue   = 270 - energyEnv * 200;
+      const sat   = 100 - energyEnv * 30;
+      const light = 55  + energyEnv * 35;
+
+      // ── LAYER A : Waveform circulaire (time domain) ─────────────────
+      // Directement le signal audio → synchro absolue
+      const wR = S * (0.22 + energyEnv * 0.06);
       ctx.beginPath();
+      const binStep = Math.floor(timeBuf.length / 256);
       for (let i = 0; i < 256; i++) {
         const angle = (i / 256) * Math.PI * 2 - Math.PI / 2;
-        const v = (timeData[i] - 128) / 128;
-        const r = waveR + v * S * (0.06 + energy * 0.08 + kickVal * 0.06);
+        const v = (timeBuf[i * binStep] - 128) / 128;
+        const r = wR + v * S * (0.04 + energyEnv * 0.1);
         const x = cx + Math.cos(angle) * r;
         const y = cy + Math.sin(angle) * r;
         i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
       }
       ctx.closePath();
-      ctx.shadowBlur = 12 + kickVal * 20;
-      ctx.shadowColor = `hsl(${hue},${sat}%,70%)`;
-      ctx.strokeStyle = `hsla(${hue},${sat}%,${lit}%,${0.6 + kickVal * 0.4})`;
-      ctx.lineWidth = 1.5 + kickVal * 2;
+      ctx.shadowBlur = 10 + energyEnv * 20 + transEnv * 15;
+      ctx.shadowColor = `hsl(${hue},${sat}%,80%)`;
+      ctx.strokeStyle = `hsla(${hue},${sat}%,${light}%,${0.5 + energyEnv * 0.5})`;
+      ctx.lineWidth = 1 + energyEnv * 2.5;
       ctx.stroke();
 
-      // ── LAYER 2 : Barres fréquentielles radiales ─────────────────────
-      const barBaseR = S * 0.32;
-      for (let i = 0; i < BARS; i++) {
-        const angle = (i / BARS) * Math.PI * 2 - Math.PI / 2;
-        const fIdx = Math.floor((i / BARS) * 100);
-        const v = freqData[fIdx] / 255;
-        const barLen = S * (0.03 + v * 0.22 + kickVal * 0.06 * (i < BARS / 4 || i > (BARS * 3) / 4 ? 1.5 : 1));
+      // ── LAYER B : 180 barres EQ radiales ────────────────────────────
+      const barR = S * (0.26 + energyEnv * 0.07);
+      for (let i = 0; i < 180; i++) {
+        const angle = (i / 180) * Math.PI * 2 - Math.PI / 2;
+        const fIdx = Math.floor((i / 180) * 110);
+        const v = freqBuf[fIdx] / 255;
+        if (v < 0.04) continue;
 
-        const x1 = cx + Math.cos(angle) * barBaseR;
-        const y1 = cy + Math.sin(angle) * barBaseR;
-        const x2 = cx + Math.cos(angle) * (barBaseR + barLen);
-        const y2 = cy + Math.sin(angle) * (barBaseR + barLen);
+        const barLen = S * (v * 0.2 + energyEnv * 0.04);
+        const x1 = cx + Math.cos(angle) * barR;
+        const y1 = cy + Math.sin(angle) * barR;
+        const x2 = cx + Math.cos(angle) * (barR + barLen);
+        const y2 = cy + Math.sin(angle) * (barR + barLen);
 
-        const barHue = hue + (i / BARS) * 40 - 20;
-        ctx.shadowBlur = 6 + v * 14 + kickVal * 10;
-        ctx.shadowColor = `hsl(${barHue},100%,70%)`;
+        const bHue = hue + (v * 40) - 20;
+        ctx.shadowBlur = 4 + v * 16 + energyEnv * 10;
+        ctx.shadowColor = `hsl(${bHue},100%,75%)`;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
-        ctx.strokeStyle = `hsla(${barHue},${sat}%,${lit + 10}%,${0.5 + v * 0.5})`;
-        ctx.lineWidth = Math.max(1, S * 0.003);
+        ctx.strokeStyle = `hsla(${bHue},${sat}%,${light + 15}%,${0.4 + v * 0.6})`;
+        ctx.lineWidth = Math.max(0.8, S * 0.0022);
         ctx.lineCap = "round";
         ctx.stroke();
       }
 
-      // ── LAYER 3 : Ring de base + kick burst ──────────────────────────
-      const ringR = S * 0.30;
-      ctx.beginPath();
-      ctx.arc(cx, cy, ringR * (1 + kickVal * 0.08), 0, Math.PI * 2);
-      ctx.shadowBlur = 20 + kickVal * 40;
-      ctx.shadowColor = `hsl(${hue},100%,70%)`;
-      ctx.strokeStyle = `hsla(${hue},${sat}%,70%,${0.15 + kickVal * 0.5})`;
-      ctx.lineWidth = 1 + kickVal * 3;
-      ctx.stroke();
-
-      // Burst radial au kick : lignes qui explosent vers l'extérieur
-      if (kickVal > 0.3) {
-        const BURST = 24;
-        for (let i = 0; i < BURST; i++) {
-          const angle = (i / BURST) * Math.PI * 2;
-          const inner = ringR * 1.05;
-          const outer = ringR * (1.05 + kickVal * 0.45);
-          ctx.beginPath();
-          ctx.moveTo(cx + Math.cos(angle) * inner, cy + Math.sin(angle) * inner);
-          ctx.lineTo(cx + Math.cos(angle) * outer, cy + Math.sin(angle) * outer);
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = `hsl(${hue},100%,80%)`;
-          ctx.strokeStyle = `hsla(${hue},100%,85%,${kickVal * 0.8})`;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        }
+      // ── LAYER C : Anneaux concentriques qui se dilatent avec l'énergie
+      const RINGS = 4;
+      for (let r = 0; r < RINGS; r++) {
+        const rf = (r + 1) / RINGS;
+        const ringR = S * (0.10 + rf * 0.22 + energyEnv * rf * 0.12);
+        const alpha = (0.08 + energyEnv * 0.25) * (1 - rf * 0.5);
+        if (alpha < 0.02) continue;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, 0, Math.PI * 2);
+        ctx.shadowBlur = 18 + energyEnv * 30;
+        ctx.shadowColor = `hsl(${hue},100%,70%)`;
+        ctx.strokeStyle = `hsla(${hue},${sat}%,${light}%,${alpha})`;
+        ctx.lineWidth = 0.8 + energyEnv * 2;
+        ctx.stroke();
       }
 
+      // ── LAYER D : Glow central pulsant ──────────────────────────────
       ctx.shadowBlur = 0;
-
-      // Glow central
-      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, ringR * 0.9);
-      glow.addColorStop(0, `hsla(${hue},80%,60%,${0.06 + energy * 0.08 + kickVal * 0.12})`);
-      glow.addColorStop(1, "transparent");
-      ctx.fillStyle = glow;
+      const glowR = S * (0.12 + energyEnv * 0.15 + bassEnv * 0.06);
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+      grd.addColorStop(0, `hsla(${hue},${sat}%,80%,${0.12 + energyEnv * 0.2 + bassEnv * 0.15})`);
+      grd.addColorStop(0.5, `hsla(${hue},${sat}%,60%,${0.04 + energyEnv * 0.08})`);
+      grd.addColorStop(1, "transparent");
+      ctx.fillStyle = grd;
       ctx.beginPath();
-      ctx.arc(cx, cy, ringR * 0.9, 0, Math.PI * 2);
+      ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
       ctx.fill();
     }
 
@@ -1238,11 +1235,8 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0 grid place-items-center">
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.9 }}
-      />
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.92 }} />
     </div>
   );
 }

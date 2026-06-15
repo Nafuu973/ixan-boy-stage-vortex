@@ -35,6 +35,8 @@ function ensureAudio(): HTMLAudioElement | null {
   return a;
 }
 
+let analyserNode: AnalyserNode | null = null;
+
 function ensureGainGraph() {
   if (usingGain || typeof window === "undefined") return;
   const a = ensureAudio();
@@ -48,7 +50,12 @@ function ensureGainGraph() {
     sourceNode = ctx.createMediaElementSource(a);
     gain = ctx.createGain();
     gain.gain.value = 0;
-    sourceNode.connect(gain);
+    // Insert analyser in the chain: source → analyser → gain → output
+    analyserNode = ctx.createAnalyser();
+    analyserNode.fftSize = 2048;
+    analyserNode.smoothingTimeConstant = 0.8;
+    sourceNode.connect(analyserNode);
+    analyserNode.connect(gain);
     gain.connect(ctx.destination);
     usingGain = true;
   } catch {
@@ -163,3 +170,8 @@ if (typeof document !== "undefined") {
 
 // Silence unused-import lint without changing the surface.
 export const __ping = () => currentGainValue();
+
+
+export function getTeaserAnalyser(): AnalyserNode | null {
+  return analyserNode;
+}
