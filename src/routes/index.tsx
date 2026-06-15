@@ -227,7 +227,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
                   animate={{ boxShadow: ["0 0 20px oklch(0.55 0.28 295 / 0.3)", "0 0 50px oklch(0.55 0.28 295 / 0.6)", "0 0 20px oklch(0.55 0.28 295 / 0.3)"] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <svg viewBox="0 0 14 14" style={{ position: "relative", width: "1.5rem", height: "1.5rem", fill: "var(--bone)", marginLeft: "3px", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
+                <svg viewBox="0 0 14 14" style={{ position: "absolute", top: "50%", left: "50%", width: "1.5rem", height: "1.5rem", transform: "translate(-46%, -50%)", fill: "var(--bone)", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
                   <path d="M3 1.5 L12 7 L3 12.5 Z" />
                 </svg>
               </motion.button>
