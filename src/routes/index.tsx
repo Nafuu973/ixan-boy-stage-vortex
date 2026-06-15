@@ -1086,7 +1086,7 @@ function WaveformCanvas() {
     const wrap = wrapRef.current;
     if (!canvas || !wrap) return;
     const ctx = canvas.getContext("2d")!;
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     function resize() {
       canvas!.width = wrap!.offsetWidth * dpr;
@@ -1099,37 +1099,46 @@ function WaveformCanvas() {
     const FREQ_SIZE = 512;
     const freqBuf = new Uint8Array(FREQ_SIZE);
 
-    // Enveloppes
+    // Enveloppes audio
     let energyEnv = 0;
     let bassEnv = 0;
     let kickVal = 0;
     let lastKick = 0;
 
-    // Cubes particules pré-calculés
-    const CUBES = 14;
-    const cubes = Array.from({ length: CUBES }, (_, i) => ({
-      rx: 0.08 + Math.random() * 0.84,
-      ry: 0.62 + Math.random() * 0.32,
-      size: 4 + Math.random() * 8,
+    // Couleurs anneaux : intérieur → extérieur
+    const RING_COLORS = ["#8B00FF", "#A020F0", "#C040FF", "#FF00AA", "#FF1493"];
+
+    // Couleurs cubes
+    const CUBE_COLORS = ["#8B00FF", "#FF00AA", "#00FFFF", "#FF6014"];
+
+    // 20 cubes flottants
+    const CUBES = 20;
+    const cubes = Array.from({ length: CUBES }, () => ({
+      rx: 0.04 + Math.random() * 0.92,
+      ry: 0.58 + Math.random() * 0.36,
+      size: 8 + Math.random() * 6,
       phase: Math.random() * Math.PI * 2,
-      speed: 0.3 + Math.random() * 0.5,
+      speed: 0.25 + Math.random() * 0.55,
+      rot: Math.random() * Math.PI,
+      rotSpeed: (Math.random() - 0.5) * 0.6,
+      color: CUBE_COLORS[Math.floor(Math.random() * CUBE_COLORS.length)],
     }));
 
-    function getAn() { return getAnalyser() || getTeaserAnalyser(); }
+    function getAn() { return getTeaserAnalyser() || getAnalyser(); }
 
     function draw() {
       rafRef.current = requestAnimationFrame(draw);
       const W = canvas!.width;
       const H = canvas!.height;
       const cx = W / 2;
-      const t = performance.now() / 1000;
+      const tNow = performance.now() / 1000;
 
       const an = getAn();
       if (an) {
         an.getByteFrequencyData(freqBuf as unknown as Uint8Array<ArrayBuffer>);
       } else {
         for (let i = 0; i < FREQ_SIZE; i++)
-          freqBuf[i] = 14 + Math.sin(t * 0.5 + i * 0.06) * 12;
+          freqBuf[i] = 14 + Math.sin(tNow * 0.5 + i * 0.06) * 12;
       }
 
       // Enveloppes
@@ -1138,101 +1147,123 @@ function WaveformCanvas() {
       for (let i = 6; i < 80; i++) midNow += freqBuf[i] / 255;
       bassNow /= 6; midNow /= 74;
       const rawE = bassNow * 0.45 + midNow * 0.55;
-      energyEnv += (rawE > energyEnv ? 0.15 : 0.03) * (rawE - energyEnv);
-      bassEnv   += (bassNow > bassEnv ? 0.25 : 0.06) * (bassNow - bassEnv);
+      energyEnv += (rawE > energyEnv ? 0.18 : 0.04) * (rawE - energyEnv);
+      bassEnv   += (bassNow > bassEnv ? 0.28 : 0.07) * (bassNow - bassEnv);
 
-      // Kick detection
-      if (bassNow > bassEnv * 1.35 && t - lastKick > 0.16) {
-        kickVal = 1; lastKick = t;
+      if (bassNow > bassEnv * 1.35 && tNow - lastKick > 0.16) {
+        kickVal = 1; lastKick = tNow;
       }
       kickVal *= 0.78;
 
-      // ── TRAIL ─────────────────────────────────────────────────────────
-      ctx.fillStyle = `rgba(0,0,0,${0.22 - energyEnv * 0.06})`;
+      // ── COUCHE 4 : TRAÎNE CINÉMATIQUE ────────────────────────────────
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "rgba(0,0,0,0.18)";
       ctx.fillRect(0, 0, W, H);
 
-      // ── 1. ANNEAUX CONCENTRIQUES (sol en perspective) ─────────────────
-      const stageCY = H * 0.74;
-      const NRINGS = 5;
-      for (let r = NRINGS - 1; r >= 0; r--) {
-        const f = (r + 1) / NRINGS;
-        const rx = W * 0.50 * f * (1 + bassEnv * 0.08 + kickVal * 0.05);
-        const ry = rx * 0.13;
+      // Geometry
+      const stageCY = H * 0.75;
+      const barW = 6 * dpr;
+      const gap = 4 * dpr;
+      const N = 40; // barres par côté
+      const maxBarH = H * 0.60;
 
-        // Couleur : violet intérieur → rose/magenta extérieur
-        const hue = 270 + (1 - f) * 60;
-        const bright = 55 + energyEnv * 30 + kickVal * 20;
-        const alpha = 0.55 + f * 0.3 + bassEnv * 0.2;
+      // ── COUCHE 1 : LUEUR RADIALE AU SOL ──────────────────────────────
+      ctx.shadowBlur = 0;
+      const glow = ctx.createRadialGradient(cx, stageCY, 0, cx, stageCY, W * 0.45);
+      glow.addColorStop(0, `rgba(139,0,255,${0.18 + energyEnv * 0.25 + kickVal * 0.25})`);
+      glow.addColorStop(0.5, `rgba(255,0,170,${0.05 + energyEnv * 0.08})`);
+      glow.addColorStop(1, "transparent");
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── COUCHE 2 : BARRES EQ SYMÉTRIQUES ─────────────────────────────
+      // (dessinées avant les anneaux pour que la scène passe au-dessus)
+      ctx.shadowBlur = 0;
+      for (let i = 0; i < N; i++) {
+        const fi = i / (N - 1);  // 0 = centre, 1 = bord
+        // Mapping log-ish 20Hz → ~16kHz sur 90 premiers bins
+        const fIdx = Math.floor(Math.pow(fi, 1.4) * 110) + 1;
+        const v = (freqBuf[Math.min(fIdx, FREQ_SIZE - 1)] / 255);
+        const barH = Math.max(2 * dpr, (v * 0.9 + energyEnv * 0.18) * maxBarH);
+
+        const xR = cx + i * (barW + gap) + gap;
+        const xL = cx - (i + 1) * (barW + gap);
+
+        // Dégradé horizontal (couleur de base de la barre)
+        const baseColor = (() => {
+          if (fi < 0.33) return { top: "#FF1493", bot: "#8B00FF" };       // centre violet→magenta
+          if (fi < 0.66) return { top: "#FF00AA", bot: "#A020F0" };       // intermédiaire
+          return { top: "#00FFFF", bot: "#FF1493" };                       // bords cyan/rose
+        })();
+
+        const grd = ctx.createLinearGradient(0, stageCY - barH, 0, stageCY);
+        grd.addColorStop(0, baseColor.top);
+        grd.addColorStop(1, baseColor.bot);
+
+        ctx.shadowBlur = 8 + v * 22 + kickVal * 14;
+        ctx.shadowColor = baseColor.top;
+        ctx.fillStyle = grd;
+
+        ctx.fillRect(xR, stageCY - barH, barW, barH);
+        ctx.fillRect(xL, stageCY - barH, barW, barH);
+
+        // Reflet miroir sous la ligne de scène (30% opacité)
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 0.30;
+        const reflH = barH * 0.55;
+        const grdR = ctx.createLinearGradient(0, stageCY, 0, stageCY + reflH);
+        grdR.addColorStop(0, baseColor.bot);
+        grdR.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = grdR;
+        ctx.fillRect(xR, stageCY, barW, reflH);
+        ctx.fillRect(xL, stageCY, barW, reflH);
+        ctx.globalAlpha = 1;
+      }
+
+      // ── COUCHE 1 : ANNEAUX CONCENTRIQUES (PERSPECTIVE) ───────────────
+      const ringPulse = 1 + bassEnv * 0.05 + kickVal * 0.04;
+      for (let r = RING_COLORS.length - 1; r >= 0; r--) {
+        const f = (r + 1) / RING_COLORS.length;
+        const rx = W * 0.48 * f * ringPulse;
+        const ry = rx * 0.12;
+        const color = RING_COLORS[r];
 
         ctx.beginPath();
         ctx.ellipse(cx, stageCY, rx, ry, 0, 0, Math.PI * 2);
-        ctx.shadowBlur = 18 + f * 20 + bassEnv * 25 + kickVal * 30;
-        ctx.shadowColor = `hsl(${hue},100%,70%)`;
-        ctx.strokeStyle = `hsla(${hue},100%,${bright}%,${alpha})`;
-        ctx.lineWidth = 1 + f * 2 + bassEnv * 2 + kickVal * 3;
+        ctx.shadowBlur = 20 + f * 20 + bassEnv * 20 + kickVal * 25;
+        ctx.shadowColor = color;
+        ctx.strokeStyle = color;
+        ctx.globalAlpha = 0.75 + bassEnv * 0.2;
+        ctx.lineWidth = 2.5 * dpr;
         ctx.stroke();
+        ctx.globalAlpha = 1;
       }
 
-      // ── 2. BARRES EQ SYMÉTRIQUES ──────────────────────────────────────
-      const N = 38;            // barres par côté
-      const barW = W * 0.011;
-      const baseline = H * 0.70;
-      const maxBarH = H * 0.58;
-      const spread = W * 0.46;
-
-      for (let i = 0; i < N; i++) {
-        const fi = i / N;               // 0 = centre, 1 = bord
-        const fIdx = Math.floor(fi * 90);
-        const v = freqBuf[fIdx] / 255;
-        const barH = (v * 0.85 + energyEnv * 0.15) * maxBarH * (1 - fi * 0.35);
-
-        // Position : convergence vers le centre
-        const x = cx + (fi * spread + barW * (i + 1));
-        const xL = cx - (fi * spread + barW * (i + 1));
-
-        // Couleur : centre = violet/blanc, bords = rose/magenta
-        const hue = 270 - fi * 80;
-        const bright = 70 + v * 25 + energyEnv * 20;
-        const alpha = 0.4 + v * 0.6;
-
-        ctx.shadowBlur = 10 + v * 22 + kickVal * 15;
-        ctx.shadowColor = `hsl(${hue},100%,75%)`;
-        ctx.fillStyle = `hsla(${hue},100%,${bright}%,${alpha})`;
-
-        // Barre droite
-        ctx.fillRect(x, baseline - barH, barW, barH);
-        // Barre gauche (miroir)
-        ctx.fillRect(xL - barW, baseline - barH, barW, barH);
-
-        // Ligne de base lumineuse
-        if (i === 0) {
-          ctx.fillStyle = `hsla(270,100%,80%,${0.3 + energyEnv * 0.5})`;
-          ctx.fillRect(xL - barW, baseline - 1.5, x - xL + barW * 2, 2);
-        }
-      }
-
-      // ── 3. CUBES PARTICULES FLOTTANTS ────────────────────────────────
-      ctx.shadowBlur = 0;
+      // ── COUCHE 3 : CUBES FLOTTANTS ───────────────────────────────────
       for (const c of cubes) {
+        c.rot += c.rotSpeed * 0.016;
         const px = c.rx * W;
-        const py = c.ry * H + Math.sin(t * c.speed + c.phase) * (6 + bassEnv * 12);
-        const s = c.size * (0.8 + bassEnv * 0.6 + kickVal * 0.4) * dpr;
-        const hue = 250 + Math.sin(c.phase) * 50;
-        const alpha = 0.5 + bassEnv * 0.4 + kickVal * 0.3;
+        const bounce = Math.sin(tNow * c.speed + c.phase) * (8 + bassEnv * 22 + kickVal * 14) * dpr;
+        const py = c.ry * H + bounce;
+        const s = c.size * (0.85 + bassEnv * 0.55 + kickVal * 0.35) * dpr;
 
-        ctx.shadowBlur = 12 + bassEnv * 20;
-        ctx.shadowColor = `hsl(${hue},100%,70%)`;
-        ctx.fillStyle = `hsla(${hue},100%,70%,${alpha})`;
-        ctx.fillRect(px - s / 2, py - s / 2, s, s);
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(c.rot);
+        ctx.shadowBlur = 12 * dpr;
+        ctx.shadowColor = c.color;
+        ctx.fillStyle = c.color;
+        ctx.globalAlpha = 0.7 + bassEnv * 0.3;
+        ctx.fillRect(-s / 2, -s / 2, s, s);
+        // Reflet (highlight) interne
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(-s / 2 + s * 0.15, -s / 2 + s * 0.15, s * 0.25, s * 0.25);
+        ctx.restore();
+        ctx.globalAlpha = 1;
       }
 
-      // ── 4. GLOW CENTRAL AU SOL ────────────────────────────────────────
       ctx.shadowBlur = 0;
-      const grd = ctx.createRadialGradient(cx, stageCY, 0, cx, stageCY, W * 0.3);
-      grd.addColorStop(0, `hsla(270,100%,70%,${0.12 + energyEnv * 0.2 + kickVal * 0.25})`);
-      grd.addColorStop(1, "transparent");
-      ctx.fillStyle = grd;
-      ctx.fillRect(0, 0, W, H);
     }
 
     draw();
@@ -1240,8 +1271,8 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0">
-      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", mixBlendMode: "screen", opacity: 0.95 }} />
+    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0" style={{ background: "#000000" }}>
+      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
     </div>
   );
 }
