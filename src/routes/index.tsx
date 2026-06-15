@@ -66,9 +66,12 @@ function Index() {
 }
 
 function TopLabelTypewriter() {
-  const full = "Reclaim The Fire — OUT SEPT 26";
+  const prefix = "Reclaim The Fire — ";
+  const suffix = "OUT SEPT 26";
+  const full = prefix + suffix;
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
+  const [glitch, setGlitch] = useState(false);
 
   useEffect(() => {
     let i = 0;
@@ -76,44 +79,68 @@ function TopLabelTypewriter() {
       const id = setInterval(() => {
         i++;
         setDisplayed(full.slice(0, i));
-        if (i >= full.length) {
-          clearInterval(id);
-          setDone(true);
-        }
-      }, 45);
+        if (i >= full.length) { clearInterval(id); setDone(true); }
+      }, 38);
       return () => clearInterval(id);
-    }, 600);
+    }, 700);
     return () => clearTimeout(delay);
   }, []);
 
+  // Periodic glitch on the whole label
+  useEffect(() => {
+    if (!done) return;
+    const fire = () => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 120);
+      setTimeout(() => { setGlitch(true); setTimeout(() => setGlitch(false), 80); }, 200);
+    };
+    const id = setInterval(fire, 3500 + Math.random() * 2000);
+    return () => clearInterval(id);
+  }, [done]);
+
+  const prefixDisplayed = displayed.slice(0, Math.min(displayed.length, prefix.length));
+  const suffixDisplayed = displayed.length > prefix.length ? displayed.slice(prefix.length) : "";
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.3 }}
-      style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
+    <div style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
       className="font-mono text-xs uppercase tracking-[0.45em] md:text-sm"
     >
       <motion.span
-        animate={{ textShadow: ["0 0 8px rgba(128,0,255,0.4)", "0 0 20px rgba(128,0,255,0.8)", "0 0 8px rgba(128,0,255,0.4)"] }}
-        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        style={{ color: "var(--violet)" }}
+        animate={done ? {
+          opacity: glitch ? [1, 0.2, 1] : 1,
+          x: glitch ? [0, -2, 2, 0] : 0,
+        } : {}}
+        style={{ color: "var(--violet)", display: "inline" }}
       >
-        {displayed}
+        {prefixDisplayed}
       </motion.span>
-      {/* Blinking cursor */}
-      {!done ? (
-        <span style={{ color: "var(--violet)", opacity: 1 }}>_</span>
-      ) : (
+
+      {suffixDisplayed && (
         <motion.span
-          animate={{ opacity: [1, 0, 1] }}
-          transition={{ duration: 0.8, repeat: 3, ease: "steps(1)" }}
+          animate={{
+            textShadow: glitch
+              ? ["0 0 30px rgba(255,80,0,1)", "0 0 8px rgba(255,80,0,0.3)", "0 0 30px rgba(255,80,0,1)"]
+              : ["0 0 10px rgba(255,100,20,0.5)", "0 0 28px rgba(255,100,20,0.9)", "0 0 10px rgba(255,100,20,0.5)"],
+            opacity: glitch ? [1, 0.3, 1] : 1,
+          }}
+          transition={{ duration: glitch ? 0.12 : 1.8, repeat: glitch ? 0 : Infinity, ease: "easeInOut" }}
+          style={{ color: "#ff6014", display: "inline" }}
+        >
+          {suffixDisplayed}
+        </motion.span>
+      )}
+
+      {!done && <span style={{ color: "var(--violet)" }}>_</span>}
+      {done && (
+        <motion.span
+          animate={{ opacity: [1, 0] }}
+          transition={{ duration: 0.5, repeat: 4, ease: "steps(1)" }}
           style={{ color: "var(--violet)" }}
         >
           _
         </motion.span>
       )}
-    </motion.div>
+    </div>
   );
 }
 
