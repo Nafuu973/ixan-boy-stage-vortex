@@ -125,13 +125,13 @@ function EnterOverlay({ visible }: { visible: boolean }) {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="absolute top-8 left-1/2 -translate-x-1/2 font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
+            className="absolute top-8 inset-x-0 flex justify-center font-mono text-[9px] uppercase tracking-[0.45em] text-violet md:text-[10px]"
           >
             Reclaim The Fire — Sortie Septembre
           </motion.div>
 
           {/* Main content */}
-          <div className="relative flex flex-col items-center gap-6 text-center md:gap-8">
+          <div className="relative flex w-full flex-col items-center gap-6 px-4 text-center md:gap-8">
             {/* Big animated title */}
             <div className="flex flex-col items-center gap-0 leading-none">
               <div className="flex items-baseline gap-4 md:gap-6">
