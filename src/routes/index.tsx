@@ -520,7 +520,7 @@ function ChromeSignature({ text }: { text: string }) {
   const clean = text.replace(/\.$/, "");
   return (
     <figure
-      className="hand-signature relative inline-block select-none"
+      className="hand-signature relative inline-block select-none whitespace-nowrap"
       aria-label={text}
     >
       <span aria-hidden className="hand-signature__halo">{clean}</span>
