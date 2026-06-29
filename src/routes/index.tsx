@@ -8,7 +8,7 @@ import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser } from "@/lib/teaser";
 
 import { RevealText } from "@/components/epk/RevealText";
-import heroImg from "@/assets/portrait-hero.jpg";
+import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
