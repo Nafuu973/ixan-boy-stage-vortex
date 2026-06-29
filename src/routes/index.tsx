@@ -461,14 +461,18 @@ function Hero() {
     >
       <motion.div style={{ y, scale }} className="absolute inset-0">
         <img
-          src={heroImg}
+          src={heroImg.url}
           alt="IXAN BOY"
-          className="h-full w-full object-contain object-center md:object-contain md:object-center"
+          className="h-full w-full object-cover object-center"
           fetchPriority="high"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-void/30 via-transparent to-void" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,transparent,var(--void)_75%)]" />
-        <div className="absolute inset-0 smoke opacity-30 mix-blend-screen drift" />
+        {/* Feathered blend into the surrounding void */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_30%,rgba(8,4,18,0.55)_70%,var(--void)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-void to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-void via-void/80 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-void to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-void to-transparent" />
+        <div className="absolute inset-0 smoke opacity-20 mix-blend-screen drift" />
       </motion.div>
 
       <motion.div
@@ -478,11 +482,7 @@ function Hero() {
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
           {t.hero.sub}
         </div>
-        <h1 className="hero-title font-display mt-3 text-[clamp(4rem,11vw,8rem)] leading-[0.85] tracking-tight">
-          <span className="hero-title__word">IXAN</span>
-          <br className="md:hidden" />
-          <span className="hero-title__word hero-title__word--accent md:ml-6">BOY</span>
-        </h1>
+
 
         <div className="mt-5 mb-6 sig-reveal flex justify-start -ml-1 md:-ml-4 md:mt-8 md:mb-8">
           <ChromeSignature text={t.hero.tag} />
