@@ -459,21 +459,33 @@ function Hero() {
       ref={ref}
       className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
     >
-      <motion.div style={{ y, scale }} className="absolute inset-0">
+      <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
+        <img
+          src={heroImg.url}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full scale-110 object-cover object-center blur-3xl"
+        />
+        <div className="absolute inset-0 bg-void/60" />
+      </motion.div>
+
+      <div className="absolute inset-0 z-[1] flex items-center justify-center">
         <img
           src={heroImg.url}
           alt="IXAN BOY"
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full object-contain object-top md:object-cover md:object-top"
           fetchPriority="high"
         />
-        {/* Feathered blend into the surrounding void */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_45%,transparent_30%,rgba(8,4,18,0.55)_70%,var(--void)_100%)]" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-void to-transparent" />
+      </div>
+
+      <div className="absolute inset-0 z-[2]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,transparent_25%,rgba(8,4,18,0.55)_70%,var(--void)_100%)]" />
+        <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-void/60 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-void via-void/80 to-transparent" />
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-void to-transparent" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-void to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-void/80 to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-void/80 to-transparent" />
         <div className="absolute inset-0 smoke opacity-20 mix-blend-screen drift" />
-      </motion.div>
+      </div>
 
       <motion.div
         style={{ opacity }}
