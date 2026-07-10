@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Lenis from "lenis";
-import { Instagram, Music2, Youtube } from "lucide-react";
+import { Instagram, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser } from "@/lib/teaser";
@@ -13,8 +13,6 @@ import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
-import waveformBg from "@/assets/waveform-round.mp4.asset.json";
-import neonStage from "@/assets/neon-stage.jpeg.asset.json";
 
 import liveBooth from "@/assets/live-booth.jpg";
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
@@ -1935,6 +1933,3 @@ function Footer() {
     </footer>
   );
 }
-
-// silence unused
-void Music2;

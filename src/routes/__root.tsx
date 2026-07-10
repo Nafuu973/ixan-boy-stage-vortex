@@ -59,8 +59,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // Anton — preload direct sur le fichier woff2 (pas sur la CSS intermédiaire)
       // pour que le navigateur télécharge la fonte en parallèle du HTML, sans
       // attendre le parse de la CSS Google Fonts.
-      // display=swap : pas de période de blocage invisible sur connexion lente ;
-      // la min-height réservée sur .hero-title absorbe le saut résiduel.
+      // display=swap : pas de période de blocage invisible sur connexion lente.
       {
         rel: "preload",
         as: "font",

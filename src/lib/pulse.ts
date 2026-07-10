@@ -1,10 +1,6 @@
 // Global pulse driver — calm by default, switches to beat/onset analysis while audio plays.
-// Drives multiple CSS variables on document root each rAF:
-//   --pulse           : smoothed total energy envelope (0..1) — drives general motion
-//   --pulse-kick      : short impulse from detected bass/kick onsets (0..1, fast decay)
-//   --pulse-cover     : bounded cover-only motion signal that always settles back down
-//   --pulse-activation: 0→1 ramp on play start, back to 0 on idle
-//   --pulse-low / --pulse-mid / --pulse-high : optional band envelopes (0..1)
+// Drives the --pulse CSS variable on document root each rAF:
+//   --pulse : smoothed total energy envelope (0..1) — drives .pulse-glow / .pulse-scale
 
 type Mode = "idle" | "live";
 
@@ -17,21 +13,10 @@ const sourceNodes = new WeakMap<HTMLAudioElement, MediaElementAudioSourceNode>()
 let rafId = 0;
 let started = false;
 
-// Envelopes
+// Envelope
 let totalEnv = 0;
-let lowEnv = 0;
-let midEnv = 0;
-let highEnv = 0;
-let lowBaseline = 0;   // slow long-term average of low band — adaptive kick threshold
-let kick = 0;
-let coverBeat = 0;
 let activation = 0;
-let lastKickTime = 0;
 let liveStartTime = 0;
-let bassFast = 0;
-let bassSlow = 0;
-let fluxAvg = 0;
-let fluxDev = 0;
 
 function now() {
   return typeof performance !== "undefined" ? performance.now() : Date.now();
@@ -49,16 +34,13 @@ function bandAverage(data: Uint8Array, from: number, to: number) {
 function tick() {
   const t = now();
   let instantTotal = 0;
-  let instantLow = 0;
-  let instantMid = 0;
-  let instantHigh = 0;
 
   if (mode === "live" && analyser && dataArray) {
     analyser.getByteFrequencyData(dataArray as unknown as Uint8Array<ArrayBuffer>);
     // Balanced band analysis for global motion.
-    instantLow = Math.min(1, bandAverage(dataArray, 2, 12) * 1.2);
-    instantMid = Math.min(1, bandAverage(dataArray, 12, 48) * 1.25);
-    instantHigh = Math.min(1, bandAverage(dataArray, 50, 96) * 1.2);
+    const instantLow = Math.min(1, bandAverage(dataArray, 2, 12) * 1.2);
+    const instantMid = Math.min(1, bandAverage(dataArray, 12, 48) * 1.25);
+    const instantHigh = Math.min(1, bandAverage(dataArray, 50, 96) * 1.2);
     // Weighted total — mids carry musical motion, lows add weight, highs add sparkle.
     instantTotal = Math.min(
       1,
@@ -66,54 +48,10 @@ function tick() {
     );
   }
 
-  // Smoothed envelopes — fast attack, slower release.
+  // Smoothed envelope — fast attack, slower release.
   const attack = 0.22;
   const release = 0.07;
-  const smooth = (env: number, target: number) =>
-    env + (target - env) * (target > env ? attack : release);
-
-  totalEnv = smooth(totalEnv, instantTotal);
-  lowEnv = smooth(lowEnv, instantLow);
-  midEnv = smooth(midEnv, instantMid);
-  highEnv = smooth(highEnv, instantHigh);
-
-  // Beat detection for the cover: follow real bass onsets, not average loudness.
-  // The first few frames seed the baselines so playback start never creates a fake hit.
-  const lowerMid = mode === "live" && dataArray ? bandAverage(dataArray, 10, 24) : 0;
-  const bassEnergy = Math.min(1, instantLow * 0.82 + lowerMid * 0.38);
-  const sinceLiveStart = mode === "live" && liveStartTime > 0 ? t - liveStartTime : 0;
-  if (mode !== "live" || sinceLiveStart < 420) {
-    bassFast = bassEnergy;
-    bassSlow = bassEnergy;
-    lowBaseline = instantLow;
-    fluxAvg = 0;
-    fluxDev = 0;
-  } else {
-    bassFast += (bassEnergy - bassFast) * 0.38;
-    bassSlow += (bassEnergy - bassSlow) * 0.045;
-    lowBaseline += (instantLow - lowBaseline) * 0.03;
-
-    const flux = Math.max(0, bassFast - bassSlow);
-    fluxAvg += (flux - fluxAvg) * 0.06;
-    fluxDev += (Math.abs(flux - fluxAvg) - fluxDev) * 0.06;
-
-    const threshold = Math.max(0.002, fluxAvg + fluxDev * 0.22);
-    const cooldownMs = 135;
-    const hasBody = bassEnergy > 0.025 && bassEnergy > lowBaseline * 0.38;
-    if (hasBody && flux > threshold && t - lastKickTime > cooldownMs) {
-      const strength = Math.min(0.5, 0.18 + flux * 0.95 + bassEnergy * 0.22);
-      kick = Math.max(kick, strength);
-      lastKickTime = t;
-    }
-
-    const bassLift = Math.max(0, bassEnergy - lowBaseline * 0.82);
-    const coverTarget = Math.min(0.8, flux * 3.5 + bassLift * 0.6);
-    coverBeat += (coverTarget - coverBeat) * (coverTarget > coverBeat ? 0.48 : 0.24);
-  }
-  // Smoother release for a softer beat motion.
-  kick *= 0.93;
-  if (mode !== "live") coverBeat *= 0.86;
-  if (kick < 0.001) kick = 0;
+  totalEnv += (instantTotal - totalEnv) * (instantTotal > totalEnv ? attack : release);
 
   // Activation ramp
   const targetActivation = mode === "live" ? 1 : 0;
@@ -130,16 +68,8 @@ function tick() {
 
   const gate = mode === "live" ? activation * warmup : 0;
   const pulseOut = totalEnv * gate;
-  const kickOut = kick * gate;
-  const coverOut = coverBeat * gate;
 
-  const root = document.documentElement;
-  root.style.setProperty("--pulse", pulseOut.toFixed(3));
-  root.style.setProperty("--pulse-kick", kickOut.toFixed(3));
-  root.style.setProperty("--pulse-activation", activation.toFixed(3));
-  root.style.setProperty("--pulse-low", (lowEnv * gate).toFixed(3));
-  root.style.setProperty("--pulse-mid", (midEnv * gate).toFixed(3));
-  root.style.setProperty("--pulse-high", (highEnv * gate).toFixed(3));
+  document.documentElement.style.setProperty("--pulse", pulseOut.toFixed(3));
 
   rafId = requestAnimationFrame(tick);
 }
@@ -152,19 +82,6 @@ export function startPulse() {
 
 export function isPulseRunning() {
   return started;
-}
-
-export function stopPulse() {
-  cancelAnimationFrame(rafId);
-  started = false;
-  const root = document.documentElement;
-  root.style.setProperty("--pulse", "0");
-  root.style.setProperty("--pulse-kick", "0");
-  
-  root.style.setProperty("--pulse-activation", "0");
-  root.style.setProperty("--pulse-low", "0");
-  root.style.setProperty("--pulse-mid", "0");
-  root.style.setProperty("--pulse-high", "0");
 }
 
 export function attachLiveAudio(audio: HTMLAudioElement) {
@@ -216,18 +133,8 @@ export function setPulseLive() {
   if (mode !== "live") {
     liveStartTime = now();
     totalEnv = 0;
-    lowEnv = 0;
-    midEnv = 0;
-    highEnv = 0;
-    lowBaseline = 0;
-    kick = 0;
-    coverBeat = 0;
   }
   mode = "live";
-}
-
-export function setSimMode() {
-  setPulseIdle();
 }
 
 export function setPulseIdle() {
