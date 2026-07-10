@@ -173,7 +173,7 @@ function TopLabelTypewriter() {
   );
 }
 
-function EnterOverlay({ visible }: { visible: boolean }) {
+function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => void }) {
   const [dismissed, setDismissed] = useState(false);
   const open = visible && !dismissed;
 
