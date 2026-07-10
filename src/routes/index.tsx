@@ -6,7 +6,7 @@ import { Instagram, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
-import matiereVideo from "@/assets/matiere-sonore.mp4.asset.json";
+import matiereVideo from "@/assets/fond-epk.mp4";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
@@ -73,7 +73,7 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <video
         ref={(el) => registerTeaserVideo(el)}
-        src={matiereVideo.url}
+        src={matiereVideo}
         className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
         style={{ opacity: entered ? 1 : 0 }}
         loop
