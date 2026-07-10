@@ -75,7 +75,7 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
         ref={(el) => registerTeaserVideo(el)}
         src={matiereVideo.url}
         className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
-        style={{ opacity: entered ? 0.38 : 0 }}
+        style={{ opacity: entered ? 1 : 0 }}
         loop
         playsInline
         muted
@@ -1472,19 +1472,6 @@ function SignatureTracks() {
 
   return (
     <section id="tracks" className="relative overflow-hidden py-10 md:py-12">
-      {/* Vidéo de fond renforcée — même visuel que le fond global, ici plus présent */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <video
-          src={matiereVideo.url}
-          className="h-full w-full object-cover opacity-70"
-          loop
-          playsInline
-          muted
-          autoPlay
-          preload="auto"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-void/60 via-void/25 to-void/70" />
-      </div>
       <div className="relative z-10 px-5 md:px-20">
 
 
