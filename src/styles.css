@@ -1,6 +1,5 @@
 @import "tailwindcss" source(none);
 @source "../src";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -155,44 +154,6 @@
   h1.font-display, h2.font-display { position: relative; }
   h1.font-display::selection,
   h2.font-display::selection { -webkit-text-fill-color: var(--bone); }
-  /* Lower-glow variant for editorial sections */
-  h2.font-display.glow-soft,
-  .font-display.glow-soft {
-    filter:
-      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.10))
-      drop-shadow(0 2px 5px rgba(0, 0, 0, 0.5))
-      drop-shadow(0 0 0.35em color-mix(in oklab, var(--violet) 18%, transparent));
-  }
-  /* Editorial-dense variant: dense white type, micro violet halo, subtle grain */
-  h2.font-display.glow-editorial,
-  .font-display.glow-editorial {
-    color: color-mix(in oklab, var(--bone) 96%, white);
-    text-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.06),
-      0 2px 8px rgba(0, 0, 0, 0.55),
-      0 0 0.55em color-mix(in oklab, var(--violet) 10%, transparent);
-    position: relative;
-  }
-  .font-display.glow-editorial::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/></svg>");
-    mix-blend-mode: overlay;
-    opacity: 0.18;
-  }
-  /* Whisper variant: barely-there shadow, no halo, no grain */
-  .font-display.glow-whisper {
-    text-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.04),
-      0 1px 3px rgba(0, 0, 0, 0.4);
-  }
-  /* Safe line-height/padding so descenders (g, p, y) never clip in tracked uppercase kickers */
-  .kicker-safe {
-    line-height: 1.75;
-    padding-bottom: 0.4em;
-  }
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
   .font-mono { font-family: var(--font-mono); }
 
@@ -603,54 +564,6 @@
     .hand-signature__halo { animation: none; }
   }
 
-  /* Hero title — cinematic premium branding */
-  .hero-title {
-    position: relative;
-    /* Anti-FOUT : on réserve la hauteur du titre pour qu'il ne fasse pas
-       sauter le bloc (ancré justify-end) quand Anton remplace le fallback.
-       Calée sur font-size clamp × line-height 0.85 × 2 lignes mobile. */
-    min-height: calc(clamp(4rem, 11vw, 8rem) * 0.85);
-  }
-  @media (max-width: 767px) {
-    /* En mobile le titre passe sur 2 lignes (IXAN / BOY) → on réserve 2×. */
-    .hero-title {
-      min-height: calc(clamp(4rem, 11vw, 8rem) * 0.85 * 2);
-    }
-  }
-  .hero-title__word {
-    display: inline-block;
-    background: linear-gradient(
-      180deg,
-      #ffffff 0%,
-      #ececf2 35%,
-      #b8b9c4 75%,
-      #8a8b96 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    filter:
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55))
-      drop-shadow(0 0 24px rgba(255, 255, 255, 0.06));
-    text-shadow: 0 0 40px rgba(255, 255, 255, 0.04);
-  }
-  .hero-title__word--accent {
-    background: linear-gradient(
-      180deg,
-      color-mix(in oklab, var(--violet) 30%, white) 0%,
-      var(--violet) 45%,
-      color-mix(in oklab, var(--violet) 78%, black) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    filter:
-      drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6))
-      drop-shadow(0 0 30px color-mix(in oklab, var(--violet) 40%, transparent));
-  }
-
   /* Track / portrait subtle breathing — replaces aggressive pulse-scale */
   @keyframes track-breathe {
     0%, 100% {
@@ -668,37 +581,11 @@
   }
 
 
-  @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
-  }
-
   @keyframes drift {
     0%, 100% { transform: translate(0, 0); }
     50% { transform: translate(2%, -1%); }
   }
   .drift { animation: drift 18s ease-in-out infinite; }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-
-  .text-stroke {
-    -webkit-text-stroke: 1px color-mix(in oklab, var(--bone) 40%, transparent);
-    color: transparent;
-  }
-
-  .glitch-hover:hover {
-    animation: glitch 0.3s steps(2) infinite;
-  }
-  @keyframes glitch {
-    0% { transform: translate(0); }
-    25% { transform: translate(-1px, 1px); }
-    50% { transform: translate(1px, -1px); }
-    75% { transform: translate(-1px, 0); }
-    100% { transform: translate(0); }
-  }
 
   @keyframes eqBar {
     0%, 100% { transform: scaleY(0.4); }
@@ -731,121 +618,37 @@
 }
 
 @layer utilities {
-  /* Responsive intensity tokens — identical logic, only scale/intensity adapt. */
+  /* Responsive intensity token — cover breathing amplitude on kick. */
   :root {
-    --fx-glow: 0.85;
-    --fx-blur: 0.85;
-    --fx-amp: 0.85;
-    --fx-kick: 0.85;
     --fx-cover-kick: 1;
-    --fx-cover-active: 0;
-    --fx-eq-max: 28px;
-    --fx-pulse-cap: 0.014;
-    --fx-breathe-dur: 6s;
-    --fx-drift-dur: 14s;
-    --fx-button-dur: 2.4s;
   }
-  /* TABLET — softened tokens that feel right on touch screens */
+  /* TABLET — softened token that feels right on touch screens */
   @media (max-width: 1023px) {
     :root {
-      --fx-glow: 0.7;
-      --fx-blur: 0.7;
-      --fx-amp: 0.7;
-      --fx-kick: 0.65;
       --fx-cover-kick: 0.9;
-      --fx-cover-active: 0;
-      --fx-eq-max: 22px;
-      --fx-pulse-cap: 0.012;
-      --fx-breathe-dur: 7s;
-      --fx-drift-dur: 16s;
-      --fx-button-dur: 2.8s;
     }
   }
   /* MOBILE — boosted to compensate for smaller cover size so the felt
      intensity matches the tablet experience. */
   @media (max-width: 767px) {
     :root {
-      --fx-glow: 0.95;
-      --fx-blur: 0.85;
-      --fx-amp: 1;
-      --fx-kick: 1;
       --fx-cover-kick: 1.35;
-      --fx-cover-active: 0;
-      --fx-eq-max: 24px;
-      --fx-pulse-cap: 0.02;
-      --fx-breathe-dur: 4.2s;
-      --fx-drift-dur: 14s;
-      --fx-button-dur: 2.4s;
     }
   }
 
-
-  /* Slow breathing lives on a WRAPPER element so the inline kick transform
-     on the <img> never collides with this keyframe. */
-  @keyframes track-breathe-active {
-    from { transform: scale(1);    filter: brightness(1)    contrast(1); }
-    to   { transform: scale(1.03); filter: brightness(1.10) contrast(1.04); }
-  }
-  @keyframes track-light-drift {
-    0%   { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
-    50%  { transform: translate3d(4%, 3%, 0);  opacity: 0.55; }
-    100% { transform: translate3d(-4%, -2%, 0); opacity: 0.35; }
-  }
-  @keyframes track-button-pulse {
-    0%, 100% { box-shadow: 0 0 0 0 transparent; }
-    50%      { box-shadow: 0 0 calc(10px * var(--fx-glow)) 0 color-mix(in oklab, var(--violet) calc(26% * var(--fx-glow)), transparent); }
-  }
   .track-cover-breathe { transform: scale(1); }
-  .track-cover-breathe-active {
-    animation: track-breathe-active 3.8s ease-in-out infinite alternate;
-    will-change: transform, filter;
-    transform-origin: center;
-  }
 
   @media (max-width: 767px) {
-    @keyframes track-breathe-active {
-      from { transform: scale(1);      filter: brightness(1)    contrast(1); }
-      to   { transform: scale(1.085);  filter: brightness(1.16) contrast(1.08); }
-    }
-    @keyframes track-cover-shell-active {
-      from { transform: scale(1); }
-      to   { transform: scale(1.055); }
-    }
     .track-cover-shell-active {
       transform-origin: center;
     }
-    .track-cover-breathe-active {
-      animation-duration: var(--fx-breathe-dur);
-    }
   }
-
-
-  .track-light-drift { animation: track-light-drift var(--fx-drift-dur) ease-in-out infinite; }
-  .track-button-pulse { animation: track-button-pulse var(--fx-button-dur) ease-in-out infinite; }
 
   /* ── One-shot activation sequence — fires only when playback starts ── */
-  @keyframes track-activate-cover {
-    0%   { filter: brightness(1); }
-    100% { filter: brightness(1.04); }
-  }
   @keyframes track-activate-aura {
     0%   { opacity: 0; }
     100% { opacity: 0.14; }
   }
-  @keyframes track-activate-button {
-    0%   { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
-    50%  { transform: scale(1.06); box-shadow: 0 0 18px 2px color-mix(in oklab, var(--violet) 38%, transparent); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
-  }
-  @keyframes track-activate-eq {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  @keyframes track-activate-now-playing {
-    0%   { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  .track-activate-cover { animation: track-activate-cover 700ms ease-out forwards; }
   .track-activate-aura {
     pointer-events: none;
     position: absolute;
@@ -857,8 +660,5 @@
     animation: track-activate-aura 800ms ease-out forwards;
     z-index: 0;
   }
-  .track-activate-button { animation: track-activate-button 420ms ease-out 1; }
-  .track-activate-eq { animation: track-activate-eq 1000ms ease-out forwards; }
-  .track-activate-now-playing { animation: track-activate-now-playing 600ms ease-out forwards; }
 }
 

@@ -64,11 +64,6 @@ function ensureGainGraph() {
   }
 }
 
-function currentGainValue(): number {
-  if (usingGain && gain && ctx) return gain.gain.value;
-  return audio?.volume ?? 0;
-}
-
 function setGainValue(v: number) {
   if (usingGain && gain) {
     gain.gain.value = v;
@@ -167,10 +162,6 @@ if (typeof document !== "undefined") {
     }
   });
 }
-
-// Silence unused-import lint without changing the surface.
-export const __ping = () => currentGainValue();
-
 
 export function getTeaserAnalyser(): AnalyserNode | null {
   return analyserNode;
