@@ -81,15 +81,6 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
         muted
         preload="auto"
       />
-      {/* Dark tint for text contrast across the whole page */}
-      <div
-        className="absolute inset-0 transition-opacity duration-[1400ms] ease-out"
-        style={{
-          opacity: entered ? 1 : 0,
-          background:
-            "linear-gradient(180deg, oklch(0.08 0.01 270 / 0.55) 0%, oklch(0.08 0.01 270 / 0.4) 40%, oklch(0.08 0.01 270 / 0.6) 100%)",
-        }}
-      />
     </div>
   );
 }
