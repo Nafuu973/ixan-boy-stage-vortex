@@ -157,7 +157,7 @@ function EnterOverlay({ visible }: { visible: boolean }) {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04, filter: "blur(12px)" }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
