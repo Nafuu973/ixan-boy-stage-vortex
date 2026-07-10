@@ -292,7 +292,7 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
             >
               <motion.button
                 type="button"
-                onClick={() => { startTeaser(); setDismissed(true); }}
+                onClick={() => { startTeaser(); onEnter(); setDismissed(true); }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.92 }}
                 aria-label="Enter"
