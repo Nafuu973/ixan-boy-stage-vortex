@@ -6,7 +6,8 @@ import { Instagram, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
-import matiereVideo from "@/assets/fond-epk.mp4";
+import matiereVideoAsset from "@/assets/fond-epk.mp4.asset.json";
+const matiereVideo = matiereVideoAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
