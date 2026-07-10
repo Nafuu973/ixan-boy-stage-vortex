@@ -26,6 +26,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const [lang, setLang] = useState<Lang>("fr");
   const [ready, setReady] = useState(false);
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
@@ -46,8 +47,9 @@ function Index() {
   return (
     <LangCtx.Provider value={{ lang, setLang }}>
       <main className="relative bg-void text-bone">
+        <GlobalBackdrop entered={entered} />
         <Preloader done={ready} />
-        <EnterOverlay visible={ready} />
+        <EnterOverlay visible={ready} onEnter={() => setEntered(true)} />
         <TopBar lang={lang} setLang={setLang} />
         <Hero />
         <PulseBar />
@@ -63,6 +65,32 @@ function Index() {
         <Footer />
       </main>
     </LangCtx.Provider>
+  );
+}
+
+function GlobalBackdrop({ entered }: { entered: boolean }) {
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <video
+        ref={(el) => registerTeaserVideo(el)}
+        src={matiereVideo.url}
+        className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
+        style={{ opacity: entered ? 0.38 : 0 }}
+        loop
+        playsInline
+        muted
+        preload="auto"
+      />
+      {/* Dark tint for text contrast across the whole page */}
+      <div
+        className="absolute inset-0 transition-opacity duration-[1400ms] ease-out"
+        style={{
+          opacity: entered ? 1 : 0,
+          background:
+            "linear-gradient(180deg, oklch(0.08 0.01 270 / 0.55) 0%, oklch(0.08 0.01 270 / 0.4) 40%, oklch(0.08 0.01 270 / 0.6) 100%)",
+        }}
+      />
+    </div>
   );
 }
 
