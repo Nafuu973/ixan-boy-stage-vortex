@@ -621,7 +621,7 @@ function Presentation() {
   const t = useT();
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative bg-void py-16 md:py-20">
+    <section className="relative py-16 md:py-20">
       <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -726,7 +726,7 @@ function ExperienceLive() {
   return (
     <section
       id="live"
-      className="relative isolate overflow-hidden bg-void py-14 md:py-20"
+      className="relative isolate overflow-hidden py-14 md:py-20"
     >
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 smoke drift" />
@@ -807,7 +807,7 @@ function ExperienceLive() {
 function WhyBook() {
   const t = useT();
   return (
-    <section className="relative overflow-hidden bg-void py-14 md:py-20">
+    <section className="relative overflow-hidden py-14 md:py-20">
       {/* ambient background — texture scan, micro grid, soft volumetric light */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.10]">
         <div
@@ -947,7 +947,7 @@ function WhyBook() {
 function Silence() {
   const t = useT();
   return (
-    <section className="relative flex min-h-[40vh] items-center justify-center bg-void px-5 py-14">
+    <section className="relative flex min-h-[40vh] items-center justify-center px-5 py-14">
       <RevealText
         text={t.silence}
         className="font-serif-i text-balance text-center text-3xl text-bone/90 md:text-6xl"
@@ -1480,7 +1480,7 @@ function SignatureTracks() {
   };
 
   return (
-    <section id="tracks" className="relative overflow-hidden bg-void py-10 md:py-12">
+    <section id="tracks" className="relative overflow-hidden py-10 md:py-12">
       {/* Vidéo de fond — même source audio que le teaser d'accueil */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <video
@@ -1781,7 +1781,7 @@ function Proof() {
   ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
-    <section className="relative bg-void py-12 md:py-16">
+    <section className="relative py-12 md:py-16">
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           06 · {t.proof.kicker}
@@ -1904,7 +1904,7 @@ function ContactFinal() {
   return (
     <section
       id="contact"
-      className="relative isolate overflow-hidden bg-void py-14 md:py-20"
+      className="relative isolate overflow-hidden py-14 md:py-20"
     >
       <div className="absolute inset-0 -z-10 smoke drift opacity-70" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)]" />
