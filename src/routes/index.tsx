@@ -5,7 +5,8 @@ import Lenis from "lenis";
 import { Instagram, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
-import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser } from "@/lib/teaser";
+import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
+import matiereVideo from "@/assets/matiere-sonore.mp4.asset.json";
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
@@ -1452,9 +1453,21 @@ function SignatureTracks() {
 
   return (
     <section id="tracks" className="relative overflow-hidden bg-void py-10 md:py-12">
-      {/* Waveform canvas réactif à l'audio — remplace la vidéo statique */}
-      <WaveformCanvas />
+      {/* Vidéo de fond — même source audio que le teaser d'accueil */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <video
+          ref={(el) => registerTeaserVideo(el)}
+          src={matiereVideo.url}
+          className="h-full w-full object-cover opacity-45"
+          loop
+          playsInline
+          muted
+          preload="auto"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-void/70 via-void/40 to-void/80" />
+      </div>
       <div className="relative z-10 px-5 md:px-20">
+
 
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           04 · {t.tracks.kicker}
