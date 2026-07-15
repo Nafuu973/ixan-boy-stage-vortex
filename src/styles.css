@@ -136,9 +136,10 @@
     font-family: var(--font-display);
     letter-spacing: -0.018em;
     text-shadow:
-      0 0.018em 0 color-mix(in oklab, white 10%, transparent),
-      0 0 0.55em color-mix(in oklab, var(--violet) 22%, transparent),
-      0 0 1.6em color-mix(in oklab, var(--violet) 10%, transparent);
+      0 2px 4px rgba(0, 0, 0, 0.75),
+      0 4px 14px rgba(0, 0, 0, 0.55),
+      0 0 0.55em color-mix(in oklab, var(--violet) 28%, transparent),
+      0 0 1.6em color-mix(in oklab, var(--violet) 14%, transparent);
   }
   /* Mainstage / festival treatment for the biggest section titles */
   h1.font-display,
