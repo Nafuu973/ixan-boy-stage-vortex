@@ -157,6 +157,25 @@
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
   .font-mono { font-family: var(--font-mono); }
 
+  /* Soften top/bottom edges of semi-opaque section backdrops so they
+     dissolve into the fixed waveform video instead of drawing a hard line. */
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 100px,
+      #000 calc(100% - 100px),
+      transparent 100%
+    );
+            mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 100px,
+      #000 calc(100% - 100px),
+      transparent 100%
+    );
+  }
+
   /* Section kicker — numbered labels 01..08, white neon treatment */
   .section-kicker {
     font-family: var(--font-mono);
