@@ -583,7 +583,7 @@ function Cta({
 function PulseBar() {
   const t = useT();
   return (
-    <section className="relative overflow-hidden border-y border-bone/10 bg-obsidian/60 py-5">
+    <section className="relative overflow-hidden bg-obsidian/60 py-5">
       <div className="flex items-center gap-6 whitespace-nowrap px-5 md:px-12">
         <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
           <span className="h-1.5 w-1.5 rounded-full bg-violet pulse-glow" />
@@ -720,7 +720,7 @@ function ExperienceLive() {
       id="live"
       className="relative isolate overflow-hidden py-14 md:py-20"
     >
-      <div className="absolute inset-0 -z-10 bg-void/75" />
+      <div className="absolute inset-0 -z-10 bg-void/75 mask-fade-y" />
 
       <div className="px-5 md:px-12">
         <div className="section-kicker">
@@ -1828,7 +1828,8 @@ function Proof() {
 function BookingReady() {
   const t = useT();
   return (
-    <section className="relative bg-obsidian/40 py-12 md:py-16">
+    <section className="relative overflow-hidden py-12 md:py-16">
+      <div className="absolute inset-0 -z-10 bg-obsidian/40 mask-fade-y" />
       <div className="px-5 md:px-12">
         <div className="section-kicker">
           07 · {t.booking.kicker}
