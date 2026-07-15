@@ -158,8 +158,10 @@
     -webkit-text-fill-color: transparent;
     letter-spacing: -0.025em;
     filter:
-      drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5))
-      drop-shadow(0 0 0.4em color-mix(in srgb, var(--violet) 25%, transparent));
+      drop-shadow(0 3px 0 rgba(0, 0, 0, 0.55))
+      drop-shadow(0 6px 18px rgba(0, 0, 0, 0.7))
+      drop-shadow(0 12px 40px rgba(0, 0, 0, 0.45))
+      drop-shadow(0 0 0.5em color-mix(in srgb, var(--violet) 35%, transparent));
     text-shadow: none;
   }
   /* Subtle silver sheen overlay on big titles */
