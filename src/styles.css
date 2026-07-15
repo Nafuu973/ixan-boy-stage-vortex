@@ -157,6 +157,19 @@
   .font-serif-i { font-family: var(--font-serif); font-style: italic; }
   .font-mono { font-family: var(--font-mono); }
 
+  /* Section kicker — numbered labels 01..08, white neon treatment */
+  .section-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--bone);
+    text-shadow:
+      0 0 0.35em rgba(255, 255, 255, 0.95),
+      0 0 0.75em rgba(255, 255, 255, 0.65),
+      0 0 1.4em rgba(255, 255, 255, 0.35);
+  }
+
   .text-balance { text-wrap: balance; }
 
   .grain::after {
