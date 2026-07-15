@@ -1940,7 +1940,8 @@ function ContactFinal() {
 function Footer() {
   const t = useT();
   return (
-    <footer className="border-t border-bone/10 bg-void px-5 py-8 md:px-12">
+    <footer className="relative px-5 py-8 md:px-12">
+      <div className="absolute inset-0 -z-10 bg-void mask-fade-y" />
       <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-bone/40">
         <span>© IXAN BOY · 2026</span>
         <span className="flex items-center gap-2">
