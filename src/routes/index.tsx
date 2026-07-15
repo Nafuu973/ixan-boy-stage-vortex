@@ -620,7 +620,7 @@ function Presentation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
-          className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet text-left"
+          className="section-kicker text-left"
         >
           01 · {t.presentation.kicker}
         </motion.div>
@@ -723,7 +723,7 @@ function ExperienceLive() {
       <div className="absolute inset-0 -z-10 bg-void/75" />
 
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           02 · {t.live.kicker}
         </div>
         <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.2rem)] leading-[0.9]">
@@ -816,7 +816,7 @@ function WhyBook() {
       <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-violet/20 to-transparent md:block" />
 
       <div className="relative px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           03 · {t.why.kicker}
         </div>
         <motion.h2
@@ -1473,7 +1473,7 @@ function SignatureTracks() {
       <div className="relative z-10 px-5 md:px-20">
 
 
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           04 · {t.tracks.kicker}
         </div>
         <h2 className="font-display mt-4 max-w-[18ch] text-balance text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] tracking-[-0.01em] md:mt-5">
@@ -1685,7 +1685,7 @@ function MusicalDNA() {
     <section className="relative overflow-hidden bg-obsidian/40 py-14 md:py-20">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)]" />
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           05 · {t.dna.kicker}
         </div>
 
@@ -1759,7 +1759,7 @@ function Proof() {
   return (
     <section className="relative py-12 md:py-16">
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           06 · {t.proof.kicker}
         </div>
         <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
@@ -1830,7 +1830,7 @@ function BookingReady() {
   return (
     <section className="relative bg-obsidian/40 py-12 md:py-16">
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           07 · {t.booking.kicker}
         </div>
         <div className="mt-12 grid gap-px overflow-hidden rounded-sm bg-bone/10 md:grid-cols-4">
@@ -1886,7 +1886,7 @@ function ContactFinal() {
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)]" />
 
       <div className="px-5 md:px-12">
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
+        <div className="section-kicker">
           08 · {t.contact.kicker}
         </div>
         <h2 className="font-display mt-6 text-balance text-[clamp(3.5rem,9vw,7rem)] leading-[0.85]">
