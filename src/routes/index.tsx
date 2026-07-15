@@ -1884,8 +1884,8 @@ function ContactFinal() {
       id="contact"
       className="relative isolate overflow-hidden py-14 md:py-20"
     >
-      <div className="absolute inset-0 -z-10 smoke drift opacity-70" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)]" />
+      <div className="absolute inset-0 -z-10 smoke drift opacity-70 mask-fade-y" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)] mask-fade-y" />
 
       <div className="px-5 md:px-12">
         <div className="section-kicker">
@@ -1940,7 +1940,8 @@ function ContactFinal() {
 function Footer() {
   const t = useT();
   return (
-    <footer className="border-t border-bone/10 bg-void px-5 py-8 md:px-12">
+    <footer className="relative px-5 py-8 md:px-12">
+      <div className="absolute inset-0 -z-10 bg-void mask-fade-y" />
       <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-bone/40">
         <span>© IXAN BOY · 2026</span>
         <span className="flex items-center gap-2">
