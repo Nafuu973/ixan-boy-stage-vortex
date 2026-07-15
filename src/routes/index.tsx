@@ -720,10 +720,7 @@ function ExperienceLive() {
       id="live"
       className="relative isolate overflow-hidden py-14 md:py-20"
     >
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 smoke drift" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,oklch(0.55_0.28_295/0.4),transparent_60%)]" />
-      </div>
+      <div className="absolute inset-0 -z-10 bg-void/75" />
 
       <div className="px-5 md:px-12">
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
