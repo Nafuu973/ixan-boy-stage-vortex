@@ -1682,8 +1682,9 @@ function SignatureTracks() {
 function MusicalDNA() {
   const t = useT();
   return (
-    <section className="relative overflow-hidden bg-obsidian/40 py-14 md:py-20">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)]" />
+    <section className="relative overflow-hidden py-14 md:py-20">
+      <div className="absolute inset-0 -z-10 bg-obsidian/40 mask-fade-y" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)] mask-fade-y" />
       <div className="px-5 md:px-12">
         <div className="section-kicker">
           05 · {t.dna.kicker}
