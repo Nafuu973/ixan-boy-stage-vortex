@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "ixan-boy-epk",
+      "version": "0.1.0",
+      "title": "IXAN BOY — EPK"
+    },
+    "tools": [
+      {
+        "name": "get_artist_info",
+        "title": "Get artist info",
+        "description": "Returns the IXAN BOY artist presentation: genre, tagline, intro, and full biography. Choose language 'fr' or 'en'.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "lang": {
+              "default": "fr",
+              "description": "Response language: 'fr' (French) or 'en' (English).",
+              "type": "string",
+              "enum": [
+                "fr",
+                "en"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_signature_tracks",
+        "title": "Get signature tracks",
+        "description": "Returns IXAN BOY's signature tracks with title and mood description.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "lang": {
+              "default": "fr",
+              "description": "Response language.",
+              "type": "string",
+              "enum": [
+                "fr",
+                "en"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_booking_contact",
+        "title": "Get booking contact",
+        "description": "Returns the official booking contact information for IXAN BOY (email and call-to-action text).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "lang": {
+              "default": "fr",
+              "description": "Response language.",
+              "type": "string",
+              "enum": [
+                "fr",
+                "en"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_credibility",
+        "title": "Get credibility signals",
+        "description": "Returns IXAN BOY's public credibility signals: labels, artists who play his tracks, and why-book pitch cards.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "lang": {
+              "default": "fr",
+              "description": "Response language.",
+              "type": "string",
+              "enum": [
+                "fr",
+                "en"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
