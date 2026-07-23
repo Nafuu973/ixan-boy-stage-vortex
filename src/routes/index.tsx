@@ -743,50 +743,9 @@ function ExperienceLive() {
         </h2>
         <div className="mt-12 grid gap-6 md:grid-cols-12">
           <div className="md:col-span-8">
-            <div className="relative aspect-video w-full max-h-[50vh] overflow-hidden rounded-sm border border-bone/10 bg-obsidian">
-              <img
-                src={liveBooth}
-                alt="IXAN BOY live"
-                loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover object-center contrast-110 saturate-[0.75]"
-              />
-              <div className="absolute inset-0 bg-void/55 mix-blend-multiply" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,oklch(0.55_0.28_295/0.35),transparent_60%)] mix-blend-screen" />
-              <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/30" />
-              <div className="absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
-                <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-ember pulse-glow" />
-                  REC · LIVE
-                </span>
-                <span className="text-bone/50">CAM_01 / 04</span>
-              </div>
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-4 py-4">
-                <span className="font-display text-2xl leading-none md:text-4xl">
-                  IXAN BOY
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
-                  RAW · LIVE
-                </span>
-              </div>
-              {[
-                "top-2 left-2",
-                "top-2 right-2",
-                "bottom-2 left-2",
-                "bottom-2 right-2",
-              ].map((p) => (
-                <span
-                  key={p}
-                  className={`absolute ${p} h-3 w-3 border-violet`}
-                  style={{
-                    borderTopWidth: p.includes("top") ? 1 : 0,
-                    borderBottomWidth: p.includes("bottom") ? 1 : 0,
-                    borderLeftWidth: p.includes("left") ? 1 : 0,
-                    borderRightWidth: p.includes("right") ? 1 : 0,
-                  }}
-                />
-              ))}
-            </div>
+            <MulticamPlayer />
           </div>
+
           <div className="flex flex-col justify-end gap-6 md:col-span-4">
             {t.live.side.map((l, i) => (
               <p
