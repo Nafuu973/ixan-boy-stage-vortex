@@ -503,12 +503,15 @@ function Hero() {
       </motion.div>
 
       <div className="absolute inset-0 z-[1] flex items-center justify-center">
-        <img
-          src={heroImg.url}
-          alt="IXAN BOY"
-          className="h-full w-full object-contain object-top md:object-cover md:object-top"
-          fetchPriority="high"
-        />
+        <picture className="h-full w-full">
+          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <img
+            src={heroImg.url}
+            alt="IXAN BOY"
+            className="h-full w-full object-contain object-top md:object-cover md:object-top"
+            fetchPriority="high"
+          />
+        </picture>
       </div>
 
       <div className="absolute inset-0 z-[2]">
