@@ -762,6 +762,160 @@ function ExperienceLive() {
   );
 }
 
+function MulticamPlayer() {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
+  const duckedRef = useRef(false);
+
+  const doDuck = () => {
+    if (!duckedRef.current) {
+      duckedRef.current = true;
+      duckTeaser();
+    }
+  };
+  const doUnduck = () => {
+    if (duckedRef.current) {
+      duckedRef.current = false;
+      unduckTeaser();
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (duckedRef.current) {
+        duckedRef.current = false;
+        unduckTeaser();
+      }
+    };
+  }, []);
+
+  const togglePlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      doDuck();
+      setStarted(true);
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => undefined);
+    } else {
+      v.pause();
+    }
+  };
+
+  const toggleFullscreen = () => {
+    const el = wrapRef.current;
+    if (!el) return;
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => undefined);
+    } else {
+      const req = el.requestFullscreen?.bind(el);
+      if (req) void req().catch(() => undefined);
+    }
+  };
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian"
+    >
+      <video
+        ref={videoRef}
+        src={multicamVideo}
+        poster={liveBooth}
+        preload="metadata"
+        playsInline
+        onPlay={() => {
+          setPlaying(true);
+          doDuck();
+        }}
+        onPause={() => {
+          setPlaying(false);
+          doUnduck();
+        }}
+        onEnded={() => {
+          setPlaying(false);
+          doUnduck();
+        }}
+        className="block h-auto w-full"
+      />
+
+      {/* Corner brackets */}
+      {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) => (
+        <span
+          key={p}
+          className={`pointer-events-none absolute ${p} h-3 w-3 border-violet`}
+          style={{
+            borderTopWidth: p.includes("top") ? 1 : 0,
+            borderBottomWidth: p.includes("bottom") ? 1 : 0,
+            borderLeftWidth: p.includes("left") ? 1 : 0,
+            borderRightWidth: p.includes("right") ? 1 : 0,
+          }}
+        />
+      ))}
+
+      {/* REC badge */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+        <span className="flex items-center gap-2">
+          <span className={`h-1.5 w-1.5 rounded-full bg-ember ${playing ? "pulse-glow" : ""}`} />
+          {playing ? "LIVE" : "MULTICAM"}
+        </span>
+        <span className="text-bone/50">CAM_01 / 04</span>
+      </div>
+
+      {/* Center play button (hidden while playing) */}
+      {!playing && (
+        <button
+          type="button"
+          onClick={togglePlay}
+          aria-label={started ? "Reprendre" : "Lire la vidéo"}
+          className="absolute inset-0 flex items-center justify-center bg-void/40 transition hover:bg-void/25"
+        >
+          <span className="flex h-20 w-20 items-center justify-center rounded-full border border-violet/70 bg-void/60 text-bone shadow-[0_0_40px_oklch(0.55_0.28_295/0.5)] backdrop-blur-sm">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden>
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </span>
+        </button>
+      )}
+
+      {/* Bottom control bar */}
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-gradient-to-t from-void/85 to-transparent px-4 py-3">
+        <button
+          type="button"
+          onClick={togglePlay}
+          aria-label={playing ? "Pause" : "Play"}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-bone/20 bg-void/60 text-bone hover:border-violet/70 hover:text-violet"
+        >
+          {playing ? (
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden>
+              <path d="M6 5h4v14H6zM14 5h4v14h-4z" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden>
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </button>
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
+          IXAN BOY · MULTICAM
+        </span>
+        <button
+          type="button"
+          onClick={toggleFullscreen}
+          aria-label="Plein écran"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-bone/20 bg-void/60 text-bone hover:border-violet/70 hover:text-violet"
+        >
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function WhyBook() {
   const t = useT();
   return (
