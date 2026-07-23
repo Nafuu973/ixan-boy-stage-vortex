@@ -7,7 +7,9 @@ import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
 import matiereVideoAsset from "@/assets/fond-epk.mp4.asset.json";
+import matiereVideoLandscapeAsset from "@/assets/fond-epk-paysage.mp4.asset.json";
 const matiereVideo = matiereVideoAsset.url;
+const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
@@ -70,11 +72,17 @@ function Index() {
 }
 
 function GlobalBackdrop({ entered }: { entered: boolean }) {
+  const [src, setSrc] = useState(matiereVideo);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 768px)");
+    setSrc(mq.matches ? matiereVideoLandscape : matiereVideo);
+  }, []);
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <video
         ref={(el) => registerTeaserVideo(el)}
-        src={matiereVideo}
+        src={src}
         className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
         style={{ opacity: entered ? 1 : 0 }}
         loop
