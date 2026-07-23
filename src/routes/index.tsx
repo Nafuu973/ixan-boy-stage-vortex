@@ -78,7 +78,7 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
   const [src, setSrc] = useState(matiereVideo);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 768px)");
+    const mq = window.matchMedia("(min-width: 1024px)");
     setSrc(mq.matches ? matiereVideoLandscape : matiereVideo);
   }, []);
   return (
@@ -491,7 +491,7 @@ function Hero() {
     >
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
         <picture>
-          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <source media="(min-width: 1024px)" srcSet={heroImgLandscape.url} />
           <img
             src={heroImg.url}
             alt=""
@@ -504,7 +504,7 @@ function Hero() {
 
       <div className="absolute inset-0 z-[1] flex items-center justify-center">
         <picture className="h-full w-full">
-          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <source media="(min-width: 1024px)" srcSet={heroImgLandscape.url} />
           <img
             src={heroImg.url}
             alt="IXAN BOY"
