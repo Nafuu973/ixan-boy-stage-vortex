@@ -7,7 +7,9 @@ import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
 import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
 import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
 import matiereVideoAsset from "@/assets/fond-epk.mp4.asset.json";
+import matiereVideoLandscapeAsset from "@/assets/fond-epk-paysage.mp4.asset.json";
 const matiereVideo = matiereVideoAsset.url;
+const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
