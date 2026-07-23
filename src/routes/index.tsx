@@ -19,6 +19,8 @@ import coverFire from "@/assets/cover-take-me-body.png";
 import coverRun from "@/assets/cover-sex-bomb.png";
 
 import liveBooth from "@/assets/live-booth.jpg";
+import multicamAsset from "@/assets/multicam.mp4.asset.json";
+const multicamVideo = multicamAsset.url;
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
 
