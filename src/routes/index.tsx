@@ -490,12 +490,15 @@ function Hero() {
       className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
-        <img
-          src={heroImg.url}
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full scale-110 object-cover object-center blur-3xl"
-        />
+        <picture>
+          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <img
+            src={heroImg.url}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full scale-110 object-cover object-center blur-3xl"
+          />
+        </picture>
         <div className="absolute inset-0 bg-void/60" />
       </motion.div>
 
