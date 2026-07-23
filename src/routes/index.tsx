@@ -13,6 +13,7 @@ const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
+import heroImgLandscape from "@/assets/ixanboy-hero-landscape.png.asset.json";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
@@ -489,22 +490,28 @@ function Hero() {
       className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
     >
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
-        <img
-          src={heroImg.url}
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full scale-110 object-cover object-center blur-3xl"
-        />
+        <picture>
+          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <img
+            src={heroImg.url}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full scale-110 object-cover object-center blur-3xl"
+          />
+        </picture>
         <div className="absolute inset-0 bg-void/60" />
       </motion.div>
 
       <div className="absolute inset-0 z-[1] flex items-center justify-center">
-        <img
-          src={heroImg.url}
-          alt="IXAN BOY"
-          className="h-full w-full object-contain object-top md:object-cover md:object-top"
-          fetchPriority="high"
-        />
+        <picture className="h-full w-full">
+          <source media="(min-width: 768px)" srcSet={heroImgLandscape.url} />
+          <img
+            src={heroImg.url}
+            alt="IXAN BOY"
+            className="h-full w-full object-contain object-top md:object-cover md:object-top"
+            fetchPriority="high"
+          />
+        </picture>
       </div>
 
       <div className="absolute inset-0 z-[2]">
