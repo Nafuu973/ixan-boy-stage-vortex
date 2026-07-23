@@ -819,6 +819,7 @@ function MulticamPlayer() {
     <div
       ref={wrapRef}
       className="relative w-full overflow-hidden rounded-sm border border-bone/10 bg-obsidian"
+      style={{ aspectRatio: "16 / 9" }}
     >
       <video
         ref={videoRef}
@@ -838,8 +839,9 @@ function MulticamPlayer() {
           setPlaying(false);
           doUnduck();
         }}
-        className="block h-auto w-full"
+        className="absolute inset-0 block h-full w-full object-cover"
       />
+
 
       {/* Corner brackets */}
       {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) => (
