@@ -72,11 +72,17 @@ function Index() {
 }
 
 function GlobalBackdrop({ entered }: { entered: boolean }) {
+  const [src, setSrc] = useState(matiereVideo);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 768px)");
+    setSrc(mq.matches ? matiereVideoLandscape : matiereVideo);
+  }, []);
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       <video
         ref={(el) => registerTeaserVideo(el)}
-        src={matiereVideo}
+        src={src}
         className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
         style={{ opacity: entered ? 1 : 0 }}
         loop
