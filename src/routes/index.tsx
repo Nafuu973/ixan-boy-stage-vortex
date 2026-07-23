@@ -13,6 +13,7 @@ const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
+import heroImgLandscape from "@/assets/ixanboy-hero-landscape.png.asset.json";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFire from "@/assets/cover-take-me-body.png";
