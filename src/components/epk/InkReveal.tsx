@@ -35,9 +35,8 @@ export function InkReveal({
 
   return (
     <div
-      key={run}
       ref={ref}
-      className={`${done ? "" : "ink-reveal"} ${className}`}
+      className={`${done ? "" : run % 2 === 0 ? "ink-reveal-a" : "ink-reveal-b"} ${className}`}
     >
       {children}
     </div>
