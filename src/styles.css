@@ -231,63 +231,96 @@
   /* ============================================================
      Ink splatter reveal — organic blots grow to uncover a block
      ============================================================ */
-  .ink-reveal-a,
-  .ink-reveal-b {
-    --ink: 0%;
+  /* ============================================================
+     Ink splatter transition — blots splash in, then bleed away
+     ============================================================ */
+  .ink-reveal-host {
+    position: relative;
+    z-index: 60;
+  }
+
+  .ink2 {
+    position: absolute;
+    inset: -6%;
+    z-index: 60;
+    pointer-events: none;
+    filter: url(#ink-rough);
+  }
+
+  .ink2-inner {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 46% 40%, oklch(0.95 0.02 300) 0%, oklch(0.80 0.16 298) 45%, oklch(0.58 0.22 296) 100%);
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     -webkit-mask-image:
-      radial-gradient(closest-side circle at 48% 46%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 20% 24%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 78% 28%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 16% 76%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 82% 74%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 50% 8%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 50% 94%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 4% 50%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 96% 50%, #000 99%, transparent 100%);
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%);
     mask-image:
-      radial-gradient(closest-side circle at 48% 46%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 20% 24%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 78% 28%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 16% 76%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 82% 74%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 50% 8%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 50% 94%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 4% 50%, #000 99%, transparent 100%),
-      radial-gradient(closest-side circle at 96% 50%, #000 99%, transparent 100%);
-    -webkit-mask-position: 48% 46%, 20% 24%, 78% 28%, 16% 76%, 82% 74%, 50% 8%, 50% 94%, 4% 50%, 96% 50%;
-    mask-position: 48% 46%, 20% 24%, 78% 28%, 16% 76%, 82% 74%, 50% 8%, 50% 94%, 4% 50%, 96% 50%;
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
+      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%);
+    -webkit-mask-position: 46% 44%, 22% 26%, 76% 30%, 18% 72%, 80% 70%, 52% 10%, 48% 92%, 8% 52%, 92% 48%, 34% 58%, 66% 60%;
+    mask-position: 46% 44%, 22% 26%, 76% 30%, 18% 72%, 80% 70%, 52% 10%, 48% 92%, 8% 52%, 92% 48%, 34% 58%, 66% 60%;
+    -webkit-mask-size: 0% 0%;
+    mask-size: 0% 0%;
   }
 
-  @keyframes ink-splat-a {
-    0%   { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    18%  { -webkit-mask-size: 70% 70%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 70% 70%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    45%  { -webkit-mask-size: 110% 110%, 80% 90%, 80% 90%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 110% 110%, 80% 90%, 80% 90%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    70%  { -webkit-mask-size: 130% 130%, 110% 120%, 110% 120%, 100% 110%, 100% 110%, 70% 80%, 70% 80%, 0% 0%, 0% 0%;
-           mask-size: 130% 130%, 110% 120%, 110% 120%, 100% 110%, 100% 110%, 70% 80%, 70% 80%, 0% 0%, 0% 0%; }
-    100% { -webkit-mask-size: 220% 220%, 200% 220%, 200% 220%, 200% 220%, 200% 220%, 180% 200%, 180% 200%, 180% 200%, 180% 200%;
-           mask-size: 220% 220%, 200% 220%, 200% 220%, 200% 220%, 200% 220%, 180% 200%, 180% 200%, 180% 200%, 180% 200%; }
+  @keyframes ink2-a {
+    0%  { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
+    10%  { -webkit-mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
+    22%  { -webkit-mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; opacity: 1; }
+    36%  { -webkit-mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; opacity: 1; }
+    52%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
+    74%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
+    100%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 0; }
   }
 
-  @keyframes ink-splat-b {
-    0%   { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    18%  { -webkit-mask-size: 70% 70%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 70% 70%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    45%  { -webkit-mask-size: 110% 110%, 80% 90%, 80% 90%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-           mask-size: 110% 110%, 80% 90%, 80% 90%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-    70%  { -webkit-mask-size: 130% 130%, 110% 120%, 110% 120%, 100% 110%, 100% 110%, 70% 80%, 70% 80%, 0% 0%, 0% 0%;
-           mask-size: 130% 130%, 110% 120%, 110% 120%, 100% 110%, 100% 110%, 70% 80%, 70% 80%, 0% 0%, 0% 0%; }
-    100% { -webkit-mask-size: 220% 220%, 200% 220%, 200% 220%, 200% 220%, 200% 220%, 180% 200%, 180% 200%, 180% 200%, 180% 200%;
-           mask-size: 220% 220%, 200% 220%, 200% 220%, 200% 220%, 200% 220%, 180% 200%, 180% 200%, 180% 200%, 180% 200%; }
+  @keyframes ink2-b {
+    0%  { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
+    10%  { -webkit-mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
+    22%  { -webkit-mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; opacity: 1; }
+    36%  { -webkit-mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; opacity: 1; }
+    52%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
+    74%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
+    100%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 0; }
   }
 
-  .ink-reveal-a { animation: ink-splat-a 1400ms cubic-bezier(0.22, 1, 0.36, 1) both; }
-  .ink-reveal-b { animation: ink-splat-b 1400ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .ink2-a > .ink2-inner { animation: ink2-a 1500ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
+  .ink2-b > .ink2-inner { animation: ink2-b 1500ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
+
+  @keyframes ink-content-a {
+    0%, 45%  { opacity: 0; }
+    75%      { opacity: 1; }
+    100%     { opacity: 1; }
+  }
+
+  @keyframes ink-content-b {
+    0%, 45%  { opacity: 0; }
+    75%      { opacity: 1; }
+    100%     { opacity: 1; }
+  }
+
+  .ink-content-a { animation: ink-content-a 1600ms ease-out both; }
+  .ink-content-b { animation: ink-content-b 1600ms ease-out both; }
 
   /* ============================================================
      Signature scan — biometric HARDSTYLE impact sweep
@@ -349,7 +382,7 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 30;
+    z-index: 60;
   }
 
   /* ── Ligne principale — laser épais, double halo ── */
@@ -410,7 +443,6 @@
       color-mix(in srgb, var(--violet) 70%, white) 70%,
       transparent
     );
-    filter: blur(3px);
     opacity: 0.5;
   }
 
@@ -581,6 +613,8 @@
     overflow: visible;
   }
   /* Dark isolation plate so the signature floats above the portrait */
+
+
   .hand-signature::before {
     content: "";
     position: absolute;
