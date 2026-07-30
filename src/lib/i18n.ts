@@ -21,6 +21,12 @@ export const dict = {
         "Chaque montée est calculée. Chaque impact est amplifié.",
         "Depuis 2020, IXAN BOY façonne une identité construite autour de la tension, du contrôle et de la précision sonore.",
       ],
+      specs: [
+        { k: "Rôle", v: "Musicien / Producteur" },
+        { k: "Formation", v: "Ingénieur son" },
+        { k: "Précision", v: "Chirurgicale" },
+        { k: "Depuis", v: "2020" },
+      ],
     },
     live: {
       kicker: "Expérience Live",
@@ -109,6 +115,12 @@ export const dict = {
         "Musician, producer and trained sound engineer, IXAN BOY shapes a hardstyle/raw where melodies carry you, tension keeps rising and every sonic detail is orchestrated with surgical precision to form a true raw symphony.",
         "Every build-up is calculated. Every impact is amplified.",
         "Since 2020, IXAN BOY has been shaping an identity built around tension, control and sonic precision.",
+      ],
+      specs: [
+        { k: "Role", v: "Musician / Producer" },
+        { k: "Training", v: "Sound engineer" },
+        { k: "Precision", v: "Surgical" },
+        { k: "Since", v: "2020" },
       ],
     },
     live: {
