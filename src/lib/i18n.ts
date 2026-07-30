@@ -116,6 +116,12 @@ export const dict = {
         "Every build-up is calculated. Every impact is amplified.",
         "Since 2020, IXAN BOY has been shaping an identity built around tension, control and sonic precision.",
       ],
+      specs: [
+        { k: "Role", v: "Musician / Producer" },
+        { k: "Training", v: "Sound engineer" },
+        { k: "Precision", v: "Surgical" },
+        { k: "Since", v: "2020" },
+      ],
     },
     live: {
       kicker: "Live Experience",
