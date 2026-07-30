@@ -21,6 +21,12 @@ export const dict = {
         "Chaque montée est calculée. Chaque impact est amplifié.",
         "Depuis 2020, IXAN BOY façonne une identité construite autour de la tension, du contrôle et de la précision sonore.",
       ],
+      specs: [
+        { k: "Rôle", v: "Musicien / Producteur" },
+        { k: "Formation", v: "Ingénieur son" },
+        { k: "Précision", v: "Chirurgicale" },
+        { k: "Depuis", v: "2020" },
+      ],
     },
     live: {
       kicker: "Expérience Live",
