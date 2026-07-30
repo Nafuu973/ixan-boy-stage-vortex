@@ -630,13 +630,8 @@ function Presentation() {
   const t = useT();
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
-    <section className="relative overflow-hidden py-16 md:py-20">
-      {/* Subtle audio-reactive waveform field behind the text */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.035]" aria-hidden>
-        <WaveformBackdrop />
-      </div>
-
-      <div className="relative px-5 md:px-12">
+    <section className="relative py-16 md:py-20">
+      <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -657,28 +652,35 @@ function Presentation() {
           {t.presentation.title}
         </motion.h2>
 
-        {/* Technical spec strip — links the section to the waveform language */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mt-6 md:mt-8"
-        >
-          <SpecStrip specs={t.presentation.specs} />
-        </motion.div>
-
         <div className="mt-8 md:mt-10 md:grid md:grid-cols-12">
           <div className="md:col-span-7 md:col-start-6">
-            <PhraseBlock className="font-serif italic text-balance text-xl leading-[1.55] text-bone md:text-2xl">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7 }}
+              className="font-serif italic text-balance text-xl leading-[1.55] text-bone md:text-2xl"
+            >
               {intro}
-            </PhraseBlock>
+            </motion.p>
 
-            <ReactiveDivider className="my-6 md:my-8" />
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="my-6 h-px w-16 origin-left bg-gradient-to-r from-violet/70 to-transparent md:my-8"
+            />
 
-            <PhraseBlock className="text-balance text-base leading-[1.85] text-bone/80 md:text-lg md:leading-[1.9]">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, delay: 0.05 }}
+              className="text-balance text-base leading-[1.85] text-bone/80 md:text-lg md:leading-[1.9]"
+            >
               {body}
-            </PhraseBlock>
+            </motion.p>
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -694,130 +696,37 @@ function Presentation() {
               <span className="h-px flex-1 bg-gradient-to-r from-violet/40 to-transparent" />
             </motion.div>
 
-            <PhraseBlock className="font-display text-balance text-2xl leading-[1.05] text-bone md:text-3xl">
-              <WaveformText text={signature} />
-            </PhraseBlock>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9 }}
+              className="font-display text-balance text-2xl leading-[1.05] text-bone md:text-3xl"
+            >
+              {signature}
+            </motion.p>
 
-            <ReactiveDivider className="my-6 md:my-8" />
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="my-6 h-px w-24 origin-left bg-gradient-to-r from-violet/60 via-violet/30 to-transparent md:my-8"
+            />
 
-            <PhraseBlock className="text-balance text-base leading-[1.85] text-bone/70 md:text-lg md:leading-[1.9]">
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8 }}
+              className="text-balance text-base leading-[1.85] text-bone/70 md:text-lg md:leading-[1.9]"
+            >
               {closing}
-            </PhraseBlock>
+            </motion.p>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-/* Small technical spec cards with a live bar */
-function SpecStrip({ specs }: { specs: readonly { k: string; v: string }[] }) {
-  return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-      {specs.map((s, i) => (
-        <motion.div
-          key={s.k}
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, delay: i * 0.08 }}
-          className="group relative overflow-hidden rounded-sm border border-bone/10 bg-void/50 p-3 backdrop-blur-sm md:p-4"
-        >
-          <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50">
-              {s.k}
-            </span>
-            <span className="flex h-2.5 items-end gap-[1px]">
-              {Array.from({ length: 5 }).map((_, j) => (
-                <span
-                  key={j}
-                  className="w-[2px] bg-violet/70"
-                  style={{
-                    height: `${20 + ((i + j) % 4) * 18}%`,
-                    opacity: Number((0.5 + Math.sin((i + j) * 0.8) * 0.3).toFixed(2)),
-                    transform: `scaleY(calc(1 + var(--pulse) * 0.8))`,
-                    transformOrigin: "bottom",
-                  }}
-                />
-              ))}
-            </span>
-          </div>
-          <p className="mt-2 font-display text-sm uppercase leading-none text-bone md:text-base">
-            {s.v}
-          </p>
-          <span className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-violet/60 to-transparent" />
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
-/* Text block that reveals and subtly focuses on scroll */
-function PhraseBlock({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.5 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/* Words with a reactive violet halo that breathes with the music */
-function WaveformText({ text, className = "" }: { text: string; className?: string }) {
-  const words = text.split(" ");
-  return (
-    <span className={className}>
-      {words.map((w, i) => (
-        <span key={i} className="wave-word inline-block">
-          {w}&nbsp;
-        </span>
-      ))}
-    </span>
-  );
-}
-
-/* Animated divider made of tiny LED bars tied to the global pulse */
-function ReactiveDivider({ className = "" }: { className?: string }) {
-  return (
-    <div className={`flex items-end gap-[2px] ${className}`} style={{ height: "10px" }} aria-hidden>
-      {Array.from({ length: 32 }).map((_, i) => (
-        <span
-          key={i}
-          className="flex-1 rounded-[1px] bg-violet"
-          style={{
-            height: `${(20 + Math.abs(Math.sin(i * 0.7)) * 80).toFixed(1)}%`,
-            opacity: Number((0.25 + Math.sin(i * 0.5) * 0.2).toFixed(2)),
-            transform: `scaleY(calc(0.6 + var(--pulse) * 0.7))`,
-            transformOrigin: "bottom",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-/* Wide, low-opacity waveform field for the section background */
-function WaveformBackdrop() {
-  return (
-    <div className="flex h-[40%] w-full items-end gap-[3px] px-6 md:h-[30%] md:px-16">
-      {Array.from({ length: 60 }).map((_, i) => (
-        <span
-          key={i}
-          className="flex-1 rounded-[1px] bg-bone"
-          style={{
-            height: `${(10 + Math.abs(Math.sin(i * 0.35)) * 90).toFixed(1)}%`,
-            opacity: Number((0.15 + Math.sin(i * 0.25) * 0.1).toFixed(2)),
-            transform: `scaleY(calc(1 + var(--pulse) * 0.6))`,
-            transformOrigin: "bottom",
-          }}
-        />
-      ))}
-    </div>
   );
 }
 
