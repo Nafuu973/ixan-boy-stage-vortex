@@ -229,98 +229,48 @@
   }
 
   /* ============================================================
-     Ink splatter reveal — organic blots grow to uncover a block
-     ============================================================ */
-  /* ============================================================
-     Ink splatter transition — blots splash in, then bleed away
+     Ink splatter transition — real ink blobs splash in, then bleed away
      ============================================================ */
   .ink-reveal-host {
     position: relative;
     z-index: 60;
   }
 
-  .ink2 {
+  .ink-svg {
     position: absolute;
-    inset: -6%;
+    inset: -8%;
+    width: 116%;
+    height: 116%;
     z-index: 60;
     pointer-events: none;
-    filter: url(#ink-rough);
+    overflow: visible;
+    animation: ink-splat-out 1700ms ease-in both;
   }
 
-  .ink2-inner {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 46% 40%, oklch(0.95 0.02 300) 0%, oklch(0.80 0.16 298) 45%, oklch(0.58 0.22 296) 100%);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-image:
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%);
-    mask-image:
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%),
-      radial-gradient(closest-side circle, #000 92%, rgba(0,0,0,0.55) 97%, transparent 100%);
-    -webkit-mask-position: 46% 44%, 22% 26%, 76% 30%, 18% 72%, 80% 70%, 52% 10%, 48% 92%, 8% 52%, 92% 48%, 34% 58%, 66% 60%;
-    mask-position: 46% 44%, 22% 26%, 76% 30%, 18% 72%, 80% 70%, 52% 10%, 48% 92%, 8% 52%, 92% 48%, 34% 58%, 66% 60%;
-    -webkit-mask-size: 0% 0%;
-    mask-size: 0% 0%;
+  .ink-blob {
+    fill: oklch(0.96 0.02 300);
+    transform: scale(0);
+    animation: ink-blob-in 520ms cubic-bezier(0.16, 1.2, 0.3, 1) both;
   }
 
-  @keyframes ink2-a {
-    0%  { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
-    10%  { -webkit-mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
-    22%  { -webkit-mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; opacity: 1; }
-    36%  { -webkit-mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; opacity: 1; }
-    52%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
-    74%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
-    100%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 0; }
+  @keyframes ink-blob-in {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.08); }
+    100% { transform: scale(1); }
   }
 
-  @keyframes ink2-b {
-    0%  { -webkit-mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
-    10%  { -webkit-mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; mask-size: 26% 26%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; opacity: 1; }
-    22%  { -webkit-mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; mask-size: 44% 44%, 30% 30%, 30% 30%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 18% 18%, 18% 18%; opacity: 1; }
-    36%  { -webkit-mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; mask-size: 58% 58%, 44% 44%, 44% 44%, 38% 38%, 38% 38%, 26% 26%, 26% 26%, 22% 22%, 22% 22%, 34% 34%, 34% 34%; opacity: 1; }
-    52%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
-    74%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 1; }
-    100%  { -webkit-mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; mask-size: 54% 54%, 40% 40%, 40% 40%, 36% 36%, 36% 36%, 24% 24%, 24% 24%, 20% 20%, 20% 20%, 32% 32%, 32% 32%; opacity: 0; }
+  @keyframes ink-splat-out {
+    0%, 55% { opacity: 1; }
+    100% { opacity: 0; }
   }
 
-  .ink2-a > .ink2-inner { animation: ink2-a 1500ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
-  .ink2-b > .ink2-inner { animation: ink2-b 1500ms cubic-bezier(0.2, 0.9, 0.2, 1) both; }
-
-  @keyframes ink-content-a {
-    0%, 45%  { opacity: 0; }
-    75%      { opacity: 1; }
-    100%     { opacity: 1; }
+  @keyframes ink-content-in {
+    0%, 50% { opacity: 0; }
+    80%, 100% { opacity: 1; }
   }
 
-  @keyframes ink-content-b {
-    0%, 45%  { opacity: 0; }
-    75%      { opacity: 1; }
-    100%     { opacity: 1; }
-  }
+  .ink-content-run { animation: ink-content-in 1700ms ease-out both; }
 
-  .ink-content-a { animation: ink-content-a 1600ms ease-out both; }
-  .ink-content-b { animation: ink-content-b 1600ms ease-out both; }
 
   /* ============================================================
      Signature scan — biometric HARDSTYLE impact sweep
