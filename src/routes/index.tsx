@@ -12,7 +12,6 @@ const matiereVideo = matiereVideoAsset.url;
 const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 
 import { RevealText } from "@/components/epk/RevealText";
-import { InkReveal } from "@/components/epk/InkReveal";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
 import heroImgLandscape from "@/assets/ixanboy-hero-landscape.png.asset.json";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
@@ -632,7 +631,7 @@ function Presentation() {
   const [intro, body, signature, closing] = t.presentation.paragraphs;
   return (
     <section className="relative py-16 md:py-20">
-      <InkReveal className="px-5 md:px-12">
+      <div className="px-5 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -726,7 +725,7 @@ function Presentation() {
             </motion.p>
           </div>
         </div>
-      </InkReveal>
+      </div>
     </section>
   );
 }
