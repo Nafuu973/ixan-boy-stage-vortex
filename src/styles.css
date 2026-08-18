@@ -228,48 +228,6 @@
     transform: scale(calc(1 + var(--pulse) * 0.04));
   }
 
-  /* ============================================================
-     Ink splatter transition — real ink blobs splash in, then bleed away
-     ============================================================ */
-  .ink-reveal-host {
-    position: relative;
-    z-index: 60;
-  }
-
-  .ink-svg {
-    position: absolute;
-    inset: -8%;
-    width: 116%;
-    height: 116%;
-    z-index: 60;
-    pointer-events: none;
-    overflow: visible;
-    animation: ink-splat-out 1700ms ease-in both;
-  }
-
-  .ink-blob {
-    fill: oklch(0.96 0.02 300);
-    transform: scale(0);
-    animation: ink-blob-in 520ms cubic-bezier(0.16, 1.2, 0.3, 1) both;
-  }
-
-  @keyframes ink-blob-in {
-    0% { transform: scale(0); }
-    70% { transform: scale(1.08); }
-    100% { transform: scale(1); }
-  }
-
-  @keyframes ink-splat-out {
-    0%, 55% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  @keyframes ink-content-in {
-    0%, 50% { opacity: 0; }
-    80%, 100% { opacity: 1; }
-  }
-
-  .ink-content-run { animation: ink-content-in 1700ms ease-out both; }
 
 
   /* ============================================================
