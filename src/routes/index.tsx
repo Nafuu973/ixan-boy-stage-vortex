@@ -977,7 +977,7 @@ function WhyBook() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ delay: i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className={`group relative overflow-hidden rounded-sm border border-bone/10 bg-obsidian/50 p-5 backdrop-blur transition-all duration-500 hover:border-violet/30 hover:bg-obsidian/70 md:p-6 md:col-span-4 ${
+                className={`group relative overflow-hidden rounded-sm border border-bone/20 bg-obsidian/70 p-5 pb-24 backdrop-blur-md transition-all duration-500 hover:border-violet/40 hover:bg-obsidian/80 md:p-6 md:pb-28 md:col-span-4 ${
                   i === 0 ? "md:mt-0" : i === 1 ? "md:mt-16" : "md:mt-6"
                 }`}
               >
@@ -993,10 +993,11 @@ function WhyBook() {
                 {/* grand numéro fantôme — scale + rotation au hover */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -bottom-6 -right-3 font-display text-[8rem] leading-none text-bone/[0.04] select-none transition-all duration-700 group-hover:scale-110 group-hover:-rotate-6 group-hover:text-violet/[0.10]"
+                  className="pointer-events-none absolute bottom-2 right-3 font-display text-[5.5rem] leading-none text-bone/[0.16] select-none transition-all duration-700 group-hover:scale-110 group-hover:-rotate-6 group-hover:text-violet/30 md:text-[7rem]"
                 >
                   0{i + 1}
                 </span>
+
 
                 {/* dégradé de fond au hover */}
                 <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet/[0.08] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
