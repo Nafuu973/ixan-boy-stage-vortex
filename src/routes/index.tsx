@@ -265,7 +265,7 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.85, duration: 0.6 }}
-              className="mt-2 font-mono text-[10px] uppercase tracking-[0.5em] text-bone/40 md:text-[11px]"
+              className="mt-2 font-mono text-[10px] uppercase tracking-[0.5em] text-bone/65 md:text-[11px]"
               style={{ paddingLeft: "0.5em" }}
             >
               EPK <span className="text-violet">·</span> 2026
@@ -284,7 +284,7 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.1, duration: 0.6 }}
-              className="mt-6 font-mono text-[9px] uppercase tracking-[0.38em] text-bone/40"
+              className="mt-6 font-mono text-[9px] uppercase tracking-[0.38em] text-bone/65"
               style={{ paddingLeft: "0.38em" }}
             >
               Expérience musicale · Montez le son
@@ -341,7 +341,7 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.5 }}
-                className="mt-4 font-mono text-[8px] uppercase text-bone/30"
+                className="mt-4 font-mono text-[8px] uppercase text-bone/60"
                 style={{ letterSpacing: "0.4em", paddingLeft: "0.4em" }}
               >
                 Appuyer pour entrer
@@ -359,7 +359,7 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
               transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="flex whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.35em] text-bone/20"
+              className="flex whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.35em] text-bone/55"
             >
               {Array.from({ length: 6 }).map((_, i) => (
                 <span key={i} className="mx-6">
@@ -383,18 +383,18 @@ function TopBar({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
           alt="IXAN BOY"
           className="h-10 w-auto md:h-12 drop-shadow-[0_0_18px_rgba(170,130,255,0.35)]"
         />
-        <span className="hidden font-mono text-[11px] uppercase tracking-[0.32em] text-bone/75 sm:inline">
+        <span className="hidden font-mono text-[11px] uppercase tracking-[0.32em] text-bone/88 sm:inline">
           EPK · 2026
         </span>
       </div>
       <div className="flex items-center font-mono text-[10px] uppercase tracking-[0.25em]">
         {(["fr", "en"] as const).map((l, i) => (
           <span key={l} className="flex items-center">
-            {i > 0 && <span className="px-1 text-bone/25">/</span>}
+            {i > 0 && <span className="px-1 text-bone/60">/</span>}
             <button
               onClick={() => setLang(l)}
               className={`px-1.5 py-1 transition-colors ${
-                lang === l ? "text-bone" : "text-bone/35 hover:text-bone/70"
+                lang === l ? "text-bone" : "text-bone/62 hover:text-bone/85"
               }`}
             >
               {l.toUpperCase()}
@@ -531,7 +531,7 @@ function Hero() {
         style={{ opacity }}
         className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 md:px-12 md:pb-24"
       >
-        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
+        <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
           {t.hero.sub}
         </div>
 
@@ -545,7 +545,7 @@ function Hero() {
           <Cta href="#contact" label={t.nav.booking} />
         </div>
 
-        <p className="mt-4 max-w-md text-balance text-[11px] leading-relaxed text-bone/55 md:mt-10 md:text-xs">
+        <p className="mt-4 max-w-md text-balance text-[11px] leading-relaxed text-bone/80 md:mt-10 md:text-xs">
           {t.hero.intro}
         </p>
       </motion.div>
@@ -622,7 +622,7 @@ function PulseBar() {
             />
           ))}
         </div>
-        <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60 sm:inline">
+        <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80 sm:inline">
           {t.pulse.feed}
         </span>
       </div>
@@ -681,7 +681,7 @@ function Presentation() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: 0.05 }}
-              className="text-balance text-base leading-[1.85] text-bone/80 md:text-lg md:leading-[1.9]"
+              className="text-balance text-base leading-[1.85] text-bone/90 md:text-lg md:leading-[1.9]"
             >
               {body}
             </motion.p>
@@ -723,7 +723,7 @@ function Presentation() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8 }}
-              className="text-balance text-base leading-[1.85] text-bone/70 md:text-lg md:leading-[1.9]"
+              className="text-balance text-base leading-[1.85] text-bone/85 md:text-lg md:leading-[1.9]"
             >
               {closing}
             </motion.p>
@@ -869,12 +869,12 @@ function MulticamPlayer() {
       ))}
 
       {/* REC badge */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-4 py-3 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/90">
         <span className="flex items-center gap-2">
           <span className={`h-1.5 w-1.5 rounded-full bg-ember ${playing ? "pulse-glow" : ""}`} />
           {playing ? "LIVE" : "MULTICAM"}
         </span>
-        <span className="text-bone/50">CAM_01 / 04</span>
+        <span className="text-bone/72">CAM_01 / 04</span>
       </div>
 
       {/* Center play button (hidden while playing) */}
@@ -911,7 +911,7 @@ function MulticamPlayer() {
             </svg>
           )}
         </button>
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/60">
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
           IXAN BOY · MULTICAM
         </span>
         <button
@@ -1010,14 +1010,14 @@ function WhyBook() {
                 {/* card index — HUD metadata */}
                 <div className="flex items-center gap-2">
                   <span className="h-px w-3 bg-bone/20" />
-                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-bone/30">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-bone/60">
                     {c.k}
                   </span>
                 </div>
 
                 {isArtists ? (
                   <>
-                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/65 md:text-lg">
+                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/85 md:text-lg">
                       {(c as any).h}
                     </h3>
                     <div className="mt-3 h-px w-10 bg-violet/20" />
@@ -1035,24 +1035,24 @@ function WhyBook() {
                         </motion.li>
                       ))}
                     </ul>
-                    <p className="mt-10 text-[13px] leading-relaxed text-bone/55">
+                    <p className="mt-10 text-[13px] leading-relaxed text-bone/80">
                       {c.p as string}
                     </p>
                   </>
                 ) : (
                   <>
-                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/65 md:text-lg">
+                    <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/85 md:text-lg">
                       {(c as any).h}
                     </h3>
                     <div className="mt-4 h-px w-10 bg-violet/20" />
                     {isList ? (
-                      <ul className="mt-7 space-y-2 text-[13px] leading-relaxed text-bone/55">
+                      <ul className="mt-7 space-y-2 text-[13px] leading-relaxed text-bone/80">
                         {((c as any).p as readonly string[]).map((line, k) => (
                           <li key={k}>{line}</li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="mt-7 text-[13px] leading-relaxed text-bone/55">
+                      <p className="mt-7 text-[13px] leading-relaxed text-bone/80">
                         {c.p as string}
                       </p>
                     )}
@@ -1766,13 +1766,13 @@ function SignatureTracks() {
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-void/10 to-transparent" />
-                    <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+                    <span className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/90">
                       TRACK · 0{i + 1}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 items-center text-center">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-bone/40">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-bone/65">
                     IXAN BOY — Track 0{i + 1}
                   </p>
                   <h3 className="font-mono text-lg uppercase tracking-[0.08em] text-bone md:text-xl">
@@ -1918,7 +1918,7 @@ function MusicalDNA() {
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-violet">
                 {t.dna.bodyKicker}
               </span>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-bone/75 md:text-lg">
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-bone/88 md:text-lg">
                 {t.dna.body}
               </p>
             </div>
@@ -1939,7 +1939,7 @@ function MusicalDNA() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent,oklch(0.55_0.28_295/0.18))]" />
-              <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
+              <span className="absolute bottom-4 left-4 font-mono text-[10px] uppercase tracking-[0.3em] text-bone/90">
                 ID · 0X · IXAN
               </span>
             </div>
@@ -1973,7 +1973,7 @@ function Proof() {
         </div>
         <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
           <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/72">
               {t.proof.labels}
             </span>
             <div className="mt-6 space-y-px overflow-hidden rounded-sm bg-bone/10">
@@ -1991,7 +1991,7 @@ function Proof() {
                     />
                   </div>
                   <div className="col-span-3 flex flex-col justify-center">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/50">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/72">
                       {l.name}
                     </span>
                     <ul className="mt-2 space-y-1">
@@ -2011,7 +2011,7 @@ function Proof() {
             </div>
           </div>
           <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/50">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/72">
               {t.proof.supports}
             </span>
             <ul className="mt-6 space-y-4">
@@ -2021,7 +2021,7 @@ function Proof() {
                   className="group flex items-center justify-between border-b border-bone/10 pb-4"
                 >
                   <span className="font-display text-2xl md:text-4xl">{l}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-bone/40 transition-colors group-hover:text-violet">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-bone/65 transition-colors group-hover:text-violet">
                     {t.proof.played}
                   </span>
                 </li>
@@ -2115,7 +2115,7 @@ function ContactFinal() {
           </a>
           <a
             href={`mailto:${t.contact.mail}`}
-            className="font-mono text-xs uppercase tracking-widest text-bone/60 hover:text-bone"
+            className="font-mono text-xs uppercase tracking-widest text-bone/80 hover:text-bone"
           >
             {t.contact.mail}
           </a>
@@ -2130,7 +2130,7 @@ function ContactFinal() {
               target="_blank"
               rel="noreferrer"
               aria-label={label}
-              className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-bone/15 bg-bone/[0.03] text-bone/70 backdrop-blur transition-all hover:border-violet/60 hover:bg-violet/10 hover:text-bone hover:shadow-[0_0_30px_-5px_var(--violet)] md:h-14 md:w-14"
+              className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-bone/15 bg-bone/[0.03] text-bone/85 backdrop-blur transition-all hover:border-violet/60 hover:bg-violet/10 hover:text-bone hover:shadow-[0_0_30px_-5px_var(--violet)] md:h-14 md:w-14"
             >
               <Icon className="h-5 w-5 md:h-6 md:w-6" />
             </a>
@@ -2150,7 +2150,7 @@ function Footer() {
   return (
     <footer className="relative px-5 py-8 md:px-12">
       <div className="absolute inset-0 -z-10 bg-void mask-fade-y" />
-      <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-bone/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-bone/65">
         <span>© IXAN BOY · 2026</span>
         <span className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-violet pulse-glow" />
