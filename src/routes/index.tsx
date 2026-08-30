@@ -504,7 +504,6 @@ function TopBar({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[calc(100%+2.5rem)] bg-gradient-to-b from-void/85 via-void/55 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
       />
       <div className="flex items-center gap-4">
-
         <img
           src={logoImg}
           alt="IXAN BOY"
