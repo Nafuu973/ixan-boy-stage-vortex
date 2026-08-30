@@ -86,6 +86,11 @@ function Index() {
     if (!nav.startsWith("fr")) setLang("en");
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
+
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
 
