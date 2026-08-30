@@ -75,7 +75,7 @@ export const dict = {
       body: "IXAN BOY développe une approche du raw basée sur la précision et le contrôle. Ses kicks ne cherchent pas uniquement la violence : ils amplifient la sensation d’impact jusqu’à créer une tension physique. Chaque détail sonore est travaillé pour pousser l’intensité encore plus loin, sans jamais perdre la maîtrise.",
     },
     proof: {
-      kicker: "Soutiens & Labels",
+      kicker: "Labels",
       labels: "Labels",
       supports: "Supports",
       played: "Joué",
@@ -170,7 +170,7 @@ export const dict = {
       body: "IXAN BOY develops a take on raw rooted in precision and control. His kicks don’t only chase violence: they amplify the sensation of impact until it becomes physical tension. Every sonic detail is engineered to push the intensity further, without ever losing control.",
     },
     proof: {
-      kicker: "Supports & Labels",
+      kicker: "Labels",
       labels: "Labels",
       supports: "Supports",
       played: "Played",
