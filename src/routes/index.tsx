@@ -2078,7 +2078,52 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+function BookingCta({ label, mail }: { label: string; mail: string }) {
+  const [copied, setCopied] = useState(false);
+  const href = `mailto:${mail}?subject=${encodeURIComponent("Booking IXAN BOY")}`;
+
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Certains contextes (iframe de preview, webview, absence de client mail)
+    // bloquent mailto: — on tente l'ouverture puis on copie l'adresse en repli.
+    e.preventDefault();
+    let opened = false;
+    try {
+      const w = window.open(href, "_self");
+      opened = !!w;
+    } catch {
+      opened = false;
+    }
+    if (!opened) {
+      try {
+        window.location.href = href;
+        opened = true;
+      } catch {
+        opened = false;
+      }
+    }
+    navigator.clipboard?.writeText(mail).then(
+      () => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2500);
+      },
+      () => {},
+    );
+  };
+
+  return (
+    <a
+      href={href}
+      onClick={onClick}
+      className="group inline-flex w-fit items-center gap-3 rounded-full border border-violet bg-violet px-6 py-3 font-mono text-xs uppercase tracking-widest text-bone transition-all hover:shadow-[0_0_50px_var(--violet)]"
+    >
+      <span>{copied ? `${mail} — copié` : label}</span>
+      <span className="transition-transform group-hover:translate-x-1">→</span>
+    </a>
+  );
+}
+
 function ContactFinal() {
+
   const t = useT();
   const links: { label: string; href: string; Icon: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement }[] = [
     { label: "Instagram", href: SOCIALS.instagram, Icon: (p) => <Instagram {...p} /> },
