@@ -1070,12 +1070,81 @@ function WhyBook() {
 
 function Silence() {
   const t = useT();
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { amount: 0.5, once: false });
+  const [glitch, setGlitch] = useState(false);
+
+  useEffect(() => {
+    if (!isInView) return;
+    // burst glitch each time the phrase comes back into view
+    setGlitch(true);
+    const t1 = setTimeout(() => setGlitch(false), 120);
+    const t2 = setTimeout(() => {
+      setGlitch(true);
+      const t3 = setTimeout(() => setGlitch(false), 90);
+      return () => clearTimeout(t3);
+    }, 220);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [isInView]);
+
   return (
-    <section className="relative flex min-h-[40vh] items-center justify-center px-5 py-14">
-      <RevealText
-        text={t.silence}
-        className="font-serif-i text-balance text-center text-3xl text-bone/90 md:text-6xl"
-      />
+    <section
+      ref={ref}
+      className="relative flex min-h-[55vh] items-center justify-center px-6 py-24"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, filter: "blur(14px)" }}
+        animate={
+          isInView
+            ? { opacity: 1, scale: 1, filter: "blur(0px)" }
+            : { opacity: 0, scale: 0.9, filter: "blur(14px)" }
+        }
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="relative text-center"
+      >
+        {/* dark isolation plate for readability over the busy video */}
+        <div
+          className="pointer-events-none absolute -inset-10 -z-10 rounded-full opacity-80 md:-inset-16"
+          style={{
+            background:
+              "radial-gradient(ellipse 55% 55% at 50% 50%, rgba(8,6,18,0.78) 0%, rgba(8,6,18,0.42) 45%, transparent 75%)",
+            filter: "blur(28px)",
+          }}
+        />
+
+        {/* violet glow breathing */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 -z-10"
+          animate={{ opacity: isInView ? [0.35, 0.7, 0.35] : 0 }}
+          transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 55% at 50% 55%, color-mix(in oklab, var(--violet) 28%, transparent), transparent 70%)",
+            filter: "blur(44px)",
+          }}
+        />
+
+        {/* glitch wrapper */}
+        <motion.div
+          animate={{
+            x: glitch ? [0, -4, 4, -2, 2, 0] : 0,
+            opacity: glitch ? [1, 0.65, 1, 0.8, 1] : 1,
+          }}
+          transition={{ duration: 0.28 }}
+        >
+          <RevealText
+            text={t.silence}
+            className="font-serif-i text-balance text-center text-4xl text-bone md:text-6xl lg:text-7xl"
+            style={{
+              textShadow:
+                "0 2px 6px rgba(0,0,0,0.9), 0 8px 30px rgba(0,0,0,0.7), 0 0 40px color-mix(in oklab, var(--violet) 35%, transparent), 0 0 80px color-mix(in oklab, var(--violet) 18%, transparent)",
+            }}
+          />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
