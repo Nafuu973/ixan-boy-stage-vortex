@@ -41,7 +41,10 @@ const multicamVideo = multicamAsset.url;
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
 
+const SITE_URL = "https://ixan-boy-stage-vortex.lovable.app";
+
 export const Route = createFileRoute("/")({
+
   head: () => ({
     meta: [
       { title: "IXAN BOY — EPK Hardstyle / Raw · Booking & Live" },
