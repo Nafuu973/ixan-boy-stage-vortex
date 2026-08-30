@@ -78,6 +78,14 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [lang, setLang] = useState<Lang>("fr");
+
+  // Détection auto de la langue du navigateur (FR par défaut, EN pour les non-francophones).
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const nav = (navigator.languages?.[0] ?? navigator.language ?? "fr").toLowerCase();
+    if (!nav.startsWith("fr")) setLang("en");
+  }, []);
+
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
 
