@@ -2025,7 +2025,8 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="auto"
+                    preload="metadata"
+
                     playsInline
                     onPlaying={() => {
                       setPulseLive();
