@@ -751,12 +751,12 @@ function ExperienceLive() {
           <br />
           <span className="text-violet">{t.live.headline[1]}</span>
         </h2>
-        <div className="mt-12 grid gap-6 md:grid-cols-12">
-          <div className="md:col-span-8">
+        <div className="mt-12 flex flex-col items-center gap-8">
+          <div className="w-full max-w-4xl">
             <MulticamPlayer />
           </div>
 
-          <div className="flex flex-col justify-end gap-6 md:col-span-4">
+          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:gap-10">
             {t.live.side.map((l, i) => (
               <p
                 key={i}
