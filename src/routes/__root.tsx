@@ -15,7 +15,9 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="font-display text-7xl text-foreground">404</h1>
         <p className="mt-2 text-sm text-muted-foreground">Lost in the smoke.</p>
-        <a href="/" className="mt-6 inline-block text-violet underline underline-offset-4">Home</a>
+        <a href="/" className="mt-6 inline-block text-violet underline underline-offset-4">
+          Home
+        </a>
       </div>
     </div>
   );
@@ -29,7 +31,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
       <div className="max-w-md text-center">
         <h1 className="font-display text-2xl">Something broke.</h1>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 rounded-md bg-violet px-4 py-2 text-bone"
         >
           Retry
@@ -46,7 +51,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#0a0612" },
       { title: "IXAN BOY — Emotion before destruction · EPK" },
-      { name: "description", content: "EPK officiel d'IXAN BOY — Hardstyle / Raw. Booking, live edit, signature tracks. Emotion before destruction." },
+      {
+        name: "description",
+        content:
+          "EPK officiel d'IXAN BOY — Hardstyle / Raw. Booking, live edit, signature tracks. Emotion before destruction.",
+      },
       { property: "og:title", content: "IXAN BOY — Emotion before destruction" },
       { property: "og:description", content: "Hardstyle / Raw. Booking & EPK officiel." },
       { property: "og:type", content: "website" },
@@ -64,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "preload",
         as: "font",
         type: "font/woff2",
-        href: "https://fonts.gstatic.com/s/anton/v25/1Ptgg87LROyAm0K08i4gS7lu.woff2",
+        href: "https://fonts.gstatic.com/s/anton/v27/1Ptgg87LROyAm3Kz-C8.woff2",
         crossOrigin: "anonymous",
       },
       {

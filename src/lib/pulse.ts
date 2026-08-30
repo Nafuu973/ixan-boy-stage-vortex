@@ -42,10 +42,7 @@ function tick() {
     const instantMid = Math.min(1, bandAverage(dataArray, 12, 48) * 1.25);
     const instantHigh = Math.min(1, bandAverage(dataArray, 50, 96) * 1.2);
     // Weighted total — mids carry musical motion, lows add weight, highs add sparkle.
-    instantTotal = Math.min(
-      1,
-      instantLow * 0.35 + instantMid * 0.45 + instantHigh * 0.2,
-    );
+    instantTotal = Math.min(1, instantLow * 0.35 + instantMid * 0.45 + instantHigh * 0.2);
   }
 
   // Smoothed envelope — fast attack, slower release.
@@ -86,7 +83,9 @@ export function isPulseRunning() {
 
 export function attachLiveAudio(audio: HTMLAudioElement) {
   try {
-    const Ctx = (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext);
+    const Ctx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     audioCtx = audioCtx ?? new Ctx();
 
     if (!analyser) {
