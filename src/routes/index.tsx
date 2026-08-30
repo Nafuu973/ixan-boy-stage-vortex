@@ -141,41 +141,24 @@ function Index() {
 }
 
 function GlobalBackdrop({ entered }: { entered: boolean }) {
-  // `null` = pas encore décidé (SSR / avant mesure réseau) ; "" = mode léger, pas de vidéo.
-  const [src, setSrc] = useState<string | null>(null);
+  const [src, setSrc] = useState(matiereVideo);
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Connexion lente ou mode économie de données : on n'embarque pas la vidéo de fond.
-    const conn = (
-      navigator as Navigator & {
-        connection?: { saveData?: boolean; effectiveType?: string };
-      }
-    ).connection;
-    const slow =
-      conn?.saveData === true || /^(slow-2g|2g|3g)$/.test(conn?.effectiveType ?? "") === true;
-    if (slow || window.matchMedia("(prefers-reduced-data: reduce)").matches) {
-      setSrc("");
-      return;
-    }
     const mq = window.matchMedia("(min-width: 1024px)");
     setSrc(mq.matches ? matiereVideoLandscape : matiereVideo);
   }, []);
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {/* fallback statique : toujours présent, la vidéo se pose par-dessus quand elle est chargée */}
-      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,color-mix(in_oklab,var(--violet)_22%,transparent),transparent_70%)] bg-void" />
-      {src ? (
-        <video
-          ref={(el) => registerTeaserVideo(el)}
-          src={src}
-          className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
-          style={{ opacity: entered ? 1 : 0 }}
-          loop
-          playsInline
-          muted
-          preload="auto"
-        />
-      ) : null}
+      <video
+        ref={(el) => registerTeaserVideo(el)}
+        src={src}
+        className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
+        style={{ opacity: entered ? 1 : 0 }}
+        loop
+        playsInline
+        muted
+        preload="auto"
+      />
       <div className="absolute inset-0 bg-black/60" />
     </div>
   );
@@ -2061,7 +2044,7 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="metadata"
+                    preload="auto"
                     playsInline
                     onPlaying={() => {
                       setPulseLive();
