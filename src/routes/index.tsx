@@ -1135,14 +1135,17 @@ function Silence() {
           }}
           transition={{ duration: 0.28 }}
         >
-          <RevealText
-            text={t.silence}
-            className="font-serif-i text-balance text-center text-4xl text-bone md:text-6xl lg:text-7xl"
+          <span
             style={{
               textShadow:
                 "0 2px 6px rgba(0,0,0,0.9), 0 8px 30px rgba(0,0,0,0.7), 0 0 40px color-mix(in oklab, var(--violet) 35%, transparent), 0 0 80px color-mix(in oklab, var(--violet) 18%, transparent)",
             }}
-          />
+          >
+            <RevealText
+              text={t.silence}
+              className="font-serif-i text-balance text-center text-4xl text-bone md:text-6xl lg:text-7xl"
+            />
+          </span>
         </motion.div>
       </motion.div>
     </section>
