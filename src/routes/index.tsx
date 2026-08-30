@@ -670,6 +670,7 @@ function Hero() {
         style={{ opacity }}
         className="relative z-10 flex h-full flex-col justify-end px-5 pb-8 md:px-12 md:pb-24"
       >
+        <h1 className="sr-only">IXAN BOY — Hardstyle / Raw · {t.hero.tag}</h1>
         <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80">
           {t.hero.sub}
         </div>
@@ -2149,7 +2150,9 @@ function Proof() {
   return (
     <section className="relative py-12 md:py-16">
       <div className="px-5 md:px-12">
-        <div className="section-kicker text-center">06 · {t.proof.kicker}</div>
+        <h2 className="section-kicker text-center">
+          06 · {t.proof.kicker}
+        </h2>
         <div className="mx-auto mt-12 max-w-4xl">
           <div className="space-y-px overflow-hidden rounded-sm bg-bone/10">
             {labels.map((l) => (
@@ -2196,7 +2199,7 @@ function BookingReady() {
     <section className="relative overflow-hidden py-12 md:py-16">
       <div className="absolute inset-0 -z-10 bg-obsidian/40 mask-fade-y" />
       <div className="px-5 md:px-12">
-        <div className="section-kicker">07 · {t.booking.kicker}</div>
+        <h2 className="section-kicker">07 · {t.booking.kicker}</h2>
         <div className="mt-12 grid gap-px overflow-hidden rounded-sm bg-bone/10 md:grid-cols-4">
           {t.booking.cards.map((c, i) => (
             <div key={i} className="bg-void p-6 md:p-8">
