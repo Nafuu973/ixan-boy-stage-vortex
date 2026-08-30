@@ -1965,69 +1965,45 @@ function Proof() {
       releases: ["So Dumb", "Sex Bomb"],
     },
   ];
-  const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
   return (
     <section className="relative py-12 md:py-16">
       <div className="px-5 md:px-12">
-        <div className="section-kicker">
+        <div className="section-kicker text-center">
           06 · {t.proof.kicker}
         </div>
-        <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
-          <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/72">
-              {t.proof.labels}
-            </span>
-            <div className="mt-6 space-y-px overflow-hidden rounded-sm bg-bone/10">
-              {labels.map((l) => (
-                <div
-                  key={l.name}
-                  className="group relative grid grid-cols-5 gap-4 bg-gradient-to-br from-obsidian/80 to-obsidian/40 p-5 backdrop-blur transition-colors hover:from-violet/[0.08] hover:to-obsidian/40 md:p-6"
-                >
-                  <div className="col-span-2 flex items-center justify-center border-r border-bone/10 pr-4">
-                    <img
-                      src={l.logo}
-                      alt={l.name}
-                      loading="lazy"
-                      className="max-h-20 w-auto max-w-full object-contain drop-shadow-[0_0_20px_rgba(167,100,255,0.18)] transition-transform duration-700 group-hover:scale-[1.04] md:max-h-24"
-                    />
-                  </div>
-                  <div className="col-span-3 flex flex-col justify-center">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/72">
-                      {l.name}
-                    </span>
-                    <ul className="mt-2 space-y-1">
-                      {l.releases.map((r) => (
-                        <li
-                          key={r}
-                          className="flex items-center gap-2 font-display text-base leading-tight text-bone/90 md:text-xl"
-                        >
-                          <span className="h-px w-3 bg-violet/70" />
-                          {r}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        <div className="mx-auto mt-12 max-w-4xl">
+          <div className="space-y-px overflow-hidden rounded-sm bg-bone/10">
+            {labels.map((l) => (
+              <div
+                key={l.name}
+                className="group relative grid grid-cols-5 gap-4 bg-gradient-to-br from-obsidian/80 to-obsidian/40 p-5 backdrop-blur transition-colors hover:from-violet/[0.08] hover:to-obsidian/40 md:p-6"
+              >
+                <div className="col-span-2 flex items-center justify-center border-r border-bone/10 pr-4">
+                  <img
+                    src={l.logo}
+                    alt={l.name}
+                    loading="lazy"
+                    className="max-h-20 w-auto max-w-full object-contain drop-shadow-[0_0_20px_rgba(167,100,255,0.18)] transition-transform duration-700 group-hover:scale-[1.04] md:max-h-24"
+                  />
                 </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-bone/72">
-              {t.proof.supports}
-            </span>
-            <ul className="mt-6 space-y-4">
-              {supports.map((l) => (
-                <li
-                  key={l}
-                  className="group flex items-center justify-between border-b border-bone/10 pb-4"
-                >
-                  <span className="font-display text-2xl md:text-4xl">{l}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-bone/65 transition-colors group-hover:text-violet">
-                    {t.proof.played}
+                <div className="col-span-3 flex flex-col justify-center">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/72">
+                    {l.name}
                   </span>
-                </li>
-              ))}
-            </ul>
+                  <ul className="mt-2 space-y-1">
+                    {l.releases.map((r) => (
+                      <li
+                        key={r}
+                        className="flex items-center gap-2 font-display text-base leading-tight text-bone/90 md:text-xl"
+                      >
+                        <span className="h-px w-3 bg-violet/70" />
+                        {r}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
