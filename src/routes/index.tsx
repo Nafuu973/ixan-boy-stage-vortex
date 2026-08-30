@@ -96,6 +96,7 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
         muted
         preload="auto"
       />
+      <div className="absolute inset-0 bg-black/60" />
     </div>
   );
 }
