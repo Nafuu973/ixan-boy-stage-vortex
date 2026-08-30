@@ -164,7 +164,6 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
   );
 }
 
-
 function TopLabelTypewriter() {
   const prefix = "Reclaim The Fire — ";
   const suffix = "OUT SEPT 26";
@@ -2045,7 +2044,7 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="metadata"
+                    preload="auto"
                     playsInline
                     onPlaying={() => {
                       setPulseLive();
