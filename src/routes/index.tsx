@@ -44,7 +44,6 @@ import labelHFR from "@/assets/label-hardstyle-france-round.png";
 const SITE_URL = "https://ixan-boy-stage-vortex.lovable.app";
 
 export const Route = createFileRoute("/")({
-
   head: () => ({
     meta: [
       { title: "IXAN BOY — EPK Hardstyle / Raw · Booking & Live" },
@@ -97,7 +96,6 @@ function Index() {
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
-
 
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
@@ -182,7 +180,6 @@ function GlobalBackdrop({ entered }: { entered: boolean }) {
     </div>
   );
 }
-
 
 function TopLabelTypewriter() {
   const prefix = "Reclaim The Fire — ";
@@ -2065,7 +2062,6 @@ function SignatureTracks() {
                     }}
                     src={tr.src || undefined}
                     preload="metadata"
-
                     playsInline
                     onPlaying={() => {
                       setPulseLive();
