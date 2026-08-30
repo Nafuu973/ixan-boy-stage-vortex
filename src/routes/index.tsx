@@ -498,7 +498,13 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
 function TopBar({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-5 py-5 md:px-10 md:py-7">
+      {/* scrim : évite que le contenu qui défile passe illisiblement sous la barre */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[calc(100%+2.5rem)] bg-gradient-to-b from-void/85 via-void/55 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+      />
       <div className="flex items-center gap-4">
+
         <img
           src={logoImg}
           alt="IXAN BOY"
