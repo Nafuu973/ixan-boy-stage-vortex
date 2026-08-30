@@ -2080,35 +2080,34 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
 
 function BookingCta({ label, mail }: { label: string; mail: string }) {
   const [copied, setCopied] = useState(false);
-  const href = `mailto:${mail}?subject=${encodeURIComponent("Booking IXAN BOY")}`;
+  const subject = "Booking IXAN BOY";
+  const body = "Bonjour,\n\nJe souhaite booker IXAN BOY.\n\nDate :\nLieu / événement :\nHoraire :\nBudget :\n\nMerci,";
+  const href = `mailto:${mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(mail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Certains contextes (iframe de preview, webview, absence de client mail)
-    // bloquent mailto: — on tente l'ouverture puis on copie l'adresse en repli.
     e.preventDefault();
-    let opened = false;
+    // 1) On tente d'ouvrir le client mail du système (top-level pour sortir
+    //    de l'iframe de preview qui bloque mailto:).
     try {
-      const w = window.open(href, "_self");
-      opened = !!w;
+      (window.top ?? window).location.href = href;
     } catch {
-      opened = false;
+      window.location.href = href;
     }
-    if (!opened) {
-      try {
-        window.location.href = href;
-        opened = true;
-      } catch {
-        opened = false;
+    // 2) Si rien ne s'est ouvert (pas de client mail / contexte bloqué),
+    //    on bascule sur la fenêtre de rédaction Gmail, pré-remplie.
+    window.setTimeout(() => {
+      if (document.hidden || !document.hasFocus()) return;
+      const w = window.open(gmail, "_blank", "noopener,noreferrer");
+      if (!w) {
+        navigator.clipboard?.writeText(mail).then(() => {
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 2500);
+        }, () => {});
       }
-    }
-    navigator.clipboard?.writeText(mail).then(
-      () => {
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2500);
-      },
-      () => {},
-    );
+    }, 1200);
   };
+
 
   return (
     <a
