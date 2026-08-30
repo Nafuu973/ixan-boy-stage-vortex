@@ -41,6 +41,8 @@ const multicamVideo = multicamAsset.url;
 import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
 
+const SITE_URL = "https://ixan-boy-stage-vortex.lovable.app";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -57,8 +59,13 @@ export const Route = createFileRoute("/")({
           "Sets live, signature tracks et booking. Le press kit officiel d'IXAN BOY, hardstyle raw.",
       },
       { property: "og:type", content: "profile" },
+      { property: "og:url", content: SITE_URL + "/" },
+      { property: "og:image", content: SITE_URL + heroImgLandscape.url },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: SITE_URL + heroImgLandscape.url },
     ],
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
+
     scripts: [
       {
         type: "application/ld+json",
@@ -78,6 +85,18 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [lang, setLang] = useState<Lang>("fr");
+
+  // Détection auto de la langue du navigateur (FR par défaut, EN pour les non-francophones).
+  useEffect(() => {
+    if (typeof navigator === "undefined") return;
+    const nav = (navigator.languages?.[0] ?? navigator.language ?? "fr").toLowerCase();
+    if (!nav.startsWith("fr")) setLang("en");
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
 
@@ -122,24 +141,41 @@ function Index() {
 }
 
 function GlobalBackdrop({ entered }: { entered: boolean }) {
-  const [src, setSrc] = useState(matiereVideo);
+  // `null` = pas encore décidé (SSR / avant mesure réseau) ; "" = mode léger, pas de vidéo.
+  const [src, setSrc] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // Connexion lente ou mode économie de données : on n'embarque pas la vidéo de fond.
+    const conn = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      }
+    ).connection;
+    const slow =
+      conn?.saveData === true || /^(slow-2g|2g|3g)$/.test(conn?.effectiveType ?? "") === true;
+    if (slow || window.matchMedia("(prefers-reduced-data: reduce)").matches) {
+      setSrc("");
+      return;
+    }
     const mq = window.matchMedia("(min-width: 1024px)");
     setSrc(mq.matches ? matiereVideoLandscape : matiereVideo);
   }, []);
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <video
-        ref={(el) => registerTeaserVideo(el)}
-        src={src}
-        className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
-        style={{ opacity: entered ? 1 : 0 }}
-        loop
-        playsInline
-        muted
-        preload="auto"
-      />
+      {/* fallback statique : toujours présent, la vidéo se pose par-dessus quand elle est chargée */}
+      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,color-mix(in_oklab,var(--violet)_22%,transparent),transparent_70%)] bg-void" />
+      {src ? (
+        <video
+          ref={(el) => registerTeaserVideo(el)}
+          src={src}
+          className="h-full w-full object-cover transition-opacity duration-[1400ms] ease-out"
+          style={{ opacity: entered ? 1 : 0 }}
+          loop
+          playsInline
+          muted
+          preload="auto"
+        />
+      ) : null}
       <div className="absolute inset-0 bg-black/60" />
     </div>
   );
@@ -2025,7 +2061,7 @@ function SignatureTracks() {
                       audioRefs.current[i] = el;
                     }}
                     src={tr.src || undefined}
-                    preload="auto"
+                    preload="metadata"
                     playsInline
                     onPlaying={() => {
                       setPulseLive();
