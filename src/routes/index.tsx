@@ -16,7 +16,10 @@ import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
 import heroImgLandscape from "@/assets/ixanboy-hero-landscape.png.asset.json";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
-import coverFire from "@/assets/cover-take-me-body.png";
+import coverFireAsset from "@/assets/cover-so-dumb.png.asset.json";
+const coverFire = coverFireAsset.url;
+import soDumbAsset from "@/assets/so-dumb.mp3.asset.json";
+const soDumbAudio = soDumbAsset.url;
 import coverRun from "@/assets/cover-sex-bomb.png";
 
 import liveBooth from "@/assets/live-booth.jpg";

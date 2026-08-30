@@ -60,7 +60,7 @@ export const dict = {
       kicker: "Matière Sonore",
       title: "Deux morceaux — Deux visions",
       list: [
-        { title: "Take Me Body", mood: "Émotion · Montée · Rupture" },
+        { title: "So Dumb", mood: "Émotion · Montée · Rupture" },
         { title: "Sex Bomb", mood: "Tension · Précision · Impact" },
       ],
     },
@@ -155,7 +155,7 @@ export const dict = {
       kicker: "Sonic Matter",
       title: "Two tracks — Two visions",
       list: [
-        { title: "Take Me Body", mood: "Emotion · Rise · Break" },
+        { title: "So Dumb", mood: "Emotion · Rise · Break" },
         { title: "Sex Bomb", mood: "Tension · Precision · Impact" },
       ],
     },
