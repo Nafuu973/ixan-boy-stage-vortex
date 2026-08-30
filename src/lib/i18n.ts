@@ -102,8 +102,7 @@ export const dict = {
     nav: { live: "Live Edit", booking: "Booking" },
     hero: {
       sub: "Hardstyle / Raw",
-      intro:
-        "A French hardstyle / raw signature built to impose absolute intensity on stage.",
+      intro: "A French hardstyle / raw signature built to impose absolute intensity on stage.",
       tag: "Emotion before destruction.",
     },
     pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
@@ -162,10 +161,7 @@ export const dict = {
     dna: {
       kicker: "Musical DNA",
       title: "The silence before the strike",
-      intro: [
-        "Melodies built to install the tension.",
-        "Impacts designed to destroy it.",
-      ],
+      intro: ["Melodies built to install the tension.", "Impacts designed to destroy it."],
       bodyKicker: "IXAN sonic DNA",
       body: "IXAN BOY develops a take on raw rooted in precision and control. His kicks don’t only chase violence: they amplify the sensation of impact until it becomes physical tension. Every sonic detail is engineered to push the intensity further, without ever losing control.",
     },

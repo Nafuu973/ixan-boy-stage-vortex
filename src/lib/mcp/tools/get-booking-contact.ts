@@ -15,9 +15,7 @@ export default defineTool({
     const c = dict[lang].contact;
     const info = { email: c.mail, cta: c.cta, headline: c.headline.join(" ") };
     return {
-      content: [
-        { type: "text", text: `Booking: ${info.email}` },
-      ],
+      content: [{ type: "text", text: `Booking: ${info.email}` }],
       structuredContent: info,
     };
   },

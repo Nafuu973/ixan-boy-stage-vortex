@@ -1,4 +1,3 @@
-
 # EPK IXAN BOY — Plan d'exécution
 
 Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé comme un set hardstyle : montée → tension → impact → respiration → rupture. Aucun template, tout custom.
@@ -8,6 +7,7 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 **Univers :** "Emotion before destruction." — cinématique, métallique, contenu. Pas de RGB gamer, pas de cyberpunk, pas de warehouse techno.
 
 **Palette (tokens dans `src/styles.css`, format oklch) :**
+
 - `--void` noir profond `oklch(0.08 0.01 270)`
 - `--obsidian` noir bleuté `oklch(0.14 0.02 270)`
 - `--steel` chrome subtil `oklch(0.72 0.01 270)`
@@ -17,11 +17,13 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 - Glow + gradient `--gradient-tension` (violet → ember), `--gradient-smoke` (void → obsidian)
 
 **Typographie :**
+
 - Display : **Anton** ou **Bebas Neue** (titres massifs, condensé, brutalité élégante)
 - Accent éditorial : **Instrument Serif** (italique, pour la tagline et les respirations émotionnelles)
 - Body : **Inter** tight (400/500), tracking serré, uppercase pour les labels
 
 **Motifs visuels récurrents :**
+
 - Fumée volumétrique (radial gradients animés + noise SVG)
 - Lignes verticales fines (rappel de waveform / barres de strobe)
 - Compteurs/timecodes monospace en coin (style trailer)
@@ -58,6 +60,7 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 ## Détail des sections clés
 
 **Hero**
+
 - Background : portrait shooting (que tu fournis) avec masque radial fumée + grain animé
 - Titre : "IXAN BOY" en Anton 18vw, lettres qui s'écartent légèrement au scroll
 - Tagline italique Instrument Serif sous le nom
@@ -66,22 +69,26 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 - Toggle FR/EN discret en haut droite, langue switcher avec animation glitch
 
 **Experience Live**
+
 - `<video>` autoplay muted loop (mix multicam quand tu l'auras — placeholder gradient animé en attendant)
 - Overlay : timecode qui défile, citations qui apparaissent/disparaissent au rythme des "kicks" simulés
 - Strobe contrôlé : flash blanc 1 frame toutes les 8 mesures max (jamais épileptique)
 
 **Signature Tracks (2 tracks)**
+
 - Layout asymétrique : cover large à gauche, méta + waveform à droite
 - Player custom : bouton play minimal, barre de progression = waveform réactive (FFT temps réel)
 - Au play : tout le site passe en mode "audio-réactif" — le pulse global sync sur la vraie analyse audio
 - Liens directs Spotify/SoundCloud/YouTube par track
 
 **Booking Ready**
+
 - Ton mesuré, pas de survente
 - 4 lignes courtes : "Management structuré." / "Réactivité 24h." / "Format club & festival." / "Projet en montée."
 - Pas de chiffres bidons
 
 **Contact Final**
+
 - Email booking en grand (à confirmer avec toi)
 - Grille réseaux : Instagram, TikTok, Spotify, YouTube, SoundCloud (liens fournis)
 - Dernière phrase : "Emotion before destruction." en pleine largeur, fade out sur fondu noir
@@ -98,6 +105,7 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 ## Médias & assets
 
 À uploader par toi (j'intègre dès réception) :
+
 - Logo IXAN BOY
 - 2 photos derrière les platines
 - 2 photos shooting studio
@@ -106,6 +114,7 @@ Construction d'un EPK one-page (FR par défaut, toggle EN), mobile-first, pensé
 - Vidéo mix multicam (fin de semaine)
 
 En attendant, je place :
+
 - Visuels IA générés cohérents avec la DA (portrait fumée, textures métal) à remplacer
 - Vidéo : section avec gradient animé + grain + slot prêt à recevoir le `<video>`
 - Email booking placeholder à remplacer

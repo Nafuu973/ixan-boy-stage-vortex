@@ -4,8 +4,21 @@ import { motion, useScroll, useTransform, AnimatePresence, useInView } from "fra
 import Lenis from "lenis";
 import { Instagram, Youtube } from "lucide-react";
 import { LangCtx, dict, useT, SOCIALS, type Lang } from "@/lib/i18n";
-import { attachLiveAudio, setPulseIdle, setPulseLive, startPulse, isPulseRunning, getAnalyser } from "@/lib/pulse";
-import { startTeaser, duckTeaser, unduckTeaser, getTeaserAnalyser, registerTeaserVideo } from "@/lib/teaser";
+import {
+  attachLiveAudio,
+  setPulseIdle,
+  setPulseLive,
+  startPulse,
+  isPulseRunning,
+  getAnalyser,
+} from "@/lib/pulse";
+import {
+  startTeaser,
+  duckTeaser,
+  unduckTeaser,
+  getTeaserAnalyser,
+  registerTeaserVideo,
+} from "@/lib/teaser";
 import matiereVideoAsset from "@/assets/fond-epk.mp4.asset.json";
 import matiereVideoLandscapeAsset from "@/assets/fond-epk-paysage.mp4.asset.json";
 const matiereVideo = matiereVideoAsset.url;
@@ -29,6 +42,37 @@ import labelScantraxx from "@/assets/label-scantraxx-round.png";
 import labelHFR from "@/assets/label-hardstyle-france-round.png";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "IXAN BOY — EPK Hardstyle / Raw · Booking & Live" },
+      {
+        name: "description",
+        content:
+          "Press kit officiel d'IXAN BOY : hardstyle raw, sets live multicam, signature tracks, labels et contact booking. Emotion before destruction.",
+      },
+      { property: "og:title", content: "IXAN BOY — EPK Hardstyle / Raw" },
+      {
+        property: "og:description",
+        content:
+          "Sets live, signature tracks et booking. Le press kit officiel d'IXAN BOY, hardstyle raw.",
+      },
+      { property: "og:type", content: "profile" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "MusicGroup",
+          name: "IXAN BOY",
+          genre: ["Hardstyle", "Raw Hardstyle"],
+          description: "DJ / producteur hardstyle raw — EPK officiel, booking et live.",
+          sameAs: Object.values(SOCIALS),
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
@@ -111,16 +155,22 @@ function TopLabelTypewriter() {
 
   useEffect(() => {
     let i = 0;
+    let id: ReturnType<typeof setInterval> | undefined;
     const delay = setTimeout(() => {
-      const id = setInterval(() => {
+      id = setInterval(() => {
         i++;
         setDisplayed(full.slice(0, i));
-        if (i >= full.length) { clearInterval(id); setDone(true); }
+        if (i >= full.length) {
+          clearInterval(id);
+          setDone(true);
+        }
       }, 38);
-      return () => clearInterval(id);
     }, 700);
-    return () => clearTimeout(delay);
-  }, []);
+    return () => {
+      clearTimeout(delay);
+      if (id) clearInterval(id);
+    };
+  }, [full]);
 
   // Periodic glitch on the whole label
   useEffect(() => {
@@ -128,7 +178,10 @@ function TopLabelTypewriter() {
     const fire = () => {
       setGlitch(true);
       setTimeout(() => setGlitch(false), 120);
-      setTimeout(() => { setGlitch(true); setTimeout(() => setGlitch(false), 80); }, 200);
+      setTimeout(() => {
+        setGlitch(true);
+        setTimeout(() => setGlitch(false), 80);
+      }, 200);
     };
     const id = setInterval(fire, 3500 + Math.random() * 2000);
     return () => clearInterval(id);
@@ -138,14 +191,26 @@ function TopLabelTypewriter() {
   const suffixDisplayed = displayed.length > prefix.length ? displayed.slice(prefix.length) : "";
 
   return (
-    <div style={{ position: "absolute", top: "2rem", left: 0, right: 0, textAlign: "center", paddingLeft: "0.45em" }}
+    <div
+      style={{
+        position: "absolute",
+        top: "2rem",
+        left: 0,
+        right: 0,
+        textAlign: "center",
+        paddingLeft: "0.45em",
+      }}
       className="font-mono text-xs uppercase tracking-[0.45em] md:text-sm"
     >
       <motion.span
-        animate={done ? {
-          opacity: glitch ? [1, 0.2, 1] : 1,
-          x: glitch ? [0, -2, 2, 0] : 0,
-        } : {}}
+        animate={
+          done
+            ? {
+                opacity: glitch ? [1, 0.2, 1] : 1,
+                x: glitch ? [0, -2, 2, 0] : 0,
+              }
+            : {}
+        }
         style={{ color: "var(--violet)", display: "inline" }}
       >
         {prefixDisplayed}
@@ -155,11 +220,23 @@ function TopLabelTypewriter() {
         <motion.span
           animate={{
             textShadow: glitch
-              ? ["0 0 30px rgba(255,80,0,1)", "0 0 8px rgba(255,80,0,0.3)", "0 0 30px rgba(255,80,0,1)"]
-              : ["0 0 10px rgba(255,100,20,0.5)", "0 0 28px rgba(255,100,20,0.9)", "0 0 10px rgba(255,100,20,0.5)"],
+              ? [
+                  "0 0 30px rgba(255,80,0,1)",
+                  "0 0 8px rgba(255,80,0,0.3)",
+                  "0 0 30px rgba(255,80,0,1)",
+                ]
+              : [
+                  "0 0 10px rgba(255,100,20,0.5)",
+                  "0 0 28px rgba(255,100,20,0.9)",
+                  "0 0 10px rgba(255,100,20,0.5)",
+                ],
             opacity: glitch ? [1, 0.3, 1] : 1,
           }}
-          transition={{ duration: glitch ? 0.12 : 1.8, repeat: glitch ? 0 : Infinity, ease: "easeInOut" }}
+          transition={{
+            duration: glitch ? 0.12 : 1.8,
+            repeat: glitch ? 0 : Infinity,
+            ease: "easeInOut",
+          }}
           style={{ color: "#ff6014", display: "inline" }}
         >
           {suffixDisplayed}
@@ -214,7 +291,8 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
           <div
             className="pointer-events-none absolute inset-0 opacity-[0.025]"
             style={{
-              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, var(--bone) 2px, var(--bone) 3px)",
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, var(--bone) 2px, var(--bone) 3px)",
               backgroundSize: "100% 4px",
             }}
           />
@@ -240,10 +318,15 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
 
           {/* Main content — single column, truly centered */}
           <div style={{ width: "100%", textAlign: "center" }}>
-
             {/* Title */}
             <motion.h1
-              style={{ color: "var(--bone)", whiteSpace: "nowrap", fontSize: "clamp(3.5rem, 12vw, 9rem)", lineHeight: 1, letterSpacing: "-0.02em" }}
+              style={{
+                color: "var(--bone)",
+                whiteSpace: "nowrap",
+                fontSize: "clamp(3.5rem, 12vw, 9rem)",
+                lineHeight: 1,
+                letterSpacing: "-0.02em",
+              }}
               className="font-display"
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -276,7 +359,13 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
               initial={{ scaleX: 0, opacity: 0 }}
               animate={{ scaleX: 1, opacity: 1 }}
               transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              style={{ height: "1px", width: "12rem", margin: "1.5rem auto 0", background: "linear-gradient(to right, transparent, oklch(0.55 0.28 295 / 0.6), transparent)" }}
+              style={{
+                height: "1px",
+                width: "12rem",
+                margin: "1.5rem auto 0",
+                background:
+                  "linear-gradient(to right, transparent, oklch(0.55 0.28 295 / 0.6), transparent)",
+              }}
             />
 
             {/* Sound label */}
@@ -299,7 +388,11 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
             >
               <motion.button
                 type="button"
-                onClick={() => { startTeaser(); onEnter(); setDismissed(true); }}
+                onClick={() => {
+                  startTeaser();
+                  onEnter();
+                  setDismissed(true);
+                }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.92 }}
                 aria-label="Enter"
@@ -318,21 +411,49 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
                 }}
               >
                 <motion.span
-                  style={{ position: "absolute", inset: 0, borderRadius: "9999px", border: "1px solid oklch(0.55 0.28 295 / 0.3)" }}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "9999px",
+                    border: "1px solid oklch(0.55 0.28 295 / 0.3)",
+                  }}
                   animate={{ scale: [1, 1.6, 1.6], opacity: [0.6, 0, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
                 />
                 <motion.span
-                  style={{ position: "absolute", inset: 0, borderRadius: "9999px", border: "1px solid oklch(0.55 0.28 295 / 0.2)" }}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "9999px",
+                    border: "1px solid oklch(0.55 0.28 295 / 0.2)",
+                  }}
                   animate={{ scale: [1, 2, 2], opacity: [0.4, 0, 0] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.4 }}
                 />
                 <motion.span
                   style={{ position: "absolute", inset: 0, zIndex: -1, borderRadius: "9999px" }}
-                  animate={{ boxShadow: ["0 0 20px oklch(0.55 0.28 295 / 0.3)", "0 0 50px oklch(0.55 0.28 295 / 0.6)", "0 0 20px oklch(0.55 0.28 295 / 0.3)"] }}
+                  animate={{
+                    boxShadow: [
+                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
+                      "0 0 50px oklch(0.55 0.28 295 / 0.6)",
+                      "0 0 20px oklch(0.55 0.28 295 / 0.3)",
+                    ],
+                  }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <svg viewBox="0 0 14 14" style={{ position: "absolute", top: "50%", left: "50%", width: "1.5rem", height: "1.5rem", transform: "translate(-46%, -50%)", fill: "var(--bone)", filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))" }}>
+                <svg
+                  viewBox="0 0 14 14"
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    width: "1.5rem",
+                    height: "1.5rem",
+                    transform: "translate(-46%, -50%)",
+                    fill: "var(--bone)",
+                    filter: "drop-shadow(0 0 8px rgba(200,160,255,0.8))",
+                  }}
+                >
                   <path d="M3 1.5 L12 7 L3 12.5 Z" />
                 </svg>
               </motion.button>
@@ -377,6 +498,11 @@ function EnterOverlay({ visible, onEnter }: { visible: boolean; onEnter: () => v
 function TopBar({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-5 py-5 md:px-10 md:py-7">
+      {/* scrim : évite que le contenu qui défile passe illisiblement sous la barre */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[calc(100%+2.5rem)] bg-gradient-to-b from-void/85 via-void/55 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+      />
       <div className="flex items-center gap-4">
         <img
           src={logoImg}
@@ -413,10 +539,7 @@ function Preloader({ done }: { done: boolean }) {
       setN(100);
       return;
     }
-    const id = setInterval(
-      () => setN((v) => Math.min(99, v + Math.ceil(Math.random() * 7))),
-      60,
-    );
+    const id = setInterval(() => setN((v) => Math.min(99, v + Math.ceil(Math.random() * 7))), 60);
     return () => clearInterval(id);
   }, [done]);
   return (
@@ -489,10 +612,7 @@ function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const t = useT();
   return (
-    <section
-      ref={ref}
-      className="relative h-[100svh] min-h-[680px] w-full overflow-hidden"
-    >
+    <section ref={ref} className="relative h-[100svh] min-h-[680px] w-full overflow-hidden">
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
         <picture>
           <source media="(min-width: 1024px)" srcSet={heroImgLandscape.url} />
@@ -535,7 +655,6 @@ function Hero() {
           {t.hero.sub}
         </div>
 
-
         <div className="mt-5 mb-6 sig-reveal flex justify-start -ml-1 md:-ml-4 md:mt-8 md:mb-8">
           <ChromeSignature text={t.hero.tag} />
         </div>
@@ -563,21 +682,15 @@ function ChromeSignature({ text }: { text: string }) {
       className="hand-signature relative inline-block select-none whitespace-nowrap"
       aria-label={text}
     >
-      <span aria-hidden className="hand-signature__halo">{clean}</span>
+      <span aria-hidden className="hand-signature__halo">
+        {clean}
+      </span>
       <span className="hand-signature__ink">{clean}</span>
     </figure>
   );
 }
 
-function Cta({
-  href,
-  label,
-  primary,
-}: {
-  href: string;
-  label: string;
-  primary?: boolean;
-}) {
+function Cta({ href, label, primary }: { href: string; label: string; primary?: boolean }) {
   return (
     <a
       href={href}
@@ -737,16 +850,11 @@ function Presentation() {
 function ExperienceLive() {
   const t = useT();
   return (
-    <section
-      id="live"
-      className="relative isolate overflow-hidden py-14 md:py-20"
-    >
+    <section id="live" className="relative isolate overflow-hidden py-14 md:py-20">
       <div className="absolute inset-0 -z-10 bg-void/75 mask-fade-y" />
 
       <div className="px-5 md:px-12">
-        <div className="section-kicker">
-          02 · {t.live.kicker}
-        </div>
+        <div className="section-kicker">02 · {t.live.kicker}</div>
         <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.2rem)] leading-[0.9]">
           {t.live.headline[0]}
           <br />
@@ -853,7 +961,6 @@ function MulticamPlayer() {
         className="absolute inset-0 block h-full w-full object-cover"
       />
 
-
       {/* Corner brackets */}
       {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) => (
         <span
@@ -920,7 +1027,15 @@ function MulticamPlayer() {
           aria-label="Plein écran"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-bone/20 bg-void/60 text-bone hover:border-violet/70 hover:text-violet"
         >
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden
+          >
             <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
           </svg>
         </button>
@@ -952,9 +1067,7 @@ function WhyBook() {
       <div className="pointer-events-none absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-violet/20 to-transparent md:block" />
 
       <div className="relative px-5 md:px-12">
-        <div className="section-kicker">
-          03 · {t.why.kicker}
-        </div>
+        <div className="section-kicker">03 · {t.why.kicker}</div>
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -968,8 +1081,15 @@ function WhyBook() {
 
         <div className="mt-16 grid gap-5 md:mt-20 md:grid-cols-12">
           {t.why.cards.map((c, i) => {
-            const isArtists = "artists" in c && Array.isArray((c as any).artists);
-            const isList = Array.isArray((c as any).p);
+            const card = c as {
+              k: string;
+              h: string;
+              p: string | readonly string[];
+              artists?: readonly string[];
+            };
+            const isArtists = Array.isArray(card.artists);
+            const isList = Array.isArray(card.p);
+
             return (
               <motion.article
                 key={i}
@@ -998,7 +1118,6 @@ function WhyBook() {
                   0{i + 1}
                 </span>
 
-
                 {/* dégradé de fond au hover */}
                 <span className="pointer-events-none absolute inset-0 bg-gradient-to-br from-violet/[0.08] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
@@ -1019,11 +1138,11 @@ function WhyBook() {
                 {isArtists ? (
                   <>
                     <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/85 md:text-lg">
-                      {(c as any).h}
+                      {card.h}
                     </h3>
                     <div className="mt-3 h-px w-10 bg-violet/20" />
                     <ul className="mt-7 space-y-2.5 md:space-y-3">
-                      {(c as any).artists.map((a: string, k: number) => (
+                      {card.artists!.map((a: string, k: number) => (
                         <motion.li
                           key={a}
                           initial={{ opacity: 0, x: -8 }}
@@ -1037,24 +1156,24 @@ function WhyBook() {
                       ))}
                     </ul>
                     <p className="mt-10 text-[13px] leading-relaxed text-bone/80">
-                      {c.p as string}
+                      {card.p as string}
                     </p>
                   </>
                 ) : (
                   <>
                     <h3 className="font-serif-i mt-5 text-base leading-[1.4] text-bone/85 md:text-lg">
-                      {(c as any).h}
+                      {card.h}
                     </h3>
                     <div className="mt-4 h-px w-10 bg-violet/20" />
                     {isList ? (
                       <ul className="mt-7 space-y-2 text-[13px] leading-relaxed text-bone/80">
-                        {((c as any).p as readonly string[]).map((line, k) => (
+                        {(card.p as readonly string[]).map((line, k) => (
                           <li key={k}>{line}</li>
                         ))}
                       </ul>
                     ) : (
                       <p className="mt-7 text-[13px] leading-relaxed text-bone/80">
-                        {c.p as string}
+                        {card.p as string}
                       </p>
                     )}
                   </>
@@ -1156,10 +1275,10 @@ function Silence() {
 
 /* Waveform LED — barres verticales segmentées montant depuis une ligne centrale
    glow + reflet miroir en dessous, façon equalizer cinématique. */
-const WAVEFORM_TOP_H = 20;          // hauteur de la zone "barres"
-const WAVEFORM_REFLECT_H = 5;       // hauteur du reflet miroir (réduit)
-const SEG_H = 4;                    // hauteur d'un segment LED en px
-const SEG_GAP = 2;                  // gap entre segments en px
+const WAVEFORM_TOP_H = 20; // hauteur de la zone "barres"
+const WAVEFORM_REFLECT_H = 5; // hauteur du reflet miroir (réduit)
+const SEG_H = 4; // hauteur d'un segment LED en px
+const SEG_GAP = 2; // gap entre segments en px
 const SEG_STRIDE = SEG_H + SEG_GAP;
 
 function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?: number }) {
@@ -1189,7 +1308,10 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 
     const tick = () => {
       const an = getAnalyser();
-      if (!an) { rafRef.current = requestAnimationFrame(tick); return; }
+      if (!an) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
       const data = new Uint8Array(an.frequencyBinCount);
       an.getByteFrequencyData(data);
 
@@ -1225,12 +1347,11 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
         const s = v.toFixed(3);
         top.style.transform = `scaleY(${s})`;
         if (ref) ref.style.transform = `scaleY(${s})`;
-
       }
 
       const midLow = Math.floor(half * 0.4);
       const midHigh = Math.floor(half * 0.7);
-      const midPeak = smooth.slice(midLow, midHigh).reduce((m, v) => v > m ? v : m, 0);
+      const midPeak = smooth.slice(midLow, midHigh).reduce((m, v) => (v > m ? v : m), 0);
       const bassPeak = Math.max(0, midPeak - 0.78) / 0.22;
       document.documentElement.style.setProperty("--pulse-cover", bassPeak.toFixed(3));
 
@@ -1244,14 +1365,19 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
     "linear-gradient(to top, rgba(88,28,135,0.6) 0%, #a855f7 55%, #d8b4fe 85%, #ffffff 100%)";
   const idleBg = "rgba(168,85,247,0.18)";
 
-  const renderBar = (origin: "bottom" | "top", refsArr: React.MutableRefObject<(HTMLSpanElement | null)[]>) =>
+  const renderBar = (
+    origin: "bottom" | "top",
+    refsArr: React.MutableRefObject<(HTMLSpanElement | null)[]>,
+  ) =>
     Array.from({ length: numBars }).map((_, idx) => {
       const idle = 0.06 + Math.abs(Math.sin(idx * 0.45)) * 0.04;
       const roundedTop = origin === "bottom" ? "2px 2px 0 0" : "0 0 2px 2px";
       return (
         <span
           key={`${origin}-${idx}`}
-          ref={(el) => { refsArr.current[idx] = el; }}
+          ref={(el) => {
+            refsArr.current[idx] = el;
+          }}
           style={{
             flex: "1 1 0",
             minWidth: 0,
@@ -1278,10 +1404,7 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
       }}
     >
       {/* Barres principales (montent depuis la ligne centrale) */}
-      <div
-        className="flex items-end gap-[2px]"
-        style={{ height: `${WAVEFORM_TOP_H}px` }}
-      >
+      <div className="flex items-end gap-[2px]" style={{ height: `${WAVEFORM_TOP_H}px` }}>
         {renderBar("bottom", topRefs)}
       </div>
 
@@ -1313,8 +1436,6 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
   );
 }
 
-
-
 /* ────────────────────────────────────────────────────────────────────────
    WaveformCanvas — "Water Drops"
    Ondes concentriques émises au centre comme des gouttes sur une surface
@@ -1325,10 +1446,10 @@ function WaveformBars({ isActive, numBars = 56 }: { isActive: boolean; numBars?:
 type RGB = [number, number, number];
 
 type Ripple = {
-  born: number;     // t de naissance
-  life: number;     // durée totale (s)
+  born: number; // t de naissance
+  life: number; // durée totale (s)
   strength: number; // intensité initiale (0..1)
-  hue: number;      // 0 violet → 1 braise
+  hue: number; // 0 violet → 1 braise
 };
 
 function WaveformCanvas() {
@@ -1371,8 +1492,7 @@ function WaveformCanvas() {
       a[1] + (b[1] - a[1]) * t,
       a[2] + (b[2] - a[2]) * t,
     ];
-    const rgba = (c: RGB, a: number) =>
-      `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${clamp(a)})`;
+    const rgba = (c: RGB, a: number) => `rgba(${c[0] | 0},${c[1] | 0},${c[2] | 0},${clamp(a)})`;
 
     const freqBuf = new Uint8Array(1024);
 
@@ -1429,10 +1549,9 @@ function WaveformCanvas() {
       for (let i = 1; i < usable; i++) eSum += freqBuf[i];
       const energyInst = clamp((eSum / (usable * 255)) * 2.4);
 
-      const env = (e: number, x: number, a: number, r: number) =>
-        e + (x - e) * (x > e ? a : r);
+      const env = (e: number, x: number, a: number, r: number) => e + (x - e) * (x > e ? a : r);
       energyEnv = env(energyEnv, energyInst, 0.28, 0.06);
-      bassEnv = env(bassEnv, bass, 0.45, 0.10);
+      bassEnv = env(bassEnv, bass, 0.45, 0.1);
 
       // Détection de kick : flux positif sur la bande basse
       bassFast += (bass - bassFast) * 0.38;
@@ -1462,7 +1581,7 @@ function WaveformCanvas() {
       c.fillRect(0, 0, W, H);
       // léger gradient radial très froid (profondeur de la surface)
       const depth = c.createRadialGradient(cx, cy, 0, cx, cy, maxR);
-      depth.addColorStop(0, rgba(mix(VIOLET, accent, 0.4), 0.10 + energyEnv * 0.10));
+      depth.addColorStop(0, rgba(mix(VIOLET, accent, 0.4), 0.1 + energyEnv * 0.1));
       depth.addColorStop(0.55, rgba(VIOLET, 0.03));
       depth.addColorStop(1, rgba(VOID, 0));
       c.fillStyle = depth;
@@ -1501,7 +1620,15 @@ function WaveformCanvas() {
 
         // Anneau principal (fin, lumineux, comme une crête d'onde)
         c.beginPath();
-        c.ellipse(cx, cy, Math.max(0.01, radius), Math.max(0.01, radius * 0.985), 0, 0, Math.PI * 2);
+        c.ellipse(
+          cx,
+          cy,
+          Math.max(0.01, radius),
+          Math.max(0.01, radius * 0.985),
+          0,
+          0,
+          Math.PI * 2,
+        );
         c.lineWidth = 1.2 + (1 - age) * 1.6;
         c.strokeStyle = rgba(mix(col, WHITE, 0.35), alpha * 0.95);
         c.shadowBlur = 18 + (1 - age) * 20;
@@ -1510,7 +1637,15 @@ function WaveformCanvas() {
 
         // Halo interne diffus (épaisseur de l'onde)
         c.beginPath();
-        c.ellipse(cx, cy, Math.max(0.01, radius * 0.985), Math.max(0.01, radius * 0.97), 0, 0, Math.PI * 2);
+        c.ellipse(
+          cx,
+          cy,
+          Math.max(0.01, radius * 0.985),
+          Math.max(0.01, radius * 0.97),
+          0,
+          0,
+          Math.PI * 2,
+        );
         c.lineWidth = 6 + (1 - age) * 10;
         c.strokeStyle = rgba(col, alpha * 0.18);
         c.shadowBlur = 24;
@@ -1520,12 +1655,17 @@ function WaveformCanvas() {
         // Reflet braise sur les ondes récentes (énergie haute)
         if (r.hue > 0.15 && age < 0.45) {
           c.beginPath();
-          c.ellipse(cx, cy, Math.max(0.01, radius * 1.005), Math.max(0.01, radius * 0.99), 0, 0, Math.PI * 2);
-          c.lineWidth = 0.8;
-          c.strokeStyle = rgba(
-            mix(EMBER, WHITE, 0.4),
-            alpha * r.hue * 0.6,
+          c.ellipse(
+            cx,
+            cy,
+            Math.max(0.01, radius * 1.005),
+            Math.max(0.01, radius * 0.99),
+            0,
+            0,
+            Math.PI * 2,
           );
+          c.lineWidth = 0.8;
+          c.strokeStyle = rgba(mix(EMBER, WHITE, 0.4), alpha * r.hue * 0.6);
           c.shadowBlur = 14;
           c.shadowColor = rgba(EMBER, alpha * 0.6);
           c.stroke();
@@ -1538,8 +1678,7 @@ function WaveformCanvas() {
       const latest = ripples[ripples.length - 1];
       const since = latest ? t - latest.born : 99;
       const dropPulse = Math.max(0, 1 - since / 0.35);
-      const dropR =
-        6 + bassEnv * 14 + dropPulse * 22 * (latest?.strength ?? 0.5);
+      const dropR = 6 + bassEnv * 14 + dropPulse * 22 * (latest?.strength ?? 0.5);
       const dropCol = mix(LAV, accent, heat * 0.6);
       const dropG = c.createRadialGradient(cx, cy, 0, cx, cy, dropR * 3);
       dropG.addColorStop(0, rgba(mix(WHITE, dropCol, 0.4), 0.55 * (0.4 + dropPulse)));
@@ -1577,12 +1716,15 @@ function WaveformCanvas() {
   }, []);
 
   return (
-    <div ref={wrapRef} aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div
+      ref={wrapRef}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+    >
       <canvas ref={canvasRef} style={{ width: "100%", height: "100%", opacity: 1 }} />
     </div>
   );
 }
-
 
 function SignatureTracks() {
   const t = useT();
@@ -1680,11 +1822,7 @@ function SignatureTracks() {
   return (
     <section id="tracks" className="relative overflow-hidden py-10 md:py-12">
       <div className="relative z-10 px-5 md:px-20">
-
-
-        <div className="section-kicker">
-          04 · {t.tracks.kicker}
-        </div>
+        <div className="section-kicker">04 · {t.tracks.kicker}</div>
         <h2 className="font-display mt-4 max-w-[18ch] text-balance text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] tracking-[-0.01em] md:mt-5">
           {t.tracks.title}
         </h2>
@@ -1702,15 +1840,15 @@ function SignatureTracks() {
                 className={`flex flex-col items-center gap-3 ${i === 1 ? "md:mt-20" : ""}`}
               >
                 <div className="relative group/wrap">
-                  {isActive && <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />}
+                  {isActive && (
+                    <div key={`aura-${i}`} aria-hidden className="track-activate-aura" />
+                  )}
                   {/* halo néon violet — large bloom réactif */}
                   <span
                     aria-hidden
                     className="pointer-events-none absolute -inset-10 rounded-full bg-violet/40 blur-3xl transition-opacity duration-500"
                     style={{
-                      opacity: isActive
-                        ? `calc(0.45 + var(--pulse-cover, 0) * 1.1)`
-                        : undefined,
+                      opacity: isActive ? `calc(0.45 + var(--pulse-cover, 0) * 1.1)` : undefined,
                       transform: isActive
                         ? `scale(calc(1 + var(--pulse-cover, 0) * 0.25))`
                         : undefined,
@@ -1733,15 +1871,13 @@ function SignatureTracks() {
                   <span
                     aria-hidden
                     className="pointer-events-none absolute -inset-4 rounded-full bg-ember/40 blur-2xl opacity-0"
-                    style={
-                      isActive
-                        ? { opacity: `calc(var(--pulse-cover, 0) * 0.65)` }
-                        : undefined
-                    }
+                    style={isActive ? { opacity: `calc(var(--pulse-cover, 0) * 0.65)` } : undefined}
                   />
                   <div
                     className={`group/cover relative h-[26vh] aspect-square overflow-hidden rounded-sm border transition-[border-color] duration-700 ${
-                      isActive ? "track-cover-shell-active border-violet/30" : "border-bone/10 hover:border-bone/25"
+                      isActive
+                        ? "track-cover-shell-active border-violet/30"
+                        : "border-bone/10 hover:border-bone/25"
                     }`}
                   >
                     <div
@@ -1818,7 +1954,10 @@ function SignatureTracks() {
                           className={`absolute -inset-3 rounded-full blur-2xl transition-opacity duration-500 ${
                             isActive ? "opacity-100" : "opacity-60 group-hover:opacity-90"
                           }`}
-                          style={{ background: "radial-gradient(circle, rgba(168,85,247,0.75), transparent 70%)" }}
+                          style={{
+                            background:
+                              "radial-gradient(circle, rgba(168,85,247,0.75), transparent 70%)",
+                          }}
                         />
                         <button
                           onClick={() => toggle(i)}
@@ -1832,12 +1971,43 @@ function SignatureTracks() {
                         >
                           {isActive ? (
                             <span className="flex items-end gap-[3px] h-[14px]">
-                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.6s ease-in-out infinite", height: "60%" }} />
-                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.8s ease-in-out 0.15s infinite", height: "100%" }} />
-                              <span className="w-[3px] rounded-sm" style={{ background: "#f0abfc", boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7", animation: "eqBar 0.7s ease-in-out 0.3s infinite", height: "75%" }} />
+                              <span
+                                className="w-[3px] rounded-sm"
+                                style={{
+                                  background: "#f0abfc",
+                                  boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7",
+                                  animation: "eqBar 0.6s ease-in-out infinite",
+                                  height: "60%",
+                                }}
+                              />
+                              <span
+                                className="w-[3px] rounded-sm"
+                                style={{
+                                  background: "#f0abfc",
+                                  boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7",
+                                  animation: "eqBar 0.8s ease-in-out 0.15s infinite",
+                                  height: "100%",
+                                }}
+                              />
+                              <span
+                                className="w-[3px] rounded-sm"
+                                style={{
+                                  background: "#f0abfc",
+                                  boxShadow: "0 0 6px #a855f7, 0 0 10px #a855f7",
+                                  animation: "eqBar 0.7s ease-in-out 0.3s infinite",
+                                  height: "75%",
+                                }}
+                              />
                             </span>
                           ) : (
-                            <svg viewBox="0 0 14 14" className="ml-[2px] h-[14px] w-[14px]" fill="#f0abfc" style={{ filter: "drop-shadow(0 0 4px #a855f7) drop-shadow(0 0 8px #a855f7)" }}>
+                            <svg
+                              viewBox="0 0 14 14"
+                              className="ml-[2px] h-[14px] w-[14px]"
+                              fill="#f0abfc"
+                              style={{
+                                filter: "drop-shadow(0 0 4px #a855f7) drop-shadow(0 0 8px #a855f7)",
+                              }}
+                            >
                               <path d="M3 1.5 L12 7 L3 12.5 Z" />
                             </svg>
                           )}
@@ -1848,8 +2018,6 @@ function SignatureTracks() {
                         <WaveformBars isActive={isActive} numBars={56} />
                       </div>
                     </div>
-
-
                   </div>
 
                   <audio
@@ -1877,7 +2045,6 @@ function SignatureTracks() {
                       setActiveIndex((cur) => (cur === i ? null : cur));
                     }}
                   />
-
                 </div>
               </motion.div>
             );
@@ -1895,9 +2062,7 @@ function MusicalDNA() {
       <div className="absolute inset-0 -z-10 bg-obsidian/40 mask-fade-y" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,oklch(0.62_0.26_15/0.2),transparent_55%)] mask-fade-y" />
       <div className="px-5 md:px-12">
-        <div className="section-kicker">
-          05 · {t.dna.kicker}
-        </div>
+        <div className="section-kicker">05 · {t.dna.kicker}</div>
 
         <h2 className="font-display mt-4 text-[clamp(2rem,4vw,3.2rem)] leading-[0.9] text-balance uppercase">
           {t.dna.title}
@@ -1907,10 +2072,7 @@ function MusicalDNA() {
           <div className="md:col-span-7 space-y-8">
             <div className="space-y-2">
               {t.dna.intro.map((line, i) => (
-                <p
-                  key={i}
-                  className="font-serif-i text-2xl leading-tight text-bone/90 md:text-4xl"
-                >
+                <p key={i} className="font-serif-i text-2xl leading-tight text-bone/90 md:text-4xl">
                   {line}
                 </p>
               ))}
@@ -1968,9 +2130,7 @@ function Proof() {
   return (
     <section className="relative py-12 md:py-16">
       <div className="px-5 md:px-12">
-        <div className="section-kicker text-center">
-          06 · {t.proof.kicker}
-        </div>
+        <div className="section-kicker text-center">06 · {t.proof.kicker}</div>
         <div className="mx-auto mt-12 max-w-4xl">
           <div className="space-y-px overflow-hidden rounded-sm bg-bone/10">
             {labels.map((l) => (
@@ -2017,9 +2177,7 @@ function BookingReady() {
     <section className="relative overflow-hidden py-12 md:py-16">
       <div className="absolute inset-0 -z-10 bg-obsidian/40 mask-fade-y" />
       <div className="px-5 md:px-12">
-        <div className="section-kicker">
-          07 · {t.booking.kicker}
-        </div>
+        <div className="section-kicker">07 · {t.booking.kicker}</div>
         <div className="mt-12 grid gap-px overflow-hidden rounded-sm bg-bone/10 md:grid-cols-4">
           {t.booking.cards.map((c, i) => (
             <div key={i} className="bg-void p-6 md:p-8">
@@ -2057,7 +2215,8 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
 function BookingCta({ label, mail }: { label: string; mail: string }) {
   const [copied, setCopied] = useState(false);
   const subject = "Booking IXAN BOY";
-  const body = "Bonjour,\n\nJe souhaite booker IXAN BOY.\n\nDate :\nLieu / événement :\nHoraire :\nBudget :\n\nMerci,";
+  const body =
+    "Bonjour,\n\nJe souhaite booker IXAN BOY.\n\nDate :\nLieu / événement :\nHoraire :\nBudget :\n\nMerci,";
   const href = `mailto:${mail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(mail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
@@ -2076,14 +2235,16 @@ function BookingCta({ label, mail }: { label: string; mail: string }) {
       if (document.hidden || !document.hasFocus()) return;
       const w = window.open(gmail, "_blank", "noopener,noreferrer");
       if (!w) {
-        navigator.clipboard?.writeText(mail).then(() => {
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 2500);
-        }, () => {});
+        navigator.clipboard?.writeText(mail).then(
+          () => {
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2500);
+          },
+          () => {},
+        );
       }
     }, 1200);
   };
-
 
   return (
     <a
@@ -2098,9 +2259,12 @@ function BookingCta({ label, mail }: { label: string; mail: string }) {
 }
 
 function ContactFinal() {
-
   const t = useT();
-  const links: { label: string; href: string; Icon: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement }[] = [
+  const links: {
+    label: string;
+    href: string;
+    Icon: (p: React.SVGProps<SVGSVGElement>) => React.ReactElement;
+  }[] = [
     { label: "Instagram", href: SOCIALS.instagram, Icon: (p) => <Instagram {...p} /> },
     { label: "TikTok", href: SOCIALS.tiktok, Icon: TikTokIcon },
     { label: "Spotify", href: SOCIALS.spotify, Icon: SpotifyIcon },
@@ -2109,17 +2273,12 @@ function ContactFinal() {
   ];
 
   return (
-    <section
-      id="contact"
-      className="relative isolate overflow-hidden py-14 md:py-20"
-    >
+    <section id="contact" className="relative isolate overflow-hidden py-14 md:py-20">
       <div className="absolute inset-0 -z-10 smoke drift opacity-70 mask-fade-y" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)] mask-fade-y" />
 
       <div className="px-5 md:px-12">
-        <div className="section-kicker">
-          08 · {t.contact.kicker}
-        </div>
+        <div className="section-kicker">08 · {t.contact.kicker}</div>
         <h2 className="font-display mt-6 text-balance text-[clamp(3.5rem,9vw,7rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
@@ -2136,7 +2295,6 @@ function ContactFinal() {
           </a>
         </div>
 
-
         {/* premium social row — minimal icons */}
         <div className="mt-16 flex flex-wrap items-center gap-3 md:gap-4">
           {links.map(({ label, href, Icon }) => (
@@ -2144,7 +2302,7 @@ function ContactFinal() {
               key={label}
               href={href}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               aria-label={label}
               className="group relative flex h-12 w-12 items-center justify-center rounded-full border border-bone/15 bg-bone/[0.03] text-bone/85 backdrop-blur transition-all hover:border-violet/60 hover:bg-violet/10 hover:text-bone hover:shadow-[0_0_30px_-5px_var(--violet)] md:h-14 md:w-14"
             >
