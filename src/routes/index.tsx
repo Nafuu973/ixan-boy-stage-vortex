@@ -1513,7 +1513,7 @@ function WaveformCanvas() {
 function SignatureTracks() {
   const t = useT();
   const tracks = [
-    { ...t.tracks.list[0], cover: coverFire, src: "/audio/take-me-body-player.mp3?v=3" },
+    { ...t.tracks.list[0], cover: coverFire, src: soDumbAudio },
     { ...t.tracks.list[1], cover: coverRun, src: "/audio/sex-bomb-player.mp3" },
   ];
   const audioRefs = useRef<(HTMLAudioElement | null)[]>([null, null]);
@@ -1888,7 +1888,7 @@ function Proof() {
     {
       name: "Hardstyle France Records",
       logo: labelHFR,
-      releases: ["Take Me Body", "Sex Bomb"],
+      releases: ["So Dumb", "Sex Bomb"],
     },
   ];
   const supports = ["Kronos", "Damien RK", "Fury", "Miss Pepper"];
