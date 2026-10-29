@@ -134,6 +134,7 @@ function Index() {
         <MusicalDNA />
         <Proof />
         <BookingReady />
+        <Photos />
         <PressKit />
         <ContactFinal />
         <Footer />
@@ -811,7 +812,7 @@ function PressKit() {
     <section id="press" className="relative isolate overflow-hidden py-14 md:py-20">
       <div className="absolute inset-0 -z-10 bg-obsidian/60 mask-fade-y" />
       <div className="px-5 md:px-12">
-        <h2 className="section-kicker">08 · {t.press.kicker}</h2>
+        <h2 className="section-kicker">09 · {t.press.kicker}</h2>
         <h3 className="font-display mt-6 text-3xl leading-[0.95] text-bone md:text-5xl">
           {t.press.title}
         </h3>
@@ -2417,7 +2418,7 @@ function ContactFinal() {
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)] mask-fade-y" />
 
       <div className="px-5 md:px-12">
-        <div className="section-kicker">09 · {t.contact.kicker}</div>
+        <div className="section-kicker">10 · {t.contact.kicker}</div>
         <h2 className="font-display mt-6 text-balance text-[clamp(3.5rem,9vw,7rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
