@@ -806,6 +806,98 @@ const PRESS_FILES: { l: string; href: string; n: string }[][] = [
   [{ l: "5:42", href: multicamVideo, n: "IXAN-BOY-multicam.mp4" }],
 ];
 
+function GalleryPhoto({
+  src,
+  alt,
+  ratio,
+  caption,
+  className = "",
+}: {
+  src: string;
+  alt: string;
+  ratio: string;
+  caption: string;
+  className?: string;
+}) {
+  return (
+    <figure
+      className={`group relative overflow-hidden rounded-sm border border-bone/10 ${className}`}
+    >
+      <div className={`${ratio} w-full overflow-hidden`}>
+        <img
+          src={src}
+          alt={alt}
+          loading="lazy"
+          className="h-full w-full object-cover contrast-110 grayscale-[18%] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+        />
+      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/85 via-void/10 to-transparent" />
+      <figcaption className="absolute bottom-3 left-3 font-mono text-[9px] uppercase tracking-[0.3em] text-bone/90">
+        {caption}
+      </figcaption>
+    </figure>
+  );
+}
+
+function Photos() {
+  const t = useT();
+  return (
+    <section id="photos" className="relative isolate overflow-hidden py-14 md:py-20">
+      <div className="absolute inset-0 -z-10 bg-obsidian/55 mask-fade-y" />
+      <div className="px-5 md:px-12">
+        <h2 className="section-kicker">08 · {t.photos.kicker}</h2>
+        <h3 className="font-display mt-6 text-3xl leading-[0.95] text-bone md:text-5xl">
+          {t.photos.title}
+        </h3>
+        <p className="mt-4 max-w-xl text-[11px] leading-relaxed text-bone/80 md:text-xs">
+          {t.photos.intro}
+        </p>
+
+        <div className="mt-10 flex flex-col gap-2 md:flex-row md:items-start md:gap-3">
+          <div className="flex w-full flex-col gap-2 md:w-[54%] md:gap-3">
+            <GalleryPhoto
+              src={liveBooth}
+              alt="IXAN BOY aux platines en live"
+              ratio="aspect-[3/2]"
+              caption={t.photos.captions[0]}
+            />
+            <GalleryPhoto
+              src={tunnelImg}
+              alt="IXAN BOY en portrait dans un tunnel couvert de graffitis"
+              ratio="aspect-[3/4]"
+              caption={t.photos.captions[1]}
+              className="ml-8 md:ml-0 md:mt-8"
+            />
+          </div>
+          <div className="flex w-full flex-col gap-2 md:mt-14 md:w-[46%] md:gap-3">
+            <GalleryPhoto
+              src={heroImg.url}
+              alt="IXAN BOY en studio, accoudé à une enceinte de monitoring"
+              ratio="aspect-[4/5]"
+              caption={t.photos.captions[2]}
+            />
+            <GalleryPhoto
+              src={heroImgLandscape.url}
+              alt="IXAN BOY en studio, plan large"
+              ratio="aspect-[16/9]"
+              caption={t.photos.captions[3]}
+              className="mr-8 md:mr-0"
+            />
+          </div>
+        </div>
+
+        <a
+          href="#press"
+          className="mt-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-violet transition-colors hover:text-bone"
+        >
+          {t.photos.hd}
+          <span aria-hidden>↓</span>
+        </a>
+      </div>
+    </section>
+  );
+}
+
 function PressKit() {
   const t = useT();
   return (
