@@ -125,6 +125,7 @@ function Index() {
         <TopBar lang={lang} setLang={setLang} />
         <Hero />
         <PulseBar />
+        <SetFormat />
         <Presentation />
         <Silence />
         <ExperienceLive />
@@ -133,6 +134,7 @@ function Index() {
         <MusicalDNA />
         <Proof />
         <BookingReady />
+        <PressKit />
         <ContactFinal />
         <Footer />
       </main>
@@ -758,6 +760,100 @@ function PulseBar() {
         <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-bone/80 sm:inline">
           {t.pulse.feed}
         </span>
+      </div>
+    </section>
+  );
+}
+
+function SetFormat() {
+  const t = useT();
+  return (
+    <section className="relative overflow-hidden border-y border-bone/10 bg-obsidian/50 py-6">
+      <div className="px-5 md:px-12">
+        <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-violet">
+          {t.setfmt.kicker}
+        </div>
+        <div className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-3">
+          {t.setfmt.items.map((it, i) => (
+            <div key={i} className="flex flex-wrap items-baseline gap-x-3">
+              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-bone/70">
+                {it.k}
+              </span>
+              <span className="text-[11px] leading-snug text-bone/90 md:text-xs">{it.v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const PRESS_FILES: { l: string; href: string; n: string }[][] = [
+  [
+    { l: "FR", href: "/downloads/IXAN-BOY-bio-FR.pdf", n: "IXAN-BOY-bio-FR.pdf" },
+    { l: "EN", href: "/downloads/IXAN-BOY-bio-EN.pdf", n: "IXAN-BOY-bio-EN.pdf" },
+  ],
+  [
+    { l: "FR", href: "/downloads/IXAN-BOY-rider-FR.pdf", n: "IXAN-BOY-rider-FR.pdf" },
+    { l: "EN", href: "/downloads/IXAN-BOY-rider-EN.pdf", n: "IXAN-BOY-rider-EN.pdf" },
+  ],
+  [
+    { l: "Portrait", href: "/downloads/ixan-boy-portrait.jpg", n: "ixan-boy-portrait.jpg" },
+    { l: "Landscape", href: "/downloads/ixan-boy-paysage.png", n: "ixan-boy-paysage.png" },
+    { l: "Artwork", href: "/downloads/ixan-boy-cover-so-dumb.png", n: "ixan-boy-cover-so-dumb.png" },
+  ],
+  [{ l: "5:42", href: multicamVideo, n: "IXAN-BOY-multicam.mp4" }],
+];
+
+function PressKit() {
+  const t = useT();
+  return (
+    <section id="press" className="relative isolate overflow-hidden py-14 md:py-20">
+      <div className="absolute inset-0 -z-10 bg-obsidian/60 mask-fade-y" />
+      <div className="px-5 md:px-12">
+        <h2 className="section-kicker">08 · {t.press.kicker}</h2>
+        <h3 className="font-display mt-6 text-3xl leading-[0.95] text-bone md:text-5xl">
+          {t.press.title}
+        </h3>
+        <p className="mt-4 max-w-xl text-[11px] leading-relaxed text-bone/80 md:text-xs">
+          {t.press.intro}
+        </p>
+
+        <div className="mt-10 grid gap-px overflow-hidden rounded-sm bg-bone/10 sm:grid-cols-2">
+          {t.press.items.map((it, i) => (
+            <div
+              key={i}
+              className="flex h-full flex-col justify-between gap-6 bg-void/95 p-6 md:p-8"
+            >
+              <div>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <span className="font-display text-lg text-bone md:text-xl">{it.k}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-violet">
+                    {it.f}
+                  </span>
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-bone/80 md:text-xs">{it.p}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {PRESS_FILES[i].map((f) => (
+                  <a
+                    key={f.href}
+                    href={f.href}
+                    download={f.n}
+                    className="group inline-flex items-center gap-2 rounded-full border border-bone/20 bg-bone/[0.05] px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-bone/90 transition-colors hover:border-violet/70 hover:bg-violet/10 hover:text-bone"
+                  >
+                    <span>
+                      {t.press.dl} · {f.l}
+                    </span>
+                    <span aria-hidden className="transition-transform group-hover:translate-y-0.5">
+                      ↓
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -2235,7 +2331,9 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
 );
 
 function BookingCta({ label, mail }: { label: string; mail: string }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
   const subject = "Booking IXAN BOY";
   const body =
     "Bonjour,\n\nJe souhaite booker IXAN BOY.\n\nDate :\nLieu / événement :\nHoraire :\nBudget :\n\nMerci,";
@@ -2244,39 +2342,58 @@ function BookingCta({ label, mail }: { label: string; mail: string }) {
 
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    // 1) On tente d'ouvrir le client mail du système (top-level pour sortir
-    //    de l'iframe de preview qui bloque mailto:).
+    // Le panneau de secours s'affiche aussitôt : aucun délai d'attente.
+    setOpen(true);
+    // Client mail du système (top-level pour sortir de l'iframe de preview).
     try {
       (window.top ?? window).location.href = href;
     } catch {
       window.location.href = href;
     }
-    // 2) Si rien ne s'est ouvert (pas de client mail / contexte bloqué),
-    //    on bascule sur la fenêtre de rédaction Gmail, pré-remplie.
-    window.setTimeout(() => {
-      if (document.hidden || !document.hasFocus()) return;
-      const w = window.open(gmail, "_blank", "noopener,noreferrer");
-      if (!w) {
-        navigator.clipboard?.writeText(mail).then(
-          () => {
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 2500);
-          },
-          () => {},
-        );
-      }
-    }, 1200);
+  };
+
+  const copy = () => {
+    navigator.clipboard?.writeText(mail).then(
+      () => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2500);
+      },
+      () => {},
+    );
   };
 
   return (
-    <a
-      href={href}
-      onClick={onClick}
-      className="group inline-flex w-fit items-center gap-3 rounded-full border border-violet bg-violet px-6 py-3 font-mono text-xs uppercase tracking-widest text-bone transition-all hover:shadow-[0_0_50px_var(--violet)]"
-    >
-      <span>{copied ? `${mail} — copié` : label}</span>
-      <span className="transition-transform group-hover:translate-x-1">→</span>
-    </a>
+    <span className="inline-flex flex-col items-start gap-3">
+      <a
+        href={href}
+        onClick={onClick}
+        className="group inline-flex w-fit items-center gap-3 rounded-full border border-violet bg-violet px-6 py-3 font-mono text-xs uppercase tracking-widest text-bone transition-all hover:shadow-[0_0_50px_var(--violet)]"
+      >
+        <span>{label}</span>
+        <span className="transition-transform group-hover:translate-x-1">→</span>
+      </a>
+      {open && (
+        <span className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[10px] uppercase tracking-widest text-bone/80">
+          <span>{t.contact.fallback}</span>
+          <span className="text-bone">{mail}</span>
+          <button
+            type="button"
+            onClick={copy}
+            className="rounded-full border border-bone/25 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-bone/90 transition-colors hover:border-violet hover:text-bone"
+          >
+            {copied ? "✓ " + mail : t.contact.copy}
+          </button>
+          <a
+            href={gmail}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-bone/25 px-3 py-1 text-bone/90 transition-colors hover:border-violet hover:text-bone"
+          >
+            {t.contact.gmail}
+          </a>
+        </span>
+      )}
+    </span>
   );
 }
 
@@ -2300,7 +2417,7 @@ function ContactFinal() {
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_60%,oklch(0.55_0.28_295/0.35),transparent_55%)] mask-fade-y" />
 
       <div className="px-5 md:px-12">
-        <div className="section-kicker">08 · {t.contact.kicker}</div>
+        <div className="section-kicker">09 · {t.contact.kicker}</div>
         <h2 className="font-display mt-6 text-balance text-[clamp(3.5rem,9vw,7rem)] leading-[0.85]">
           {t.contact.headline[0]}
           <br />
