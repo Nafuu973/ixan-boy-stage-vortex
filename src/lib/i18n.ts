@@ -97,6 +97,14 @@ export const dict = {
         { k: "Vision", p: "Un projet construit pour évoluer vite." },
       ],
     },
+    photos: {
+      kicker: "Photos",
+      title: "Le voir, c’est le comprendre",
+      intro:
+        "Sélection de photos : live, studio et portraits. Toutes les versions HD sont dans le dossier presse.",
+      hd: "Toutes les photos en HD",
+      captions: ["En live", "Portrait street", "Studio", "Studio — plan large"],
+    },
     press: {
       kicker: "Dossier presse",
       title: "Tout pour programmer IXAN BOY",
@@ -211,6 +219,14 @@ export const dict = {
         { k: "Performance", p: "A sonic identity already recognizable." },
         { k: "Vision", p: "A project built to scale fast." },
       ],
+    },
+    photos: {
+      kicker: "Photos",
+      title: "Seeing is understanding",
+      intro:
+        "Photo selection: live, studio and portraits. All HD versions are in the press kit.",
+      hd: "All photos in HD",
+      captions: ["Live", "Street portrait", "Studio", "Studio — wide"],
     },
     press: {
       kicker: "Press kit",
