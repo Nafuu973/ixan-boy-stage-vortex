@@ -2379,7 +2379,7 @@ function BookingCta({ label, mail }: { label: string; mail: string }) {
           <button
             type="button"
             onClick={copy}
-            className="rounded-full border border-bone/25 px-3 py-1 text-bone/90 transition-colors hover:border-violet hover:text-bone"
+            className="rounded-full border border-bone/25 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-bone/90 transition-colors hover:border-violet hover:text-bone"
           >
             {copied ? "✓ " + mail : t.contact.copy}
           </button>
