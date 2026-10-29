@@ -2331,7 +2331,9 @@ const SoundCloudIcon = (p: React.SVGProps<SVGSVGElement>) => (
 );
 
 function BookingCta({ label, mail }: { label: string; mail: string }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
   const subject = "Booking IXAN BOY";
   const body =
     "Bonjour,\n\nJe souhaite booker IXAN BOY.\n\nDate :\nLieu / événement :\nHoraire :\nBudget :\n\nMerci,";
@@ -2340,39 +2342,58 @@ function BookingCta({ label, mail }: { label: string; mail: string }) {
 
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    // 1) On tente d'ouvrir le client mail du système (top-level pour sortir
-    //    de l'iframe de preview qui bloque mailto:).
+    // Le panneau de secours s'affiche aussitôt : aucun délai d'attente.
+    setOpen(true);
+    // Client mail du système (top-level pour sortir de l'iframe de preview).
     try {
       (window.top ?? window).location.href = href;
     } catch {
       window.location.href = href;
     }
-    // 2) Si rien ne s'est ouvert (pas de client mail / contexte bloqué),
-    //    on bascule sur la fenêtre de rédaction Gmail, pré-remplie.
-    window.setTimeout(() => {
-      if (document.hidden || !document.hasFocus()) return;
-      const w = window.open(gmail, "_blank", "noopener,noreferrer");
-      if (!w) {
-        navigator.clipboard?.writeText(mail).then(
-          () => {
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 2500);
-          },
-          () => {},
-        );
-      }
-    }, 1200);
+  };
+
+  const copy = () => {
+    navigator.clipboard?.writeText(mail).then(
+      () => {
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 2500);
+      },
+      () => {},
+    );
   };
 
   return (
-    <a
-      href={href}
-      onClick={onClick}
-      className="group inline-flex w-fit items-center gap-3 rounded-full border border-violet bg-violet px-6 py-3 font-mono text-xs uppercase tracking-widest text-bone transition-all hover:shadow-[0_0_50px_var(--violet)]"
-    >
-      <span>{copied ? `${mail} — copié` : label}</span>
-      <span className="transition-transform group-hover:translate-x-1">→</span>
-    </a>
+    <span className="inline-flex flex-col items-start gap-3">
+      <a
+        href={href}
+        onClick={onClick}
+        className="group inline-flex w-fit items-center gap-3 rounded-full border border-violet bg-violet px-6 py-3 font-mono text-xs uppercase tracking-widest text-bone transition-all hover:shadow-[0_0_50px_var(--violet)]"
+      >
+        <span>{label}</span>
+        <span className="transition-transform group-hover:translate-x-1">→</span>
+      </a>
+      {open && (
+        <span className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[10px] uppercase tracking-widest text-bone/80">
+          <span>{t.contact.fallback}</span>
+          <span className="text-bone">{mail}</span>
+          <button
+            type="button"
+            onClick={copy}
+            className="rounded-full border border-bone/25 px-3 py-1 text-bone/90 transition-colors hover:border-violet hover:text-bone"
+          >
+            {copied ? "✓ " + mail : t.contact.copy}
+          </button>
+          <a
+            href={gmail}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-bone/25 px-3 py-1 text-bone/90 transition-colors hover:border-violet hover:text-bone"
+          >
+            {t.contact.gmail}
+          </a>
+        </span>
+      )}
+    </span>
   );
 }
 
