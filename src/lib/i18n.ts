@@ -12,6 +12,14 @@ export const dict = {
       tag: "Emotion before destruction.",
     },
     pulse: { state: "SIGNAL ACTIF", feed: "TRANSMISSION ACTIVE" },
+    setfmt: {
+      kicker: "En pratique",
+      items: [
+        { k: "Durée du set", v: "60–90 min club · 45–60 min festival" },
+        { k: "Format", v: "CDJ / USB — pas d'ordinateur" },
+        { k: "Sur scène", v: "2 CDJ-3000 · DJM-900 · 1 retour" },
+      ],
+    },
     presentation: {
       kicker: "Présentation",
       title: "La précision avant le chaos",
@@ -89,11 +97,27 @@ export const dict = {
         { k: "Vision", p: "Un projet construit pour évoluer vite." },
       ],
     },
+    press: {
+      kicker: "Dossier presse",
+      title: "Tout pour programmer IXAN BOY",
+      intro:
+        "Biographie, fiche technique, photos et vidéo live — à transmettre à votre équipe technique ou à votre graphiste.",
+      items: [
+        { k: "Biographie", p: "Présentation, ADN musical, labels et supports.", f: "PDF · FR / EN" },
+        { k: "Fiche technique", p: "Sources, retour de scène, soundcheck, accueil.", f: "PDF · FR / EN" },
+        { k: "Photos HD", p: "Portrait, paysage et pochette So Dumb.", f: "JPG / PNG" },
+        { k: "Vidéo live", p: "Mix multicam complet — 5 min 42.", f: "MP4 · 58 Mo" },
+      ],
+      dl: "Télécharger",
+    },
     contact: {
       kicker: "Contact Booking",
       headline: ["Booker", "IXAN BOY"],
       cta: "Réserver IXAN BOY",
       mail: "booking.ixanboy@gmail.com",
+      fallback: "Si rien ne s'est ouvert :",
+      copy: "Copier l'adresse",
+      gmail: "Ouvrir dans Gmail",
       end: "Emotion before destruction.",
     },
     footer: { signal: "SIGNAL · STABLE", style: "HARDSTYLE / RAW" },
@@ -106,6 +130,14 @@ export const dict = {
       tag: "Emotion before destruction.",
     },
     pulse: { state: "SIGNAL ACTIVE", feed: "LIVE FEED" },
+    setfmt: {
+      kicker: "In practice",
+      items: [
+        { k: "Set length", v: "60–90 min club · 45–60 min festival" },
+        { k: "Format", v: "CDJ / USB — no laptop" },
+        { k: "On stage", v: "2 CDJ-3000 · DJM-900 · 1 monitor" },
+      ],
+    },
     presentation: {
       kicker: "Presentation",
       title: "Precision before chaos",
@@ -180,11 +212,27 @@ export const dict = {
         { k: "Vision", p: "A project built to scale fast." },
       ],
     },
+    press: {
+      kicker: "Press kit",
+      title: "Everything you need to book IXAN BOY",
+      intro:
+        "Biography, tech rider, photos and live video — ready to forward to your technical team or your designer.",
+      items: [
+        { k: "Biography", p: "Presentation, musical DNA, labels and supports.", f: "PDF · FR / EN" },
+        { k: "Tech rider", p: "Sources, booth monitor, soundcheck, hospitality.", f: "PDF · FR / EN" },
+        { k: "HD photos", p: "Portrait, landscape and So Dumb artwork.", f: "JPG / PNG" },
+        { k: "Live video", p: "Full multicam mix — 5 min 42.", f: "MP4 · 58 MB" },
+      ],
+      dl: "Download",
+    },
     contact: {
       kicker: "Booking Contact",
       headline: ["Book", "IXAN BOY"],
       cta: "Book IXAN BOY",
       mail: "booking.ixanboy@gmail.com",
+      fallback: "If nothing opened:",
+      copy: "Copy address",
+      gmail: "Open in Gmail",
       end: "Emotion before destruction.",
     },
     footer: { signal: "SIGNAL · STABLE", style: "HARDSTYLE / RAW" },
