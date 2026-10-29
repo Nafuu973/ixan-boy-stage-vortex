@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "asset_id": "6300d72a-11a3-4c49-bd38-0d4b014fced8",
+  "project_id": "16b9c307-43a4-4657-9013-42a1cd8aaf4e",
+  "url": "/__l5e/assets-v1/6300d72a-11a3-4c49-bd38-0d4b014fced8/fond-epk-paysage.mp4",
+  "r2_key": "a/v1/16b9c307-43a4-4657-9013-42a1cd8aaf4e/6300d72a-11a3-4c49-bd38-0d4b014fced8/fond-epk-paysage.mp4",
+  "original_filename": "fond-epk-paysage.mp4",
+  "size": 28704288,
+  "content_type": "video/mp4",
+  "created_at": "2026-10-29T13:30:02Z"
+}
