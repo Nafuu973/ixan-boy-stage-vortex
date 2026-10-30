@@ -27,6 +27,7 @@ const matiereVideoLandscape = matiereVideoLandscapeAsset.url;
 import { RevealText } from "@/components/epk/RevealText";
 import heroImg from "@/assets/ixanboy-hero.jpg.asset.json";
 import heroImgLandscape from "@/assets/ixanboy-hero-landscape.png.asset.json";
+import { GALLERY, GALLERY_CATS, type GalleryCat, type GalleryItem } from "@/lib/gallery";
 import tunnelImg from "@/assets/portrait-tunnel.jpg";
 import logoImg from "@/assets/logo.png";
 import coverFireAsset from "@/assets/cover-so-dumb.png.asset.json";
@@ -804,43 +805,26 @@ const PRESS_FILES: { l: string; href: string; n: string }[][] = [
     { l: "Artwork", href: "/downloads/ixan-boy-cover-so-dumb.png", n: "ixan-boy-cover-so-dumb.png" },
   ],
   [{ l: "5:42", href: multicamVideo, n: "IXAN-BOY-multicam.mp4" }],
+  [
+    { l: "So Dumb", href: soDumbAsset.url, n: "IXAN-BOY-So-Dumb.mp3" },
+    { l: "Sex Bomb", href: "/audio/sex-bomb-player.mp3", n: "IXAN-BOY-Sex-Bomb.mp3" },
+  ],
 ];
 
-function GalleryPhoto({
-  src,
-  alt,
-  ratio,
-  caption,
-  className = "",
-}: {
-  src: string;
-  alt: string;
-  ratio: string;
-  caption: string;
-  className?: string;
-}) {
-  return (
-    <figure
-      className={`group relative overflow-hidden rounded-sm border border-bone/10 ${className}`}
-    >
-      <div className={`${ratio} w-full overflow-hidden`}>
-        <img
-          src={src}
-          alt={alt}
-          loading="lazy"
-          className="h-full w-full object-cover contrast-110 grayscale-[18%] transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-        />
-      </div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/85 via-void/10 to-transparent" />
-      <figcaption className="absolute bottom-3 left-3 font-mono text-[9px] uppercase tracking-[0.3em] text-bone/90">
-        {caption}
-      </figcaption>
-    </figure>
-  );
-}
+const BASE_PHOTOS: GalleryItem[] = [
+  { cat: "live", src: liveBooth, name: "booth", file: "ixan-boy-live-booth.jpg" },
+  { cat: "portrait", src: tunnelImg, name: "tunnel", file: "ixan-boy-portrait-tunnel.jpg" },
+  { cat: "portrait", src: heroImg.url, name: "studio", file: "ixan-boy-portrait-studio.jpg" },
+  { cat: "portrait", src: heroImgLandscape.url, name: "studio-large", file: "ixan-boy-portrait-studio-large.png" },
+];
 
 function Photos() {
   const t = useT();
+  const [cat, setCat] = useState<GalleryCat | "all">("all");
+  const all = [...BASE_PHOTOS, ...GALLERY];
+  const cats = GALLERY_CATS.filter((c) => all.some((p) => p.cat === c));
+  const shown = cat === "all" ? all : all.filter((p) => p.cat === cat);
+  const tabs: (GalleryCat | "all")[] = ["all", ...cats];
   return (
     <section id="photos" className="relative isolate overflow-hidden py-14 md:py-20">
       <div className="absolute inset-0 -z-10 bg-obsidian/55 mask-fade-y" />
@@ -853,46 +837,52 @@ function Photos() {
           {t.photos.intro}
         </p>
 
-        <div className="mt-10 flex flex-col gap-2 md:flex-row md:items-start md:gap-3">
-          <div className="flex w-full flex-col gap-2 md:w-[54%] md:gap-3">
-            <GalleryPhoto
-              src={liveBooth}
-              alt="IXAN BOY aux platines en live"
-              ratio="aspect-[3/2]"
-              caption={t.photos.captions[0]}
-            />
-            <GalleryPhoto
-              src={tunnelImg}
-              alt="IXAN BOY en portrait dans un tunnel couvert de graffitis"
-              ratio="aspect-[3/4]"
-              caption={t.photos.captions[1]}
-              className="ml-8 md:ml-0 md:mt-8"
-            />
-          </div>
-          <div className="flex w-full flex-col gap-2 md:mt-14 md:w-[46%] md:gap-3">
-            <GalleryPhoto
-              src={heroImg.url}
-              alt="IXAN BOY en studio, accoudé à une enceinte de monitoring"
-              ratio="aspect-[4/5]"
-              caption={t.photos.captions[2]}
-            />
-            <GalleryPhoto
-              src={heroImgLandscape.url}
-              alt="IXAN BOY en studio, plan large"
-              ratio="aspect-[16/9]"
-              caption={t.photos.captions[3]}
-              className="mr-8 md:mr-0"
-            />
-          </div>
+        <div className="mt-8 flex flex-wrap gap-2" role="tablist">
+          {tabs.map((c) => (
+            <button
+              key={c}
+              type="button"
+              role="tab"
+              aria-selected={cat === c}
+              onClick={() => setCat(c)}
+              className={`rounded-full border px-4 py-2 font-mono text-[10px] uppercase tracking-widest transition-colors ${
+                cat === c
+                  ? "border-violet bg-violet/20 text-bone"
+                  : "border-bone/20 bg-bone/[0.04] text-bone/75 hover:border-violet/60 hover:text-bone"
+              }`}
+            >
+              {t.photos.cats[c]}
+            </button>
+          ))}
         </div>
 
-        <a
-          href="#press"
-          className="mt-8 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-violet transition-colors hover:text-bone"
-        >
-          {t.photos.hd}
-          <span aria-hidden>↓</span>
-        </a>
+        <div className="mt-6 columns-2 gap-2 md:columns-3 md:gap-3">
+          {shown.map((p) => (
+            <figure
+              key={p.src}
+              className="group relative mb-2 break-inside-avoid overflow-hidden rounded-sm border border-bone/10 md:mb-3"
+            >
+              <img
+                src={p.src}
+                alt={`IXAN BOY — ${t.photos.cats[p.cat]}`}
+                loading="lazy"
+                className="block h-auto w-full contrast-110 transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-transparent" />
+              <figcaption className="absolute bottom-2 left-2 font-mono text-[8px] uppercase tracking-[0.3em] text-bone/90 md:text-[9px]">
+                {t.photos.cats[p.cat]}
+              </figcaption>
+              <a
+                href={p.src}
+                download={p.file}
+                aria-label={`${t.press.dl} ${p.file}`}
+                className="absolute bottom-2 right-2 inline-flex h-8 w-8 items-center justify-center rounded-full border border-bone/30 bg-void/70 text-bone/90 backdrop-blur transition-colors hover:border-violet hover:bg-violet/30"
+              >
+                <span aria-hidden>↓</span>
+              </a>
+            </figure>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -916,7 +906,9 @@ function PressKit() {
           {t.press.items.map((it, i) => (
             <div
               key={i}
-              className="flex h-full flex-col justify-between gap-6 bg-void/95 p-6 md:p-8"
+              className={`flex h-full flex-col justify-between gap-6 bg-void/95 p-6 md:p-8 ${
+                i === t.press.items.length - 1 && t.press.items.length % 2 ? "sm:col-span-2" : ""
+              }`}
             >
               <div>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
