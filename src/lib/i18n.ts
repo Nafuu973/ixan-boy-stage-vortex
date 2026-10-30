@@ -17,7 +17,7 @@ export const dict = {
       items: [
         { k: "Durée du set", v: "60–90 min club · 45–60 min festival" },
         { k: "Format", v: "CDJ / USB — pas d'ordinateur" },
-        { k: "Sur scène", v: "2 CDJ-3000 · DJM-900 · 1 retour" },
+        { k: "Sur scène", v: "2 CDJ-3000 · DJM-900 / DJM-900 Nexus 2" },
       ],
     },
     presentation: {
@@ -101,9 +101,9 @@ export const dict = {
       kicker: "Photos",
       title: "Le voir, c’est le comprendre",
       intro:
-        "Sélection de photos : live, studio et portraits. Toutes les versions HD sont dans le dossier presse.",
+        "Sélection de photos : live, studio et portraits. Chaque photo se télécharge en HD avec la flèche ↓.",
       hd: "Toutes les photos en HD",
-      captions: ["En live", "Portrait street", "Studio", "Studio — plan large"],
+      cats: { all: "Tout", live: "Live", portrait: "Portraits", univers: "Univers", artwork: "Pochettes" },
     },
     press: {
       kicker: "Dossier presse",
@@ -112,9 +112,10 @@ export const dict = {
         "Biographie, fiche technique, photos et vidéo live — à transmettre à votre équipe technique ou à votre graphiste.",
       items: [
         { k: "Biographie", p: "Présentation, ADN musical, labels et supports.", f: "PDF · FR / EN" },
-        { k: "Fiche technique", p: "Sources, retour de scène, soundcheck, accueil.", f: "PDF · FR / EN" },
+        { k: "Fiche technique", p: "Matériel, soundcheck, accueil.", f: "PDF · FR / EN" },
         { k: "Photos HD", p: "Portrait, paysage et pochette So Dumb.", f: "JPG / PNG" },
         { k: "Vidéo live", p: "Mix multicam complet — 5 min 42.", f: "MP4 · 58 Mo" },
+        { k: "Musique", p: "So Dumb et Sex Bomb, pour vos teasers et réseaux.", f: "MP3" },
       ],
       dl: "Télécharger",
     },
@@ -143,7 +144,7 @@ export const dict = {
       items: [
         { k: "Set length", v: "60–90 min club · 45–60 min festival" },
         { k: "Format", v: "CDJ / USB — no laptop" },
-        { k: "On stage", v: "2 CDJ-3000 · DJM-900 · 1 monitor" },
+        { k: "On stage", v: "2 CDJ-3000 · DJM-900 / DJM-900 Nexus 2" },
       ],
     },
     presentation: {
@@ -224,9 +225,9 @@ export const dict = {
       kicker: "Photos",
       title: "Seeing is understanding",
       intro:
-        "Photo selection: live, studio and portraits. All HD versions are in the press kit.",
+        "Photo selection: live, studio and portraits. Every photo downloads in HD with the ↓ arrow.",
       hd: "All photos in HD",
-      captions: ["Live", "Street portrait", "Studio", "Studio — wide"],
+      cats: { all: "All", live: "Live", portrait: "Portraits", univers: "World", artwork: "Artworks" },
     },
     press: {
       kicker: "Press kit",
@@ -235,9 +236,10 @@ export const dict = {
         "Biography, tech rider, photos and live video — ready to forward to your technical team or your designer.",
       items: [
         { k: "Biography", p: "Presentation, musical DNA, labels and supports.", f: "PDF · FR / EN" },
-        { k: "Tech rider", p: "Sources, booth monitor, soundcheck, hospitality.", f: "PDF · FR / EN" },
+        { k: "Tech rider", p: "Gear, soundcheck, hospitality.", f: "PDF · FR / EN" },
         { k: "HD photos", p: "Portrait, landscape and So Dumb artwork.", f: "JPG / PNG" },
         { k: "Live video", p: "Full multicam mix — 5 min 42.", f: "MP4 · 58 MB" },
+        { k: "Music", p: "So Dumb and Sex Bomb, for your teasers and socials.", f: "MP3" },
       ],
       dl: "Download",
     },
