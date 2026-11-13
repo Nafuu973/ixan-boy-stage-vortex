@@ -119,6 +119,23 @@ function Index() {
     };
   }, []);
 
+  useEffect(() => {
+    // Grain désactivé pendant le scroll : son blend plein écran coûte des frames.
+    const el = document.documentElement;
+    let t = 0;
+    const onScroll = () => {
+      el.dataset.scrolling = "1";
+      clearTimeout(t);
+      t = window.setTimeout(() => delete el.dataset.scrolling, 150);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(t);
+      delete el.dataset.scrolling;
+    };
+  }, []);
+
   return (
     <LangCtx.Provider value={{ lang, setLang }}>
       <main className="relative bg-void text-bone">
