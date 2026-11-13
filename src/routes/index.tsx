@@ -102,17 +102,19 @@ function Index() {
   const [entered, setEntered] = useState(false);
 
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.08, smoothWheel: true });
+    // Touch devices: native momentum scrolling is smoother than JS smoothing.
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const lenis = isTouch ? null : new Lenis({ lerp: 0.08, smoothWheel: true });
     let raf = 0;
     const loop = (time: number) => {
-      lenis.raf(time);
+      lenis?.raf(time);
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    if (lenis) raf = requestAnimationFrame(loop);
     const tm = setTimeout(() => setReady(true), 1500);
     return () => {
       cancelAnimationFrame(raf);
-      lenis.destroy();
+      lenis?.destroy();
       clearTimeout(tm);
     };
   }, []);
