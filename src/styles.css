@@ -918,3 +918,37 @@
     z-index: 0;
   }
 }
+
+/* Fluidité tactile — sur téléphones/tablettes, on retire les effets GPU les
+   plus coûteux (flous d'arrière-plan, grain en fusion, ombres multicouches
+   recalculées à chaque frame du scroll au-dessus de la vidéo) en gardant une
+   lisibilité nette via une ombre simple et des fonds un peu plus opaques. */
+@media (pointer: coarse), (max-width: 1023px) {
+  .grain::after {
+    display: none;
+  }
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  main {
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.85),
+      0 0 8px rgba(0, 0, 0, 0.6);
+  }
+  .font-display {
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  }
+  h1.font-display,
+  h2.font-display,
+  h3.font-display {
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.75));
+  }
+  .drift,
+  .track-breathe {
+    animation: none;
+  }
+  [class*="blur-[140px]"] {
+    display: none;
+  }
+}
